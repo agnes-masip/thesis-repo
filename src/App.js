@@ -3,7 +3,9 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/views/home';
 import List from './components/views/list';
-import { API } from "aws-amplify";
+import NavBar from './components/navbar';
+import User from './components/views/user';
+// import { API } from "aws-amplify";
 // import { createTodo } from './graphql/mutations';
 import './App.css';
 
@@ -11,7 +13,7 @@ import './App.css';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#FF74B1'
+      main: '#F875AA'
     },
     secondary: {
       main: '#FFA1CF',
@@ -45,10 +47,11 @@ function App() {
   return (
     <div className="app">
       <ThemeProvider theme={theme}>
+        <NavBar/>
         <Routes>
           <Route path='/' element={<Home/>} />
-          <Route path='home' element={<Home/>} />
           <Route path='list' element={<List/>} />
+          <Route path='user' element={<User/>} />
         </Routes>
       </ThemeProvider>
     </div>
