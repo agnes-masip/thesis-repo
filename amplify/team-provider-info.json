@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplify7086d81be34e4-staging-153100-authRole",
+      "UnauthRoleArn": "arn:aws:iam::199715360668:role/amplify-amplify7086d81be34e4-staging-153100-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::199715360668:role/amplify-amplify7086d81be34e4-staging-153100-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-amplify7086d81be34e4-staging-153100-deployment",
+      "UnauthRoleName": "amplify-amplify7086d81be34e4-staging-153100-unauthRole",
+      "StackName": "amplify-amplify7086d81be34e4-staging-153100",
+      "StackId": "arn:aws:cloudformation:us-east-1:199715360668:stack/amplify-amplify7086d81be34e4-staging-153100/3c876e70-b90f-11ed-b666-0af0b5fda68b",
+      "AmplifyAppId": "d1ranocpeacs6g"
+    },
+    "categories": {
+      "api": {
+        "thesisrepo": {}
+      }
+    }
+  }
+}
