@@ -11,4 +11,8 @@ root.render(
       <App />
     </BrowserRouter>
   </React.StrictMode>
+<<<<<<< HEAD:src/index.js
 );
+=======
+);
+>>>>>>> 014170b573707e82a1c5f8736a8f2701f0ad9050:my-app/src/index.js
