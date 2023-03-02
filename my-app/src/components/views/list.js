@@ -1,18 +1,15 @@
 import React from 'react';
 import '../../App.css';
+import { Typography } from '@mui/material';
 
-function List() {
+export default function List() {
   return (
     <div className="App">
-      <header className="App-header">
-
-        <p>
-          yeehaw list
-        </p>
-
-      </header>
+        <div className="page-title">
+          <Typography variant="h3" color="primary">
+            List
+          </Typography>
+      </div>
     </div>
   );
 }
-
-export default List;
