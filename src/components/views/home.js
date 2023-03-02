@@ -1,5 +1,6 @@
 
 import '../../App.css';
+import { API } from "aws-amplify";
 
 function Home() {
   return (

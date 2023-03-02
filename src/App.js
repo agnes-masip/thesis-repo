@@ -2,6 +2,8 @@ import { createTheme, colors, ThemeProvider } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/views/home';
 import List from './components/views/list';
+import { API } from "aws-amplify";
+import { createTodo } from './graphql/mutations';
 import './App.css';
 
 
@@ -27,7 +29,18 @@ const theme = createTheme({
   }
 });
 
+const newTodo = await API.graphql({
+  query: createTodo,
+  variables: {
+      input: {
+  "name": "Lorem ipsum dolor sit amet",
+  "description": "Lorem ipsum dolor sit amet"
+}
+  }
+});
+
 function App() {
+    
   return (
     <div className="app">
       <ThemeProvider theme={theme}>
