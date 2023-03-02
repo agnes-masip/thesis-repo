@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, AppBar, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import { Link } from "react-router-dom";
-import { AccountCircleOutlined } from '@mui/icons-material';
+import { AccountCircle } from '@mui/icons-material';
 
 export default function NavBar() {
   const [auth] = React.useState(true);
@@ -34,7 +34,7 @@ export default function NavBar() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircleOutlined/>
+                <AccountCircle color="background"/>
               </IconButton>
               <Menu
                 id="menu-appbar"

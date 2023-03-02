@@ -20,6 +20,9 @@ const theme = createTheme({
     },
     dark: {
       main: '#FFD6EC'
+    },
+    background: {
+      main: '#fde4f2'
     }
   },
   typography: {
