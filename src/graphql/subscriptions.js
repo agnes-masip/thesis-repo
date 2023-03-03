@@ -1,34 +1,40 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateTodo = /* GraphQL */ `
-  subscription OnCreateTodo($filter: ModelSubscriptionTodoFilterInput) {
-    onCreateTodo(filter: $filter) {
+export const onCreatePaper = /* GraphQL */ `
+  subscription OnCreatePaper($filter: ModelSubscriptionPaperFilterInput) {
+    onCreatePaper(filter: $filter) {
       id
-      name
+      title
       description
+      likes
+      author
       createdAt
       updatedAt
     }
   }
 `;
-export const onUpdateTodo = /* GraphQL */ `
-  subscription OnUpdateTodo($filter: ModelSubscriptionTodoFilterInput) {
-    onUpdateTodo(filter: $filter) {
+export const onUpdatePaper = /* GraphQL */ `
+  subscription OnUpdatePaper($filter: ModelSubscriptionPaperFilterInput) {
+    onUpdatePaper(filter: $filter) {
       id
-      name
+      title
       description
+      likes
+      author
       createdAt
       updatedAt
     }
   }
 `;
-export const onDeleteTodo = /* GraphQL */ `
-  subscription OnDeleteTodo($filter: ModelSubscriptionTodoFilterInput) {
-    onDeleteTodo(filter: $filter) {
+export const onDeletePaper = /* GraphQL */ `
+  subscription OnDeletePaper($filter: ModelSubscriptionPaperFilterInput) {
+    onDeletePaper(filter: $filter) {
       id
-      name
+      title
       description
+      likes
+      author
       createdAt
       updatedAt
     }
