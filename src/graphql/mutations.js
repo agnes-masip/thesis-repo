@@ -12,6 +12,7 @@ export const createPaper = /* GraphQL */ `
       description
       likes
       author
+      list
       createdAt
       updatedAt
     }
@@ -28,6 +29,7 @@ export const updatePaper = /* GraphQL */ `
       description
       likes
       author
+      list
       createdAt
       updatedAt
     }
@@ -44,6 +46,7 @@ export const deletePaper = /* GraphQL */ `
       description
       likes
       author
+      list
       createdAt
       updatedAt
     }

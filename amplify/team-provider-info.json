@@ -14,6 +14,9 @@
     "categories": {
       "api": {
         "thesisrepo": {}
+      },
+      "auth": {
+        "thesisrepo70d67ac1": {}
       }
     }
   }

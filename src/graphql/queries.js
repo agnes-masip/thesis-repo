@@ -9,6 +9,7 @@ export const getPaper = /* GraphQL */ `
       description
       likes
       author
+      list
       createdAt
       updatedAt
     }
@@ -27,6 +28,7 @@ export const listPapers = /* GraphQL */ `
         description
         likes
         author
+        list
         createdAt
         updatedAt
       }

@@ -8,4 +8,5 @@ type Paper @model {
   description: String!
   likes: Int!
   author: String!
+  list: ID
 }
