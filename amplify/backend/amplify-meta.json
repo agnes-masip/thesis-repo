@@ -1,0 +1,85 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplify7086d81be34e4-staging-153100-authRole",
+      "UnauthRoleArn": "arn:aws:iam::199715360668:role/amplify-amplify7086d81be34e4-staging-153100-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::199715360668:role/amplify-amplify7086d81be34e4-staging-153100-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-amplify7086d81be34e4-staging-153100-deployment",
+      "UnauthRoleName": "amplify-amplify7086d81be34e4-staging-153100-unauthRole",
+      "StackName": "amplify-amplify7086d81be34e4-staging-153100",
+      "StackId": "arn:aws:cloudformation:us-east-1:199715360668:stack/amplify-amplify7086d81be34e4-staging-153100/3c876e70-b90f-11ed-b666-0af0b5fda68b",
+      "AmplifyAppId": "d1ranocpeacs6g"
+    }
+  },
+  "api": {
+    "thesisrepo": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            }
+          },
+          "additionalAuthenticationProviders": []
+        },
+        "GraphQLAPIIdOutput": "ejkynjshhjfo5d77aj55f45yni",
+        "GraphQLAPIEndpointOutput": "https://kindbrzbdrdxni6jxwcrgbjmhe.appsync-api.us-east-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-e6lpjamva5elvcitdknq7vqmsy"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify7086d81be34e4-staging-153100-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apithesisrepo"
+      },
+      "lastPushTimeStamp": "2023-03-03T19:12:19.271Z",
+      "lastPushDirHash": "8f/Li4q7slw2oY8Jtgt/SD88h2k="
+    }
+  },
+  "auth": {
+    "thesisrepo70d67ac1": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify7086d81be34e4-staging-153100-deployment/amplify-cfn-templates/auth/thesisrepo70d67ac1-cloudformation-template.json",
+        "logicalId": "auththesisrepo70d67ac1"
+      },
+      "lastPushTimeStamp": "2023-03-03T19:12:20.286Z",
+      "output": {
+        "UserPoolId": "us-east-1_jWBaHElC8",
+        "AppClientIDWeb": "3fi6mlf1pse98hqa2j4g642qn1",
+        "AppClientID": "4tb9tbmq7kiuibccs0poapioat",
+        "IdentityPoolId": "us-east-1:f8005c8d-7e8a-44bd-b838-eaecc68ed1ab",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-1:199715360668:userpool/us-east-1_jWBaHElC8",
+        "IdentityPoolName": "thesisrepo70d67ac1_identitypool_70d67ac1__staging",
+        "UserPoolName": "thesisrepo70d67ac1_userpool_70d67ac1"
+      },
+      "lastPushDirHash": "aoC9p4/7+4BFCMzNz76DlzE/TNk="
+    }
+  }
+}
