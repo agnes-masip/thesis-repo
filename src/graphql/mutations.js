@@ -9,12 +9,7 @@ export const createPaper = /* GraphQL */ `
     createPaper(input: $input, condition: $condition) {
       id
       title
-      description
-      likes
       author
-      list
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -26,12 +21,7 @@ export const updatePaper = /* GraphQL */ `
     updatePaper(input: $input, condition: $condition) {
       id
       title
-      description
-      likes
       author
-      list
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -42,13 +32,6 @@ export const deletePaper = /* GraphQL */ `
   ) {
     deletePaper(input: $input, condition: $condition) {
       id
-      title
-      description
-      likes
-      author
-      list
-      createdAt
-      updatedAt
     }
   }
 `;

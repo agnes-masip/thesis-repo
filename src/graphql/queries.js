@@ -5,13 +5,8 @@ export const getPaper = /* GraphQL */ `
   query GetPaper($id: ID!) {
     getPaper(id: $id) {
       id
-      title
-      description
-      likes
       author
-      list
-      createdAt
-      updatedAt
+      title
     }
   }
 `;
@@ -24,13 +19,8 @@ export const listPapers = /* GraphQL */ `
     listPapers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        title
-        description
-        likes
         author
-        list
-        createdAt
-        updatedAt
+        title
       }
       nextToken
     }

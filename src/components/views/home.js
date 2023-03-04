@@ -4,11 +4,11 @@ import '../../App.css';
 // import Amplify, { API, graphqlOperation } from 'aws-amplify';
 import Amplify from '@aws-amplify/core';
 import {API, graphqlOperation} from '@aws-amplify/api';
-// import awsconfig from '../../aws-exports';
+import awsconfig from '../../aws-exports';
 import { listPapers} from '../../graphql/queries';
 
 
-// Amplify.configure(awsconfig);
+Amplify.configure(awsconfig);
 
 function Home() {
   // the variable papers is the data you can use in frontend
@@ -54,15 +54,25 @@ function Home() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>
-          yeehaw home
-          {papers.map((paper) => {
-            return (
-            <p>paper.title</p>
-            );
-          })}
-        </p>
-       
+        <h1>Papers</h1>
+          <table>
+            <tbody>
+              <tr>
+                <th>Paper ID</th>
+                <th>Paper Title</th>
+                <th>Paper Author</th>
+              </tr>
+                {papers.map((paper) => {
+                  return (
+                    <tr key='${paper.id}'>
+                      <td>{paper.id}</td>
+                      <td>{paper.title}</td>
+                      <td>{paper.author}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+          </table>
       </header>
     </div>
   );
