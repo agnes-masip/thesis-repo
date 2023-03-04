@@ -8,12 +8,12 @@ import User from './components/views/user';
 
 import Amplify from '@aws-amplify/core';
 import API from '@aws-amplify/api';
-import awsconfig from './aws-exports';
+// import awsconfig from './aws-exports';
 import { listPapers} from './graphql/queries';
 // import { API } from "aws-amplify";
 // import { createTodo } from './graphql/mutations';
 import './App.css';
-Amplify.configure(awsconfig);
+// Amplify.configure(awsconfig);
 
 const theme = createTheme({
   palette: {
@@ -66,4 +66,4 @@ function App() {
   );
 }
 
-export default withAuthenticator(App);
+export default App;

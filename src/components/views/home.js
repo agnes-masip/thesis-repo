@@ -1,12 +1,14 @@
 
 import React, { useState, useEffect} from 'react';
 import '../../App.css';
-import Amplify, { API, graphqlOperation } from 'aws-amplify';
-import awsconfig from '../../aws-exports';
+// import Amplify, { API, graphqlOperation } from 'aws-amplify';
+import Amplify from '@aws-amplify/core';
+import {API, graphqlOperation} from '@aws-amplify/api';
+// import awsconfig from '../../aws-exports';
 import { listPapers} from '../../graphql/queries';
 
 
-Amplify.configure(awsconfig);
+// Amplify.configure(awsconfig);
 
 function Home() {
   // the variable papers is the data you can use in frontend
