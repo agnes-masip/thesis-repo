@@ -15,6 +15,9 @@ const theme = createTheme({
     },
     dark: {
       main: '#FFD6EC'
+    },
+    background: {
+      paper: '#FFA1CF',
     }
   },
   typography: {
@@ -23,6 +26,9 @@ const theme = createTheme({
     },
     h3: {
       fontWeight: 'bold',
+    },
+    h4: {
+      fontSize: 20,
     }
   }
 });

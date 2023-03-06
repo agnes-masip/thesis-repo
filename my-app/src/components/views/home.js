@@ -1,39 +1,57 @@
 import React from 'react';
 import '../../App.css';
-import {Box, Button, Card, CardContent, Typography} from '@mui/material';
-import {List, ListItem, ListItemText} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import {Box, Button, Card,Grid, CardContent, Typography} from '@mui/material';
+import {List, ListItem, ListItemText, ListItemButton, ListItemIcon} from "@mui/material";
+
 
 function Home() {
+
+    let navigate = useNavigate();
+    const goToList = () => {
+        let path = 'list';
+        navigate(path);
+    }
   return (
-    <div className="App" >
-        <div className="page-title" color="primary">
+    <div className="App" style={{ margin: '10px'}}>
+        <div className="page-title" >
             <Typography variant="h3" color="primary">
                 Home
             </Typography>
         </div>
-        <Box color="secondary">
+        <Box style={{ marginTop: '50px', marginBottom: '50px', marginLeft: '10%', marginRight: '10%'}}>
             <Card >
                 <CardContent >
-                    User
+                    <Typography variant="h4" align="left">
+                      User
+                    </Typography>
                 </CardContent>
             </Card>
         </Box>
-        <Box>
-            <Typography variant="h3" color="primary">
-                Lists
-            </Typography>
-            <List>
-                <ListItem>
-                    <ListItemText>
-                        MyFirstList
-                    </ListItemText>
-                </ListItem>
-            </List>
 
+        <Box style={{ marginTop: '50px', marginBottom: '50px', marginLeft: '10%', marginRight: '10%'}}>
+            <Grid container spacing={2}>
+                <Grid item xs={6} md={8}>
+                    <Typography variant="h2" align="left" color="primary">
+                        Lists
+                    </Typography>
+                    <List>
+                        <ListItem button="true" onClick={() => goToList()}>
+                            <ListItemText>
+                                My First List
+                            </ListItemText>
+                        </ListItem>
+                    </List>
+                </Grid>
+                <Grid item xs={6} md={4}>
+                    <Button variant="contained" color="primary" onClick={() => goToList()}>
+                        <Typography variant>
+                            Create list
+                        </Typography>
+                    </Button>
+                </Grid>
+            </Grid>
         </Box>
-        <Button>
-            Create list
-        </Button>
     </div>
   );
 }
