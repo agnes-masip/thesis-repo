@@ -2,6 +2,20 @@
   text-align: center;
 }
 
+.Content {
+  background-color:#fde4f2;
+  height: 100%;
+  padding: 50px;
+}
+
+.data-grid-header {
+  background-color: #FFA1CF;
+}
+
+.data-grid-header .p {
+  font-weight: bold;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
