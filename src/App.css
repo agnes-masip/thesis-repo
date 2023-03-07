@@ -4,12 +4,16 @@
 
 .Content {
   background-color:#fde4f2;
-  height: 100vh;
+  height: 100%;
   padding: 50px;
 }
 
-.Card {
+.data-grid-header {
   background-color: #FFA1CF;
+}
+
+.data-grid-header .p {
+  font-weight: bold;
 }
 
 .App-logo {
