@@ -8,6 +8,10 @@
   padding: 50px;
 }
 
+.Card {
+  background-color: #FFA1CF;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

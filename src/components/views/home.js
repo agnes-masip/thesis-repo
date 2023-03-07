@@ -21,19 +21,19 @@ function Home() {
         fetchPapers();
     }, []);
 
-  
+
 
   //fetch all the papers in the database (dynamodb nosql)
   const fetchPapers = async () => {
-    
-      //folder graphql in component has mutations and queries.js these is where you can find 
+
+      //folder graphql in component has mutations and queries.js these is where you can find
       // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
       const paperData = await API.graphql(graphqlOperation(listPapers));
       const paperList = paperData.data.listPapers.items;
       console.log(paperList)
       setPapers(paperList)
 
-    
+
   };
 
   const updatePaper = async (id, title) => {
@@ -71,13 +71,13 @@ function Home() {
                       <td>{paper.id}</td>
                       <td>{paper.title}</td>
                       <td>{paper.list}</td>
-                       {/*This button is to use if you create a form for the changes. Right now, 
+                       {/*This button is to use if you create a form for the changes. Right now,
                          it only changes the title. */}
-                        
+
                          <button onClick={() => updatePaper(paper.id, "idList")}> </button>
 
-                        {/*This button is to delete the paper.*/}
-                         <button onClick={() => deletePaper(paper.id)}> </button>
+                        {/* This button is to delete the paper.
+                         <button onClick={() => deletePaper(paper.id)}> </button> */}
                     </tr>
                   );
                 })}
@@ -106,12 +106,12 @@ function Home() {
                   }else{
                     return null;
                   }
-                  
+
                 })}
               </tbody>
           </table>
               {/*This is the form to upload papers.*/}
-          <form onSubmit={handleSubmit}>
+          {/* <form onSubmit={handleSubmit}>
             <div>
               <label htmlFor="title">Title:</label>
               <input type="text" id="title" value={title} onChange={(event) => setTitle(event.target.value)} />
@@ -121,12 +121,12 @@ function Home() {
               <input type="text" id="author" value={author}  onChange={(event) => setAuthor(event.target.value)} />
             </div>
              <button type="submit">Create paper</button>
-          </form>
-         
-          
+          </form> */}
 
 
-          
+
+
+
       </header>
     </div>
   );
