@@ -145,7 +145,7 @@ export default function Home() {
                         </Card>
                     </Grid>
                     <Grid item xs={6} md={4}>
-                        <Button variant="contained" color="primary" endIcon={<AddIcon />} onClick={() => createList()}>
+                        <Button variant="contained" color="primary" endIcon={<AddIcon />}  style={{marginTop: '15%'}} onClick={() => createList()}>
                             <Typography variant>
                                 Create list
                             </Typography>
