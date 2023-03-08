@@ -6,17 +6,92 @@ import Amplify from '@aws-amplify/core';
 import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 import { listPapers} from '../../graphql/queries';
+import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
+import FileUpload from "react-material-file-upload";
+import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from '@mui/icons-material/Add';
+
 
 
 Amplify.configure(awsconfig);
 
+const initialRows = [
+    {
+        id: 1,
+        listname: 'Some Long Ass List',
+        owner: 'Schrijnemaekers et al.',
+    },
+    {
+        id: 2,
+        listname: 'An Even Longer Paper List Because Real',
+        owner: 'Masip-Gomez et al.',
+    },
+];
+
+const initialUser = {name:"Najma", mail:"some@mail.ch"};
+
+
+
+
 function Home() {
+
   // the variable papers is the data you can use in frontend
   const [papers, setPapers] = useState([]);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
+  const [rows, setRows] = React.useState(initialRows);
+  const [user, setUser] = React.useState(initialUser);
 
-  // useEffect is to call the fetch every time we go to home.js
+
+
+    // Currently only deletes item from list visually
+    const deleteSource = React.useCallback(
+        (id) => () => {
+            setTimeout(() => {
+                setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+            });
+        },
+        [],
+    );
+
+
+    // Currently does nothing, should navigate to list
+    const editList = React.useCallback(
+        (id) => () => {
+        },
+        [],
+    );
+
+    const columns = React.useMemo(
+        () => [
+            { field: 'listname', headerName: 'Listname', headerClassName: 'data-grid-header', type: 'string', flex: 1.5 },
+            { field: 'owner', headerName: 'Owner', headerClassName: 'data-grid-header', type: 'string', flex: 1 },
+            {
+                field: 'actions',
+                headerClassName: 'data-grid-header',
+                type: 'actions',
+                flex: 0.5,
+                getActions: (params) => [
+                    <GridActionsCellItem
+                        icon={<DeleteIcon />}
+                        label="Delete"
+                        onClick={deleteSource(params.id)}
+                    />,
+                    <GridActionsCellItem
+                        icon={<EditIcon />}
+                        label="Edit"
+                        onClick={editList(params.id)}
+                    />,
+                ],
+            },
+        ],
+        [deleteSource, editList],
+    );
+
+
+    // useEffect is to call the fetch every time we go to home.js
   useEffect(() => {
         fetchPapers();
     }, []);
@@ -52,7 +127,92 @@ function Home() {
     }
 };
 
+    // Currently does nothing, should navigate to Profile
+    const editProfile = React.useCallback(
+        () => () => {
+        },
+        [],
+    );
 
+
+  return(
+      <div className="Content">
+          <div className="Title">
+              <Typography variant="h4" align="left" color="primary">
+                  Home
+              </Typography>
+          </div>
+          <div>
+              <Box my={4}>
+                  <Typography variant="h6" align="left" color="primary">
+                      User
+                  </Typography>
+                  <Card>
+                      <CardContent>
+                          <Grid container>
+                              <Grid item xs={10}>
+                                  <table >
+                                      <tr>
+                                          <td>
+                                              <Typography color="primary">
+                                                  Username:
+                                              </Typography>
+                                          </td>
+                                          <td>
+                                              <Typography>
+                                                  {user.name}
+                                              </Typography>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td>
+                                              <Typography color="primary">
+                                                  E-mail:
+                                              </Typography>
+                                          </td>
+                                          <td>
+                                              <Typography>
+                                                  {user.mail}
+                                              </Typography>
+                                          </td>
+                                      </tr>
+                                  </table>
+                              </Grid>
+                              <Grid item xs={2} >
+                                  <Button variant="contained" endIcon={<EditIcon />}  style={{margin:'5px'}} onClick={editProfile()}>
+                                      Edit
+                                  </Button>
+
+                              </Grid>
+                          </Grid>
+                      </CardContent>
+                  </Card>
+              </Box>
+              <Box my={4}>
+                  <Typography variant="h6" align="left" color="primary">
+                      My Lists
+                  </Typography>
+                  <div className='align-right'>
+                    <Button variant="contained" endIcon={<AddIcon />}  style={{marginBottom: '5px' }}>Create</Button>
+                  </div>
+                  <Card sx={{height: 400, width: '100%' }}>
+                      <DataGrid columns={columns} rows={rows}/>
+                  </Card>
+              </Box>
+          </div>
+      </div>
+
+  )
+
+
+
+
+
+
+
+
+
+/*
   return (
     <div className="App">
       <header className="App-header">
@@ -72,12 +232,12 @@ function Home() {
                       <td>{paper.title}</td>
                       <td>{paper.list}</td>
                        {/*This button is to use if you create a form for the changes. Right now,
-                         it only changes the title. */}
+                         it only changes the title. }
 
                          <button onClick={() => updatePaper(paper.id, "idList")}> </button>
 
                         {/* This button is to delete the paper.
-                         <button onClick={() => deletePaper(paper.id)}> </button> */}
+                         <button onClick={() => deletePaper(paper.id)}> </button> }
                     </tr>
                   );
                 })}
@@ -110,7 +270,7 @@ function Home() {
                 })}
               </tbody>
           </table>
-              {/*This is the form to upload papers.*/}
+              {/*This is the form to upload papers.}
           {/* <form onSubmit={handleSubmit}>
             <div>
               <label htmlFor="title">Title:</label>
@@ -121,15 +281,11 @@ function Home() {
               <input type="text" id="author" value={author}  onChange={(event) => setAuthor(event.target.value)} />
             </div>
              <button type="submit">Create paper</button>
-          </form> */}
-
-
-
-
-
+          </form> }
       </header>
     </div>
   );
+*/
 }
 
 export default Home;

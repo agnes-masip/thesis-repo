@@ -42,6 +42,11 @@
   color: #61dafb;
 }
 
+.align-right {
+  display: flex !important;
+  justify-content: right !important;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
