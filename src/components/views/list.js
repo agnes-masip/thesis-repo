@@ -109,7 +109,7 @@ const fetchPapers = async () => {
 
   const userColumns = React.useMemo(
     () => [
-      { field: 'username', header: 'Username', headerClassName: 'data-grid-header', type: 'string', flex: 1},
+      { field: 'username', headerName: 'Username', headerClassName: 'data-grid-header', type: 'string', flex: 1},
       {
         field: 'actions',
         headerClassName: 'data-grid-header',
@@ -172,46 +172,36 @@ const fetchPapers = async () => {
         </Typography>
       </div>
       <div>
-        <Box my={4} sx={{ display: 'grid', gap: 2, gridTemplateColumns: 'repeat(2, 1fr)' }}>
-          <Box>
-            <Typography variant="h6" align="left" color="primary">
-              New Source
-            </Typography>
-            <Card sx={{height: '100%', width: '100%'}}>
-              <CardContent>
-                <FileUpload value={files} onChange={setFiles} />
-              </CardContent>
-            </Card>
-          </Box>
-          <Box>
-            <Box sx={{ display: 'grid', gridAutoColumns: '1fr' }}>
+        <Box my={4} sx={{ display: 'grid', gap: 2, gridAutoColumns: '1fr' }}>
+          <Box sx={{ display: 'grid', gridAutoColumns: '1fr', gridColumn: '1/4' }}>
+            <Box sx={{ display: 'grid', gridAutoColumns: '1fr'}}>
               <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
-                Collaborators
+                Sources
               </Typography>
-              <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '4 / 5' }}>
-                Add user
+              <Button endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
+                Export
+              </Button>
+              <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
+                Add
               </Button>
             </Box>
-            <Card sx={{height: '100%', width: '100%'}}>
-              <DataGrid columns={userColumns} rows={userRows}/>
-            </Card>
-          </Box>
-        </Box>
-        <Box my={8}>
-          <Box sx={{ display: 'grid', gridAutoColumns: '1fr' }}>
-            <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
-              Sources
-            </Typography>
-            <Button endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '7/9', textAlign: 'right' }}>
-              Export Citations
-            </Button>
-            <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
-              Add Source
-            </Button>
-          </Box>
           <Card sx={{height: 500, width: '100%' }}>
             <DataGrid columns={paperColumns} rows={paperRows}/>
           </Card>
+          </Box>
+            <Box sx={{ display: 'grid', gridAutoColumns: '1fr', gridColumn: '4/5' }}>
+              <Box sx={{ display: 'grid', gridAutoColumns: '1fr'}}>
+                <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
+                  Collaborators
+                </Typography>
+                <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '5/6', textAlign: 'right' }}>
+                  Add
+                </Button>
+              </Box>
+              <Card sx={{height: 500, width: '100%'}}>
+                <DataGrid columns={userColumns} rows={userRows}/>
+              </Card>
+          </Box>
         </Box>
       </div>
     </div>
