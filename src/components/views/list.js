@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../App.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FileUpload from "react-material-file-upload";
 import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -9,6 +9,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DownloadIcon from '@mui/icons-material/Download';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
+
+//these imports probably should go somewhere else
+import Amplify from '@aws-amplify/core';
+import {API, graphqlOperation} from '@aws-amplify/api';
+import awsconfig from '../../aws-exports';
+import {listPapers} from '../../graphql/queries';
+
 
 const initialUserRows = [
   {
@@ -34,6 +42,7 @@ const initialUserRows = [
 ]
 
 const initialPaperRows = [
+
   {
     id: 1,
     title: 'Some Long Ass Paper Title',
@@ -60,6 +69,8 @@ const initialPaperRows = [
   },
 ];
 
+Amplify.configure(awsconfig);
+
 export default function List() {
   const [files, setFiles] = useState([]);
   const [paperRows, setPaperRows] = React.useState(initialPaperRows);
@@ -75,6 +86,27 @@ export default function List() {
     [],
   );
 
+  useEffect(() => {
+    fetchPapers();
+}, []);
+
+
+
+//fetch all the papers in the database (dynamodb nosql)
+const fetchPapers = async () => {
+
+  //folder graphql in component has mutations and queries.js these is where you can find
+  // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
+  
+  const paperData = await API.graphql(graphqlOperation(listPapers));
+  const paperList = paperData.data.listPapers.items;
+  setRows(paperList)
+
+
+};
+
+  
+
   // Currently only deletes item from list visually
   const deleteSource = React.useCallback(
     (id) => () => {
@@ -88,6 +120,7 @@ export default function List() {
   // Currently does nothing
   const likeSource = React.useCallback(
     (id) => () => {
+     
     },
     [],
   );

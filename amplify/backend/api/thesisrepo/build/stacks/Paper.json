@@ -43,13 +43,37 @@
     "referencetotransformerrootstackGraphQLAPI20497F53ApiId": {
       "Type": "String"
     },
-    "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name": {
-      "Type": "String"
-    },
     "referencetotransformerrootstackS3DeploymentBucket7592718ARef": {
       "Type": "String"
     },
     "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref": {
+      "Type": "String"
+    },
+    "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamQuerygetTeamauth0FunctionQuerygetTeamauth0FunctionAppSyncFunction1C27E45CFunctionId": {
+      "Type": "String"
+    },
+    "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamQuerygetTeampostAuth0FunctionQuerygetTeampostAuth0FunctionAppSyncFunction430F0241FunctionId": {
+      "Type": "String"
+    },
+    "referencetotransformerrootstackauthRoleNameFB872D50Ref": {
+      "Type": "String"
+    },
+    "referencetotransformerrootstackunauthRoleName49F3C1FERef": {
+      "Type": "String"
+    },
+    "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamMutationcreateTeaminit0FunctionMutationcreateTeaminit0FunctionAppSyncFunction5417E70BFunctionId": {
+      "Type": "String"
+    },
+    "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamMutationcreateTeamauth0FunctionMutationcreateTeamauth0FunctionAppSyncFunctionCAEE2466FunctionId": {
+      "Type": "String"
+    },
+    "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamMutationupdateTeaminit0FunctionMutationupdateTeaminit0FunctionAppSyncFunction9BE69770FunctionId": {
+      "Type": "String"
+    },
+    "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamSubscriptiononCreateTeamauth0FunctionSubscriptiononCreateTeamauth0FunctionAppSyncFunctionD1CF63CFFunctionId": {
+      "Type": "String"
+    },
+    "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamSubscriptionOnCreateTeamDataResolverFnSubscriptionOnCreateTeamDataResolverFnAppSyncFunction17A58657FunctionId": {
       "Type": "String"
     }
   },
@@ -352,36 +376,6 @@
         "PaperIAMRoleC5D5EB37"
       ]
     },
-    "QuerygetPaperpostAuth0FunctionQuerygetPaperpostAuth0FunctionAppSyncFunction9C5DEE22": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Ref": "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name"
-        },
-        "FunctionVersion": "2018-05-29",
-        "Name": "QuerygetPaperpostAuth0Function",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Query.getPaper.postAuth.1.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplate": "$util.toJson({})"
-      }
-    },
     "QueryGetPaperDataResolverFnQueryGetPaperDataResolverFnAppSyncFunction537168F0": {
       "Type": "AWS::AppSync::FunctionConfiguration",
       "Properties": {
@@ -445,10 +439,10 @@
         "PipelineConfig": {
           "Functions": [
             {
-              "Fn::GetAtt": [
-                "QuerygetPaperpostAuth0FunctionQuerygetPaperpostAuth0FunctionAppSyncFunction9C5DEE22",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamQuerygetTeamauth0FunctionQuerygetTeamauth0FunctionAppSyncFunction1C27E45CFunctionId"
+            },
+            {
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamQuerygetTeampostAuth0FunctionQuerygetTeampostAuth0FunctionAppSyncFunction430F0241FunctionId"
             },
             {
               "Fn::GetAtt": [
@@ -470,7 +464,23 @@
               {
                 "Ref": "PaperTable"
               },
-              "\"))\n$util.toJson({})"
+              "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackauthRoleNameFB872D50Ref"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.toJson({})"
             ]
           ]
         },
@@ -540,10 +550,10 @@
         "PipelineConfig": {
           "Functions": [
             {
-              "Fn::GetAtt": [
-                "QuerygetPaperpostAuth0FunctionQuerygetPaperpostAuth0FunctionAppSyncFunction9C5DEE22",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamQuerygetTeamauth0FunctionQuerygetTeamauth0FunctionAppSyncFunction1C27E45CFunctionId"
+            },
+            {
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamQuerygetTeampostAuth0FunctionQuerygetTeampostAuth0FunctionAppSyncFunction430F0241FunctionId"
             },
             {
               "Fn::GetAtt": [
@@ -565,41 +575,27 @@
               {
                 "Ref": "PaperTable"
               },
-              "\"))\n$util.toJson({})"
+              "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackauthRoleNameFB872D50Ref"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.toJson({})"
             ]
           ]
         },
         "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)"
-      }
-    },
-    "MutationcreatePaperinit0FunctionMutationcreatePaperinit0FunctionAppSyncFunction25695F7F": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Ref": "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name"
-        },
-        "FunctionVersion": "2018-05-29",
-        "Name": "MutationcreatePaperinit0Function",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Mutation.createPaper.init.1.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplate": "$util.toJson({})"
       }
     },
     "MutationCreatePaperDataResolverFnMutationCreatePaperDataResolverFnAppSyncFunction16B822BF": {
@@ -665,16 +661,13 @@
         "PipelineConfig": {
           "Functions": [
             {
-              "Fn::GetAtt": [
-                "MutationcreatePaperinit0FunctionMutationcreatePaperinit0FunctionAppSyncFunction25695F7F",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamMutationcreateTeaminit0FunctionMutationcreateTeaminit0FunctionAppSyncFunction5417E70BFunctionId"
             },
             {
-              "Fn::GetAtt": [
-                "QuerygetPaperpostAuth0FunctionQuerygetPaperpostAuth0FunctionAppSyncFunction9C5DEE22",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamMutationcreateTeamauth0FunctionMutationcreateTeamauth0FunctionAppSyncFunctionCAEE2466FunctionId"
+            },
+            {
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamQuerygetTeampostAuth0FunctionQuerygetTeampostAuth0FunctionAppSyncFunction430F0241FunctionId"
             },
             {
               "Fn::GetAtt": [
@@ -696,24 +689,43 @@
               {
                 "Ref": "PaperTable"
               },
-              "\"))\n$util.toJson({})"
+              "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackauthRoleNameFB872D50Ref"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.toJson({})"
             ]
           ]
         },
         "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)"
       }
     },
-    "MutationupdatePaperinit0FunctionMutationupdatePaperinit0FunctionAppSyncFunction2EEFAF8D": {
+    "MutationupdatePaperauth0FunctionMutationupdatePaperauth0FunctionAppSyncFunction5BC0EB01": {
       "Type": "AWS::AppSync::FunctionConfiguration",
       "Properties": {
         "ApiId": {
           "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
         },
         "DataSourceName": {
-          "Ref": "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name"
+          "Fn::GetAtt": [
+            "PaperDataSource",
+            "Name"
+          ]
         },
         "FunctionVersion": "2018-05-29",
-        "Name": "MutationupdatePaperinit0Function",
+        "Name": "MutationupdatePaperauth0Function",
         "RequestMappingTemplateS3Location": {
           "Fn::Join": [
             "",
@@ -726,12 +738,30 @@
               {
                 "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
               },
-              "/resolvers/Mutation.updatePaper.init.1.req.vtl"
+              "/resolvers/Mutation.updatePaper.auth.1.req.vtl"
             ]
           ]
         },
-        "ResponseMappingTemplate": "$util.toJson({})"
-      }
+        "ResponseMappingTemplateS3Location": {
+          "Fn::Join": [
+            "",
+            [
+              "s3://",
+              {
+                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
+              },
+              "/",
+              {
+                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
+              },
+              "/resolvers/Mutation.updatePaper.auth.1.res.vtl"
+            ]
+          ]
+        }
+      },
+      "DependsOn": [
+        "PaperDataSource"
+      ]
     },
     "MutationUpdatePaperDataResolverFnMutationUpdatePaperDataResolverFnAppSyncFunction13DFC94A": {
       "Type": "AWS::AppSync::FunctionConfiguration",
@@ -796,16 +826,16 @@
         "PipelineConfig": {
           "Functions": [
             {
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamMutationupdateTeaminit0FunctionMutationupdateTeaminit0FunctionAppSyncFunction9BE69770FunctionId"
+            },
+            {
               "Fn::GetAtt": [
-                "MutationupdatePaperinit0FunctionMutationupdatePaperinit0FunctionAppSyncFunction2EEFAF8D",
+                "MutationupdatePaperauth0FunctionMutationupdatePaperauth0FunctionAppSyncFunction5BC0EB01",
                 "FunctionId"
               ]
             },
             {
-              "Fn::GetAtt": [
-                "QuerygetPaperpostAuth0FunctionQuerygetPaperpostAuth0FunctionAppSyncFunction9C5DEE22",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamQuerygetTeampostAuth0FunctionQuerygetTeampostAuth0FunctionAppSyncFunction430F0241FunctionId"
             },
             {
               "Fn::GetAtt": [
@@ -827,12 +857,79 @@
               {
                 "Ref": "PaperTable"
               },
-              "\"))\n$util.toJson({})"
+              "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackauthRoleNameFB872D50Ref"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.toJson({})"
             ]
           ]
         },
         "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)"
       }
+    },
+    "MutationdeletePaperauth0FunctionMutationdeletePaperauth0FunctionAppSyncFunction292B6CCA": {
+      "Type": "AWS::AppSync::FunctionConfiguration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
+        },
+        "DataSourceName": {
+          "Fn::GetAtt": [
+            "PaperDataSource",
+            "Name"
+          ]
+        },
+        "FunctionVersion": "2018-05-29",
+        "Name": "MutationdeletePaperauth0Function",
+        "RequestMappingTemplateS3Location": {
+          "Fn::Join": [
+            "",
+            [
+              "s3://",
+              {
+                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
+              },
+              "/",
+              {
+                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
+              },
+              "/resolvers/Mutation.deletePaper.auth.1.req.vtl"
+            ]
+          ]
+        },
+        "ResponseMappingTemplateS3Location": {
+          "Fn::Join": [
+            "",
+            [
+              "s3://",
+              {
+                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
+              },
+              "/",
+              {
+                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
+              },
+              "/resolvers/Mutation.deletePaper.auth.1.res.vtl"
+            ]
+          ]
+        }
+      },
+      "DependsOn": [
+        "PaperDataSource"
+      ]
     },
     "MutationDeletePaperDataResolverFnMutationDeletePaperDataResolverFnAppSyncFunction0BEF4571": {
       "Type": "AWS::AppSync::FunctionConfiguration",
@@ -898,9 +995,12 @@
           "Functions": [
             {
               "Fn::GetAtt": [
-                "QuerygetPaperpostAuth0FunctionQuerygetPaperpostAuth0FunctionAppSyncFunction9C5DEE22",
+                "MutationdeletePaperauth0FunctionMutationdeletePaperauth0FunctionAppSyncFunction292B6CCA",
                 "FunctionId"
               ]
+            },
+            {
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamQuerygetTeampostAuth0FunctionQuerygetTeampostAuth0FunctionAppSyncFunction430F0241FunctionId"
             },
             {
               "Fn::GetAtt": [
@@ -922,56 +1022,27 @@
               {
                 "Ref": "PaperTable"
               },
-              "\"))\n$util.toJson({})"
+              "\"))\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackauthRoleNameFB872D50Ref"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.toJson({})"
             ]
           ]
         },
         "ResponseMappingTemplate": "$util.toJson($ctx.prev.result)"
-      }
-    },
-    "SubscriptionOnCreatePaperDataResolverFnSubscriptionOnCreatePaperDataResolverFnAppSyncFunctionA374B5A3": {
-      "Type": "AWS::AppSync::FunctionConfiguration",
-      "Properties": {
-        "ApiId": {
-          "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
-        },
-        "DataSourceName": {
-          "Ref": "referencetotransformerrootstackGraphQLAPINONEDS2BA9D1C8Name"
-        },
-        "FunctionVersion": "2018-05-29",
-        "Name": "SubscriptionOnCreatePaperDataResolverFn",
-        "RequestMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Subscription.onCreatePaper.req.vtl"
-            ]
-          ]
-        },
-        "ResponseMappingTemplateS3Location": {
-          "Fn::Join": [
-            "",
-            [
-              "s3://",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentBucket7592718ARef"
-              },
-              "/",
-              {
-                "Ref": "referencetotransformerrootstackS3DeploymentRootKeyA71EA735Ref"
-              },
-              "/resolvers/Subscription.onCreatePaper.res.vtl"
-            ]
-          ]
-        }
       }
     },
     "SubscriptiononCreatePaperResolver": {
@@ -986,16 +1057,13 @@
         "PipelineConfig": {
           "Functions": [
             {
-              "Fn::GetAtt": [
-                "QuerygetPaperpostAuth0FunctionQuerygetPaperpostAuth0FunctionAppSyncFunction9C5DEE22",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamSubscriptiononCreateTeamauth0FunctionSubscriptiononCreateTeamauth0FunctionAppSyncFunctionD1CF63CFFunctionId"
             },
             {
-              "Fn::GetAtt": [
-                "SubscriptionOnCreatePaperDataResolverFnSubscriptionOnCreatePaperDataResolverFnAppSyncFunctionA374B5A3",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamQuerygetTeampostAuth0FunctionQuerygetTeampostAuth0FunctionAppSyncFunction430F0241FunctionId"
+            },
+            {
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamSubscriptionOnCreateTeamDataResolverFnSubscriptionOnCreateTeamDataResolverFnAppSyncFunction17A58657FunctionId"
             }
           ]
         },
@@ -1007,7 +1075,23 @@
               {
                 "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
               },
-              "\"))\n\n$util.toJson({})"
+              "\"))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackauthRoleNameFB872D50Ref"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.toJson({})"
             ]
           ]
         },
@@ -1026,16 +1110,13 @@
         "PipelineConfig": {
           "Functions": [
             {
-              "Fn::GetAtt": [
-                "QuerygetPaperpostAuth0FunctionQuerygetPaperpostAuth0FunctionAppSyncFunction9C5DEE22",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamSubscriptiononCreateTeamauth0FunctionSubscriptiononCreateTeamauth0FunctionAppSyncFunctionD1CF63CFFunctionId"
             },
             {
-              "Fn::GetAtt": [
-                "SubscriptionOnCreatePaperDataResolverFnSubscriptionOnCreatePaperDataResolverFnAppSyncFunctionA374B5A3",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamQuerygetTeampostAuth0FunctionQuerygetTeampostAuth0FunctionAppSyncFunction430F0241FunctionId"
+            },
+            {
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamSubscriptionOnCreateTeamDataResolverFnSubscriptionOnCreateTeamDataResolverFnAppSyncFunction17A58657FunctionId"
             }
           ]
         },
@@ -1047,7 +1128,23 @@
               {
                 "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
               },
-              "\"))\n\n$util.toJson({})"
+              "\"))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackauthRoleNameFB872D50Ref"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.toJson({})"
             ]
           ]
         },
@@ -1066,16 +1163,13 @@
         "PipelineConfig": {
           "Functions": [
             {
-              "Fn::GetAtt": [
-                "QuerygetPaperpostAuth0FunctionQuerygetPaperpostAuth0FunctionAppSyncFunction9C5DEE22",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamSubscriptiononCreateTeamauth0FunctionSubscriptiononCreateTeamauth0FunctionAppSyncFunctionD1CF63CFFunctionId"
             },
             {
-              "Fn::GetAtt": [
-                "SubscriptionOnCreatePaperDataResolverFnSubscriptionOnCreatePaperDataResolverFnAppSyncFunctionA374B5A3",
-                "FunctionId"
-              ]
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamQuerygetTeampostAuth0FunctionQuerygetTeampostAuth0FunctionAppSyncFunction430F0241FunctionId"
+            },
+            {
+              "Ref": "referencetotransformerrootstackTeamNestedStackTeamNestedStackResourceCE482C8COutputstransformerrootstackTeamSubscriptionOnCreateTeamDataResolverFnSubscriptionOnCreateTeamDataResolverFnAppSyncFunction17A58657FunctionId"
             }
           ]
         },
@@ -1087,7 +1181,23 @@
               {
                 "Ref": "referencetotransformerrootstackGraphQLAPI20497F53ApiId"
               },
-              "\"))\n\n$util.toJson({})"
+              "\"))\n\n$util.qr($ctx.stash.put(\"authRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackauthRoleNameFB872D50Ref"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.qr($ctx.stash.put(\"unauthRole\", \"arn:aws:sts::",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":assumed-role/",
+              {
+                "Ref": "referencetotransformerrootstackunauthRoleName49F3C1FERef"
+              },
+              "/CognitoIdentityCredentials\"))\n$util.toJson({})"
             ]
           ]
         },
