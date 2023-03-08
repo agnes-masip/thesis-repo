@@ -2,12 +2,14 @@ import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from "react";
 import FileUpload from "react-material-file-upload";
-import { Box, Card, CardContent, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
+import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DownloadIcon from '@mui/icons-material/Download';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
 
 //these imports probably should go somewhere else
 import Amplify from '@aws-amplify/core';
@@ -15,7 +17,32 @@ import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 import {listPapers} from '../../graphql/queries';
 
-const initialRows = [
+
+const initialUserRows = [
+  {
+    id: 1,
+    username: 'MichelleSchr'
+  },
+  {
+    id: 2,
+    username: 'MichelleSchr'
+  },
+  {
+    id: 3,
+    username: 'MichelleSchr'
+  },
+  {
+    id: 4,
+    username: 'MichelleSchr'
+  },
+  {
+    id: 5,
+    username: 'MichelleSchr'
+  }
+]
+
+const initialPaperRows = [
+
   {
     id: 1,
     title: 'Some Long Ass Paper Title',
@@ -35,7 +62,7 @@ const initialRows = [
     likes: 3,
   },
   {
-    id: 3,
+    id: 4,
     title: 'Najma Also Wrote a Paper',
     author: 'Christen et al.',
     likes: 3,
@@ -46,8 +73,18 @@ Amplify.configure(awsconfig);
 
 export default function List() {
   const [files, setFiles] = useState([]);
+  const [paperRows, setPaperRows] = React.useState(initialPaperRows);
+  const [userRows, setUserRows] = React.useState(initialUserRows);
 
-  const [rows, setRows] = React.useState(initialRows);
+  // Currently only deletes item from list visually
+  const deleteUser = React.useCallback(
+    (id) => () => {
+      setTimeout(() => {
+        setUserRows((prevUserRows) => prevUserRows.filter((row) => row.id !== id));
+      });
+    },
+    [],
+  );
 
   useEffect(() => {
     fetchPapers();
@@ -74,7 +111,7 @@ const fetchPapers = async () => {
   const deleteSource = React.useCallback(
     (id) => () => {
       setTimeout(() => {
-        setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+        setPaperRows((prevPaperRows) => prevPaperRows.filter((row) => row.id !== id));
       });
     },
     [],
@@ -102,7 +139,27 @@ const fetchPapers = async () => {
     [],
   );
 
-  const columns = React.useMemo(
+  const userColumns = React.useMemo(
+    () => [
+      { field: 'username', header: 'Username', headerClassName: 'data-grid-header', type: 'string', flex: 1},
+      {
+        field: 'actions',
+        headerClassName: 'data-grid-header',
+        type: 'actions',
+        flex: 0.25,
+        getActions: (params) => [
+          <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="delete"
+          onClick={deleteUser(params.id)}
+          />,
+        ]
+      },
+    ],
+    [deleteUser],
+  );
+
+  const paperColumns = React.useMemo(
     () => [
       { field: 'title', headerName: 'Title', headerClassName: 'data-grid-header', type: 'string', flex: 1.5 },
       { field: 'author', headerName: 'Author', headerClassName: 'data-grid-header', type: 'string', flex: 1 },
@@ -147,22 +204,45 @@ const fetchPapers = async () => {
         </Typography>
       </div>
       <div>
-        <Box my={4}>
-          <Typography variant="h6" align="left" color="primary">
-            New Source
-          </Typography>
-          <Card>
-            <CardContent>
-              <FileUpload value={files} onChange={setFiles} />
-            </CardContent>
-          </Card>
+        <Box my={4} sx={{ display: 'grid', gap: 2, gridTemplateColumns: 'repeat(2, 1fr)' }}>
+          <Box>
+            <Typography variant="h6" align="left" color="primary">
+              New Source
+            </Typography>
+            <Card sx={{height: '100%', width: '100%'}}>
+              <CardContent>
+                <FileUpload value={files} onChange={setFiles} />
+              </CardContent>
+            </Card>
+          </Box>
+          <Box>
+            <Box sx={{ display: 'grid', gridAutoColumns: '1fr' }}>
+              <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
+                Collaborators
+              </Typography>
+              <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '4 / 5' }}>
+                Add user
+              </Button>
+            </Box>
+            <Card sx={{height: '100%', width: '100%'}}>
+              <DataGrid columns={userColumns} rows={userRows}/>
+            </Card>
+          </Box>
         </Box>
-        <Box my={4}>
-          <Typography variant="h6" align="left" color="primary">
-            Sources
-          </Typography>
-          <Card sx={{height: 800, width: '100%' }}>
-            <DataGrid columns={columns} rows={rows}/>
+        <Box my={8}>
+          <Box sx={{ display: 'grid', gridAutoColumns: '1fr' }}>
+            <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
+              Sources
+            </Typography>
+            <Button endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '7/9', textAlign: 'right' }}>
+              Export Citations
+            </Button>
+            <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
+              Add Source
+            </Button>
+          </Box>
+          <Card sx={{height: 500, width: '100%' }}>
+            <DataGrid columns={paperColumns} rows={paperRows}/>
           </Card>
         </Box>
       </div>
