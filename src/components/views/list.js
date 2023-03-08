@@ -41,39 +41,11 @@ const initialUserRows = [
   }
 ]
 
-const initialPaperRows = [
-
-  {
-    id: 1,
-    title: 'Some Long Ass Paper Title',
-    author: 'Schrijnemaekers et al.',
-    likes: 5,
-  },
-  {
-    id: 2,
-    title: 'An Even Longer Paper Title Because Real',
-    author: 'Masip-Gomez et al.',
-    likes: 10,
-  },
-  {
-    id: 3,
-    title: 'A Small Paper Title',
-    author: 'van Brummelen et al.',
-    likes: 3,
-  },
-  {
-    id: 4,
-    title: 'Najma Also Wrote a Paper',
-    author: 'Christen et al.',
-    likes: 3,
-  },
-];
-
 Amplify.configure(awsconfig);
 
 export default function List() {
   const [files, setFiles] = useState([]);
-  const [paperRows, setPaperRows] = React.useState(initialPaperRows);
+  const [paperRows, setPaperRows] = React.useState([]);
   const [userRows, setUserRows] = React.useState(initialUserRows);
 
   // Currently only deletes item from list visually
@@ -94,15 +66,11 @@ export default function List() {
 
 //fetch all the papers in the database (dynamodb nosql)
 const fetchPapers = async () => {
-
   //folder graphql in component has mutations and queries.js these is where you can find
   // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
-
   const paperData = await API.graphql(graphqlOperation(listPapers));
   const paperList = paperData.data.listPapers.items;
   setPaperRows(paperList)
-
-
 };
 
 
