@@ -4,6 +4,7 @@ import { useState } from "react";
 import FileUpload from "react-material-file-upload";
 import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
+import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -186,7 +187,7 @@ export default function List() {
               <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
                 Collaborators
               </Typography>
-              <Button sx={{ gridRow: '1', gridColumn: '4 / 5' }}>
+              <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '4 / 5' }}>
                 Add user
               </Button>
             </Box>
@@ -200,10 +201,10 @@ export default function List() {
             <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
               Sources
             </Typography>
-            <Button sx={{ gridRow: '1', gridColumn: '7/10', textAlign: 'right' }}>
+            <Button endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '7/9', textAlign: 'right' }}>
               Export Citations
             </Button>
-            <Button sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
+            <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
               Add Source
             </Button>
           </Box>
