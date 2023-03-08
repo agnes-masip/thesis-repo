@@ -15,19 +15,19 @@ const initialUserRows = [
     username: 'MichelleSchr'
   },
   {
-    id: 1,
+    id: 2,
     username: 'MichelleSchr'
   },
   {
-    id: 1,
+    id: 3,
     username: 'MichelleSchr'
   },
   {
-    id: 1,
+    id: 4,
     username: 'MichelleSchr'
   },
   {
-    id: 1,
+    id: 5,
     username: 'MichelleSchr'
   }
 ]
@@ -52,7 +52,7 @@ const initialPaperRows = [
     likes: 3,
   },
   {
-    id: 3,
+    id: 4,
     title: 'Najma Also Wrote a Paper',
     author: 'Christen et al.',
     likes: 3,
@@ -107,7 +107,7 @@ export default function List() {
 
   const userColumns = React.useMemo(
     () => [
-      { field: 'username', headerClassName: 'data-grid-header', type: 'string', flex: 1},
+      { field: 'username', header: 'Username', headerClassName: 'data-grid-header', type: 'string', flex: 1},
       {
         field: 'actions',
         headerClassName: 'data-grid-header',
@@ -207,7 +207,7 @@ export default function List() {
               Add Source
             </Button>
           </Box>
-          <Card sx={{height: 800, width: '100%' }}>
+          <Card sx={{height: 500, width: '100%' }}>
             <DataGrid columns={paperColumns} rows={paperRows}/>
           </Card>
         </Box>
