@@ -34,6 +34,12 @@ const initialRows = [
     author: 'van Brummelen et al.',
     likes: 3,
   },
+  {
+    id: 3,
+    title: 'Najma Also Wrote a Paper',
+    author: 'Christen et al.',
+    likes: 3,
+  },
 ];
 
 Amplify.configure(awsconfig);
@@ -103,11 +109,6 @@ export default function List() {
         flex: 0.5,
         getActions: (params) => [
           <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={deleteSource(params.id)}
-          />,
-          <GridActionsCellItem
           icon={<ThumbUpIcon />}
           label="Like"
           onClick={likeSource(params.id)}
@@ -118,6 +119,11 @@ export default function List() {
           onClick={downloadSource(params.id)}
           />,
           <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete"
+          onClick={deleteSource(params.id)}
+        />,
+          <GridActionsCellItem
           icon={<MoreHorizIcon />}
           label="Like"
           onClick={listActions(params.id)}
@@ -125,7 +131,7 @@ export default function List() {
         ],
       },
     ],
-    [deleteSource, likeSource, downloadSource, listActions],
+    [likeSource, downloadSource, deleteSource, listActions],
   );
 
   return (
