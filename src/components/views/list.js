@@ -97,15 +97,15 @@ const fetchPapers = async () => {
 
   //folder graphql in component has mutations and queries.js these is where you can find
   // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
-  
+
   const paperData = await API.graphql(graphqlOperation(listPapers));
   const paperList = paperData.data.listPapers.items;
-  setRows(paperList)
+  setPaperRows(paperList)
 
 
 };
 
-  
+
 
   // Currently only deletes item from list visually
   const deleteSource = React.useCallback(
@@ -120,7 +120,7 @@ const fetchPapers = async () => {
   // Currently does nothing
   const likeSource = React.useCallback(
     (id) => () => {
-     
+
     },
     [],
   );
