@@ -200,6 +200,9 @@ export default function List() {
             <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
               Sources
             </Typography>
+            <Button sx={{ gridRow: '1', gridColumn: '7/10', textAlign: 'right' }}>
+              Export Citations
+            </Button>
             <Button sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
               Add Source
             </Button>
