@@ -2,7 +2,12 @@
     "AppSyncApiName": "thesisrepo",
     "DynamoDBBillingMode": "PAY_PER_REQUEST",
     "DynamoDBEnableServerSideEncryption": false,
-    "AuthModeLastUpdated": "2023-03-08T12:43:18.528Z",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
     "S3DeploymentBucket": "amplify-amplify7086d81be34e4-staging-153100-deployment",
     "S3DeploymentRootKey": "amplify-appsync-files/c756bd2179585596bb10085d755f5b1e2ef87bdf"
 }

@@ -28,6 +28,7 @@ function Home() {
 
       //folder graphql in component has mutations and queries.js these is where you can find
       // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
+      console.log("fuckmylife")
       const paperData = await API.graphql(graphqlOperation(listPapers));
       const paperList = paperData.data.listPapers.items;
       console.log(paperList)
@@ -86,7 +87,7 @@ const deletePaper = async (id) => {
                     <tr key='${paper.id}'>
                       <td>{paper.id}</td>
                       <td>{paper.title}</td>
-                      <td>{paper.list}</td>
+                      
                        {/*This button is to use if you create a form for the changes. Right now,
                          it only changes the title. */}
 
@@ -100,32 +101,7 @@ const deletePaper = async (id) => {
               </tbody>
           </table>
           <h1>Papers in a specific list</h1>
-          <table>
-            <tbody>
-              <tr>
-                <th>List ID</th>
-                <th>Paper ID</th>
-                <th>Paper Title</th>
-                <th>Paper Author</th>
-              </tr>
-                {papers.map((paper) => {
-                  //paper.list is the list ID
-                  if(paper.list == "idList"){
-                    return (
-                      <tr key='${paper.list}'>
-                        <td>{paper.list}</td>
-                        <td>{paper.id}</td>
-                        <td>{paper.title}</td>
-                        <td>{paper.author}</td>
-                      </tr>
-                    );
-                  }else{
-                    return null;
-                  }
-
-                })}
-              </tbody>
-          </table>
+          
               {/*This is the form to upload papers.*/}
           {/* <form onSubmit={handleSubmit}>
             <div>
