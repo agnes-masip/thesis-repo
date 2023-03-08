@@ -1,12 +1,21 @@
 import React from 'react';
 import '../../App.css';
-import { useState } from "react";
+import { useState, useEffect  } from "react";
 import { useNavigate } from "react-router-dom";
 import {Box, Button, Card, Grid, CardContent, Typography} from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+
+//refactor imports one day maybe
+import Amplify from '@aws-amplify/core';
+import {API, graphqlOperation} from '@aws-amplify/api';
+import awsconfig from '../../aws-exports';
+import {listLists} from '../../graphql/queries';
+
+
+Amplify.configure(awsconfig);
 
 
 
@@ -42,6 +51,25 @@ const initialUser = {"name": "najma", "mail": "some@mail.ch"}
 export default function Home() {
     const [user, setUser] = React.useState(initialUser);
     const [rows, setRows] = React.useState(initialRows);
+
+    useEffect(() => {
+        fetchLists();
+    }, []);
+
+
+
+  //fetch all the papers in the database (dynamodb nosql)
+  const fetchLists = async () => {
+
+      //folder graphql in component has mutations and queries.js these is where you can find
+      // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
+      
+      const listsData = await API.graphql(graphqlOperation(listLists));
+      const allLists = listsData.data.listLists.items;
+      setRows(allLists)
+
+
+  };
 
     // Currently only deletes item from list visually
     const deleteSource = React.useCallback(
