@@ -17,6 +17,10 @@ import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 import {listPapers} from '../../graphql/queries';
 
+//creation of paper necessary import
+import { createPaper } from '../../graphql/mutations';
+
+//import {newPaper,deletedPaper,updatedPaper} from '../api/papers';
 
 const initialUserRows = [
   {
@@ -40,6 +44,8 @@ const initialUserRows = [
     username: 'MichelleSchr'
   }
 ]
+
+
 
 Amplify.configure(awsconfig);
 
@@ -66,12 +72,38 @@ export default function List() {
 
 //fetch all the papers in the database (dynamodb nosql)
 const fetchPapers = async () => {
+
   //folder graphql in component has mutations and queries.js these is where you can find
   // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
+
   const paperData = await API.graphql(graphqlOperation(listPapers));
   const paperList = paperData.data.listPapers.items;
   setPaperRows(paperList)
+
 };
+
+// create a new paper
+const createNewPaper = async () => {
+  const newPaper = await API.graphql({
+    query: createPaper,
+    variables: {
+        input: {
+                "title": "Lorem ipsum dolor sit amet",
+                "description": "Lorem ipsum dolor sit amet",
+                "likes": 1020,
+                "author": [],
+                "journal": "Lorem ipsum dolor sit amet",
+                "year": 1020,
+                "volume": "Lorem ipsum dolor sit amet",
+                "issue": "Lorem ipsum dolor sit amet",
+                "doi": "Lorem ipsum dolor sit amet",
+                "issn": "Lorem ipsum dolor sit amet",
+                "citationStorageLocation":  "https://www.google.com/"
+        }
+    }
+  });
+}
+
 
 
 
