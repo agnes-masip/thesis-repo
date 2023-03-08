@@ -10,10 +10,15 @@
 
 .data-grid-header {
   background-color: #FFA1CF;
+  width: 100%;
 }
 
 .data-grid-header .p {
   font-weight: bold;
+}
+
+.data-grid-no-header {
+  display: none;
 }
 
 .App-logo {
