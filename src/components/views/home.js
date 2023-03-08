@@ -7,11 +7,11 @@ import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 import { listPapers} from '../../graphql/queries';
 import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
-import FileUpload from "react-material-file-upload";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from '@mui/icons-material/Add';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 
 
@@ -80,7 +80,7 @@ function Home() {
                         onClick={deleteSource(params.id)}
                     />,
                     <GridActionsCellItem
-                        icon={<EditIcon />}
+                        icon={<VisibilityIcon />}
                         label="Edit"
                         onClick={editList(params.id)}
                     />,
@@ -144,57 +144,54 @@ function Home() {
           </div>
           <div>
               <Box my={4}>
-                  <Typography variant="h6" align="left" color="primary">
-                      User
-                  </Typography>
+                  <Box sx={{display: 'grid', gridAutoColumns: '1fr', gap: 1,}}>
+                      <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
+                          User
+                      </Typography>
+                      <Button  endIcon={<EditIcon />} onClick={editProfile()} sx={{ gridRow: '1', gridColumn: '7/8' }}>
+                          Edit
+                      </Button>
+                  </Box>
                   <Card>
                       <CardContent>
-                          <Grid container>
-                              <Grid item xs={10}>
-                                  <table >
-                                      <tr>
-                                          <td>
-                                              <Typography color="primary">
-                                                  Username:
-                                              </Typography>
-                                          </td>
-                                          <td>
-                                              <Typography>
-                                                  {user.name}
-                                              </Typography>
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                          <td>
-                                              <Typography color="primary">
-                                                  E-mail:
-                                              </Typography>
-                                          </td>
-                                          <td>
-                                              <Typography>
-                                                  {user.mail}
-                                              </Typography>
-                                          </td>
-                                      </tr>
-                                  </table>
-                              </Grid>
-                              <Grid item xs={2} >
-                                  <Button variant="contained" endIcon={<EditIcon />}  style={{margin:'5px'}} onClick={editProfile()}>
-                                      Edit
-                                  </Button>
-
-                              </Grid>
-                          </Grid>
+                          <table >
+                              <tr>
+                                  <td>
+                                      <Typography color="primary">
+                                          Username:
+                                      </Typography>
+                                  </td>
+                                  <td>
+                                      <Typography>
+                                          {user.name}
+                                      </Typography>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td>
+                                      <Typography color="primary">
+                                          E-mail:
+                                      </Typography>
+                                  </td>
+                                  <td>
+                                      <Typography>
+                                          {user.mail}
+                                      </Typography>
+                                  </td>
+                              </tr>
+                          </table>
                       </CardContent>
                   </Card>
               </Box>
               <Box my={4}>
-                  <Typography variant="h6" align="left" color="primary">
-                      My Lists
-                  </Typography>
-                  <div className='align-right'>
-                    <Button variant="contained" endIcon={<AddIcon />}  style={{marginBottom: '5px' }}>Create</Button>
-                  </div>
+                  <Box sx={{display: 'grid', gridAutoColumns: '1fr', gap: 1,}}>
+                      <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
+                          My Lists
+                      </Typography>
+                      <Button endIcon={<AddIcon />}  sx={{ gridRow: '1', gridColumn: '7/8' }}>
+                          Create
+                      </Button>
+                  </Box>
                   <Card sx={{height: 400, width: '100%' }}>
                       <DataGrid columns={columns} rows={rows}/>
                   </Card>
