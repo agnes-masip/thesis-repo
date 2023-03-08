@@ -14,17 +14,44 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type PaperCreateFormInputValues = {
     title?: string;
-    author?: string;
+    description?: string;
+    likes?: number;
+    author?: string[];
+    journal?: string;
+    year?: number;
+    volume?: string;
+    issue?: string;
+    doi?: string;
+    issn?: string;
+    citationStorageLocation?: string;
 };
 export declare type PaperCreateFormValidationValues = {
     title?: ValidationFunction<string>;
+    description?: ValidationFunction<string>;
+    likes?: ValidationFunction<number>;
     author?: ValidationFunction<string>;
+    journal?: ValidationFunction<string>;
+    year?: ValidationFunction<number>;
+    volume?: ValidationFunction<string>;
+    issue?: ValidationFunction<string>;
+    doi?: ValidationFunction<string>;
+    issn?: ValidationFunction<string>;
+    citationStorageLocation?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PaperCreateFormOverridesProps = {
     PaperCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
     title?: PrimitiveOverrideProps<TextFieldProps>;
+    description?: PrimitiveOverrideProps<TextFieldProps>;
+    likes?: PrimitiveOverrideProps<TextFieldProps>;
     author?: PrimitiveOverrideProps<TextFieldProps>;
+    journal?: PrimitiveOverrideProps<TextFieldProps>;
+    year?: PrimitiveOverrideProps<TextFieldProps>;
+    volume?: PrimitiveOverrideProps<TextFieldProps>;
+    issue?: PrimitiveOverrideProps<TextFieldProps>;
+    doi?: PrimitiveOverrideProps<TextFieldProps>;
+    issn?: PrimitiveOverrideProps<TextFieldProps>;
+    citationStorageLocation?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type PaperCreateFormProps = React.PropsWithChildren<{
     overrides?: PaperCreateFormOverridesProps | undefined | null;

@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../App.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FileUpload from "react-material-file-upload";
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -8,6 +8,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DownloadIcon from '@mui/icons-material/Download';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
+//these imports probably should go somewhere else
+import Amplify from '@aws-amplify/core';
+import {API, graphqlOperation} from '@aws-amplify/api';
+import awsconfig from '../../aws-exports';
+import {listPapers} from '../../graphql/queries';
 
 const initialRows = [
   {
@@ -30,10 +36,28 @@ const initialRows = [
   },
 ];
 
+Amplify.configure(awsconfig);
+
 export default function List() {
   const [files, setFiles] = useState([]);
+  const [papers, setPapers] = useState([]);
 
   const [rows, setRows] = React.useState(initialRows);
+
+  
+
+  const fetchPapers = () => {
+    API.graphql(graphqlOperation(listPapers))
+      .then((paperData) => {
+        const paperList = paperData.data.listPapers.items;
+        console.log(paperList);
+        setPapers(paperList);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  
 
   // Currently only deletes item from list visually
   const deleteSource = React.useCallback(
@@ -48,6 +72,7 @@ export default function List() {
   // Currently does nothing
   const likeSource = React.useCallback(
     (id) => () => {
+      fetchPapers();
     },
     [],
   );

@@ -52,10 +52,26 @@ function Home() {
     }
 };
 
+const deletePaper = async (id) => {
+    try {
+        const paper = papers[id];
+        delete paper.createdAt;
+        delete paper.updatedAt;
+
+        const paperData = await API.graphql(graphqlOperation(deletePaper, { input: paper }));
+        const paperList = [...papers];
+        paperList[id] = paperData.data.deletePaper;
+        setPapers(paperList);
+    } catch (error) {
+        console.log('error on deleting a paper', error);
+    }
+};
+
 
   return (
     <div className="App">
       <header className="App-header">
+      
         <h1>Papers</h1>
           <table>
             <tbody>
