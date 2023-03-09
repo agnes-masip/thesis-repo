@@ -1,9 +1,7 @@
 import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Box, Button, Card, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
@@ -17,8 +15,8 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Amplify from '@aws-amplify/core';
 import { API } from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
-import {listPapers, getList, getPaper} from '../../graphql/queries';
-import {deletePaper, updateList} from '../../graphql/mutations';
+import { getList, getPaper } from '../../graphql/queries';
+import { deletePaper, updateList } from '../../graphql/mutations';
 
 const initialUserRows = [
   {
@@ -160,26 +158,26 @@ export default function List() {
   };
 
   // create a new paper
-  const createNewPaper = async () => {
-    const newPaper = await API.graphql({
-      query: createPaper,
-      variables: {
-          input: {
-                  "title": "Lorem ipsum dolor sit amet",
-                  "description": "Lorem ipsum dolor sit amet",
-                  "likes": 1020,
-                  "author": [],
-                  "journal": "Lorem ipsum dolor sit amet",
-                  "year": 1020,
-                  "volume": "Lorem ipsum dolor sit amet",
-                  "issue": "Lorem ipsum dolor sit amet",
-                  "doi": "Lorem ipsum dolor sit amet",
-                  "issn": "Lorem ipsum dolor sit amet",
-                  "citationStorageLocation":  "https://www.google.com/"
-          }
-      }
-    });
-  }
+  // const createNewPaper = async () => {
+  //   const newPaper = await API.graphql({
+  //     query: createPaper,
+  //     variables: {
+  //         input: {
+  //                 "title": "Lorem ipsum dolor sit amet",
+  //                 "description": "Lorem ipsum dolor sit amet",
+  //                 "likes": 1020,
+  //                 "author": [],
+  //                 "journal": "Lorem ipsum dolor sit amet",
+  //                 "year": 1020,
+  //                 "volume": "Lorem ipsum dolor sit amet",
+  //                 "issue": "Lorem ipsum dolor sit amet",
+  //                 "doi": "Lorem ipsum dolor sit amet",
+  //                 "issn": "Lorem ipsum dolor sit amet",
+  //                 "citationStorageLocation":  "https://www.google.com/"
+  //         }
+  //     }
+  //   });
+  // }
 
   // Currently only deletes item from list visually
   const deleteSource = React.useCallback(

@@ -6,11 +6,7 @@ import Amplify from '@aws-amplify/core';
 import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
-import { listPapers, listLists } from '../../graphql/queries';
-=======
 import { listLists} from '../../graphql/queries';
->>>>>>> addSource
 import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -22,31 +18,17 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 
 Amplify.configure(awsconfig);
 
-const initialRows = [
-    {
-        id: 1,
-        listname: 'Some Long Ass List',
-        owner: 'Schrijnemaekers et al.',
-    },
-    {
-        id: 2,
-        listname: 'An Even Longer Paper List Because Real',
-        owner: 'Masip-Gomez et al.',
-    },
-];
 
 const initialUser = {name:"Najma", mail:"some@mail.ch"};
-
-
 
 
 function Home() {
 
   // the variable papers is the data you can use in frontend
   const [papers, setPapers] = useState([]);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [rows, setRows] = React.useState(initialRows);
+  const [title, setTitle] = useState([]);
+  const [author, setAuthor] = useState([]);
+  const [rows, setRows] = React.useState([]);
   const [user, setUser] = React.useState(initialUser);
 
 
