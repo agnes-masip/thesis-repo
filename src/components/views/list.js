@@ -1,8 +1,8 @@
 import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from "react";
-import FileUpload from "react-material-file-upload";
-import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+import { Link, useParams } from "react-router-dom";
+import { Box, Button, Card, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -13,10 +13,10 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 //these imports probably should go somewhere else
 import Amplify from '@aws-amplify/core';
-import {API, graphqlOperation} from '@aws-amplify/api';
+import { API } from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
-import {listPapers} from '../../graphql/queries';
-
+import { getList, getPaper } from '../../graphql/queries';
+import { deletePaper, updateList } from '../../graphql/mutations';
 
 const initialUserRows = [
   {
@@ -41,40 +41,13 @@ const initialUserRows = [
   }
 ]
 
-const initialPaperRows = [
-
-  {
-    id: 1,
-    title: 'Some Long Ass Paper Title',
-    author: 'Schrijnemaekers et al.',
-    likes: 5,
-  },
-  {
-    id: 2,
-    title: 'An Even Longer Paper Title Because Real',
-    author: 'Masip-Gomez et al.',
-    likes: 10,
-  },
-  {
-    id: 3,
-    title: 'A Small Paper Title',
-    author: 'van Brummelen et al.',
-    likes: 3,
-  },
-  {
-    id: 4,
-    title: 'Najma Also Wrote a Paper',
-    author: 'Christen et al.',
-    likes: 3,
-  },
-];
-
 Amplify.configure(awsconfig);
 
 export default function List() {
   const [files, setFiles] = useState([]);
-  const [paperRows, setPaperRows] = React.useState(initialPaperRows);
+  const [paperRows, setPaperRows] = React.useState([]);
   const [userRows, setUserRows] = React.useState(initialUserRows);
+  const { listID } = useParams();
 
   // Currently only deletes item from list visually
   const deleteUser = React.useCallback(
@@ -87,31 +60,131 @@ export default function List() {
   );
 
   useEffect(() => {
-    fetchPapers();
-}, []);
+    fetchPapers(listID);
+  },
+  []);
 
 
 
-//fetch all the papers in the database (dynamodb nosql)
-const fetchPapers = async () => {
+  //fetch all the papers in the database (dynamodb nosql)
+  const fetchPapers = async (listID) => {
 
-  //folder graphql in component has mutations and queries.js these is where you can find
-  // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
+    //folder graphql in component has mutations and queries.js these is where you can find
+    // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
+    const listData = await getListById(listID);
+    const paperIds = listData.papers;
+    let paperList = [];
+    for (const paperId of paperIds){
+      const paper = await getPaperById(paperId)
+      paperList.push(paper);
+    };
+    setPaperRows(paperList);
 
-  const paperData = await API.graphql(graphqlOperation(listPapers));
-  const paperList = paperData.data.listPapers.items;
-  setPaperRows(paperList)
+    // some test functions
+    deletePaperFromList("l12", 'a14');
+    // addPaperToList("l12", 'a14');
+  };
 
+  const getPaperById = async(paperId) => {
+    const paperData = await API.graphql({
+      query: getPaper,
+      variables: { id: paperId }
+    });
+    return paperData.data.getPaper;
+  }
 
-};
+  const getListById = async(listID) => {
+    const listData = await API.graphql({
+      query: getList,
+      variables: { id: listID }
+    });
+    return listData.data.getList;
+  }
 
+  const deletePaperFromList = async(listId, paperId) => {
+    try{
+      const list = await getListById(listId);
+      let listData = list;
+      let listPapers = listData.papers;
+      if (listPapers.includes(paperId)) { listPapers = listPapers.filter(id => id != paperId); }
+      listData.papers = listPapers;
+      await updateListById(listData);
+    } catch (error) {
+      console.error("Error on deleting paper from list", error);
+    }
+  }
 
+  const addPaperToList = async(listId, paperId) => {
+    try {
+      const list = await getListById (listId);
+      let listData = list;
+      let listPapers = listData.papers;
+      if (!listPapers.includes(paperId)) { listPapers.push(paperId); }
+      listData.papers = listPapers;
+      await updateListById(listData);
+    } catch (error) {
+      console.error('Error on adding paper to list', error);
+    }
+  }
+
+  const updateListById = async(listData) => {
+    try {
+      delete listData["createdAt"];
+      delete listData["updatedAt"];
+      await API.graphql({
+        query: updateList,
+        variables: {
+            input: listData
+        }
+      });
+    } catch (error) {
+      console.error("Error on update list", error);
+    }
+  }
+
+  const deletePaperById = async (id) => {
+    try {
+        await API.graphql({
+          query: deletePaper,
+          variables: {
+              input: {
+                  id: id
+              }
+          }
+      });
+    } catch (error) {
+        console.log('error on deleting paper', error);
+    }
+  };
+
+  // create a new paper
+  // const createNewPaper = async () => {
+  //   const newPaper = await API.graphql({
+  //     query: createPaper,
+  //     variables: {
+  //         input: {
+  //                 "title": "Lorem ipsum dolor sit amet",
+  //                 "description": "Lorem ipsum dolor sit amet",
+  //                 "likes": 1020,
+  //                 "author": [],
+  //                 "journal": "Lorem ipsum dolor sit amet",
+  //                 "year": 1020,
+  //                 "volume": "Lorem ipsum dolor sit amet",
+  //                 "issue": "Lorem ipsum dolor sit amet",
+  //                 "doi": "Lorem ipsum dolor sit amet",
+  //                 "issn": "Lorem ipsum dolor sit amet",
+  //                 "citationStorageLocation":  "https://www.google.com/"
+  //         }
+  //     }
+  //   });
+  // }
 
   // Currently only deletes item from list visually
   const deleteSource = React.useCallback(
     (id) => () => {
       setTimeout(() => {
         setPaperRows((prevPaperRows) => prevPaperRows.filter((row) => row.id !== id));
+        deletePaperById(id);
       });
     },
     [],
@@ -141,7 +214,7 @@ const fetchPapers = async () => {
 
   const userColumns = React.useMemo(
     () => [
-      { field: 'username', header: 'Username', headerClassName: 'data-grid-header', type: 'string', flex: 1},
+      { field: 'username', headerName: 'Username', headerClassName: 'data-grid-header', type: 'string', flex: 1},
       {
         field: 'actions',
         headerClassName: 'data-grid-header',
@@ -204,46 +277,38 @@ const fetchPapers = async () => {
         </Typography>
       </div>
       <div>
-        <Box my={4} sx={{ display: 'grid', gap: 2, gridTemplateColumns: 'repeat(2, 1fr)' }}>
-          <Box>
-            <Typography variant="h6" align="left" color="primary">
-              New Source
-            </Typography>
-            <Card sx={{height: '100%', width: '100%'}}>
-              <CardContent>
-                <FileUpload value={files} onChange={setFiles} />
-              </CardContent>
-            </Card>
-          </Box>
-          <Box>
-            <Box sx={{ display: 'grid', gridAutoColumns: '1fr' }}>
+        <Box my={4} sx={{ display: 'grid', gap: 2, gridAutoColumns: '1fr' }}>
+          <Box sx={{ display: 'grid', gridAutoColumns: '1fr', gridColumn: '1/4' }}>
+            <Box sx={{ display: 'grid', gridAutoColumns: '1fr'}}>
               <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
-                Collaborators
+                Sources
               </Typography>
-              <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '4 / 5' }}>
-                Add user
+              <Button endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
+                Export
+              </Button>
+              <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
+                <Link to={'/form/add'} class="Link" style={{ textDecoration: 'none'}}>
+                  Add
+                </Link>
               </Button>
             </Box>
-            <Card sx={{height: '100%', width: '100%'}}>
-              <DataGrid columns={userColumns} rows={userRows}/>
-            </Card>
-          </Box>
-        </Box>
-        <Box my={8}>
-          <Box sx={{ display: 'grid', gridAutoColumns: '1fr' }}>
-            <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
-              Sources
-            </Typography>
-            <Button endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '7/9', textAlign: 'right' }}>
-              Export Citations
-            </Button>
-            <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
-              Add Source
-            </Button>
-          </Box>
           <Card sx={{height: 500, width: '100%' }}>
             <DataGrid columns={paperColumns} rows={paperRows}/>
           </Card>
+          </Box>
+            <Box sx={{ display: 'grid', gridAutoColumns: '1fr', gridColumn: '4/5' }}>
+              <Box sx={{ display: 'grid', gridAutoColumns: '1fr'}}>
+                <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
+                  Collaborators
+                </Typography>
+                <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '5/6', textAlign: 'right' }}>
+                  Add
+                </Button>
+              </Box>
+              <Card sx={{height: 500, width: '100%'}}>
+                <DataGrid columns={userColumns} rows={userRows}/>
+              </Card>
+          </Box>
         </Box>
       </div>
     </div>

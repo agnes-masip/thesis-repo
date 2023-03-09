@@ -5,7 +5,8 @@ import '../../App.css';
 import Amplify from '@aws-amplify/core';
 import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
-import { listPapers} from '../../graphql/queries';
+import { Link } from "react-router-dom";
+import { listLists} from '../../graphql/queries';
 import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -17,31 +18,17 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 
 Amplify.configure(awsconfig);
 
-const initialRows = [
-    {
-        id: 1,
-        listname: 'Some Long Ass List',
-        owner: 'Schrijnemaekers et al.',
-    },
-    {
-        id: 2,
-        listname: 'An Even Longer Paper List Because Real',
-        owner: 'Masip-Gomez et al.',
-    },
-];
 
 const initialUser = {name:"Najma", mail:"some@mail.ch"};
-
-
 
 
 function Home() {
 
   // the variable papers is the data you can use in frontend
   const [papers, setPapers] = useState([]);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [rows, setRows] = React.useState(initialRows);
+  const [title, setTitle] = useState([]);
+  const [author, setAuthor] = useState([]);
+  const [rows, setRows] = React.useState([]);
   const [user, setUser] = React.useState(initialUser);
 
 
@@ -52,14 +39,6 @@ function Home() {
             setTimeout(() => {
                 setRows((prevRows) => prevRows.filter((row) => row.id !== id));
             });
-        },
-        [],
-    );
-
-
-    // Currently does nothing, should navigate to list
-    const editList = React.useCallback(
-        (id) => () => {
         },
         [],
     );
@@ -79,69 +58,41 @@ function Home() {
                         label="Delete"
                         onClick={deleteSource(params.id)}
                     />,
-                    <GridActionsCellItem
-                        icon={<VisibilityIcon />}
-                        label="Edit"
-                        onClick={editList(params.id)}
-                    />,
-                ],
+                    <Link to={'/list/' + params.id}>
+                        <GridActionsCellItem
+                            icon={<VisibilityIcon />}
+                            label="view"
+                        />
+                    </Link>,
+                ]
             },
         ],
-        [deleteSource, editList],
+        [deleteSource],
     );
 
 
     // useEffect is to call the fetch every time we go to home.js
   useEffect(() => {
-        fetchPapers();
+        fetchLists();
     }, []);
 
 
 
   //fetch all the papers in the database (dynamodb nosql)
-  const fetchPapers = async () => {
+  const fetchLists = async () => {
 
       //folder graphql in component has mutations and queries.js these is where you can find
       // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
-      console.log("fuckmylife")
-      const paperData = await API.graphql(graphqlOperation(listPapers));
-      const paperList = paperData.data.listPapers.items;
-      console.log(paperList)
-      setPapers(paperList)
+
+      const listData = await API.graphql(graphqlOperation(listLists));
+      const listList = listData.data.listLists.items;
+
+      setRows(listList)
 
 
   };
 
-  const updatePaper = async (id, title) => {
-    try {
-        const paper = papers[id];
-        paper.title = "we need to pass a variable here";
-        delete paper.createdAt;
-        delete paper.updatedAt;
 
-        const paperData = await API.graphql(graphqlOperation(updatePaper, { input: paper }));
-        const paperList = [...papers];
-        paperList[id] = paperData.data.updatePaper;
-        setPapers(paperList);
-    } catch (error) {
-        console.log('error on updating paper info', error);
-    }
-};
-
-const deletePaper = async (id) => {
-    try {
-        const paper = papers[id];
-        delete paper.createdAt;
-        delete paper.updatedAt;
-
-        const paperData = await API.graphql(graphqlOperation(deletePaper, { input: paper }));
-        const paperList = [...papers];
-        paperList[id] = paperData.data.deletePaper;
-        setPapers(paperList);
-    } catch (error) {
-        console.log('error on deleting a paper', error);
-    }
-};
 
     // Currently does nothing, should navigate to Profile
     const editProfile = React.useCallback(
@@ -229,7 +180,7 @@ const deletePaper = async (id) => {
   return (
     <div className="App">
       <header className="App-header">
-      
+
         <h1>Papers</h1>
           <table>
             <tbody>
@@ -244,7 +195,7 @@ const deletePaper = async (id) => {
                     <tr key='${paper.id}'>
                       <td>{paper.id}</td>
                       <td>{paper.title}</td>
-                      
+
                        {/*This button is to use if you create a form for the changes. Right now,
                          it only changes the title. }
 
