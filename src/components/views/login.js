@@ -7,6 +7,8 @@ import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
 import TextField from '@mui/material/TextField';
+import {SHA256} from 'crypto-js';
+import { getUserByEmail, newUser, userEmailExists, usernameExists } from '../api/users';
 
 
 
@@ -17,23 +19,55 @@ import TextField from '@mui/material/TextField';
 
 function Login() {
 
-    const [username, setUsername] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [password, setPassword] = useState(null);
+    const [username, setUsername] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [formValues, setFormValues] = useState([]);
+
+    const testPass = JSON.stringify(SHA256("testpass").words);
 
     // Currently does nothing, should navigate to list
-    const signUp = React.useCallback(
-        (id) => () => {
-        },
-        [],
-    );
+    async function signUp() {
+        // check if email's already used!
+        const emailExists = await userEmailExists(formValues["email"]);
+        if (emailExists) { console.error("This email is already used"); return;} // TODO: add actual error front-end
+
+        // check if username's already used
+        const userExists = await usernameExists(formValues["username"]);
+        if (userExists) { console.error("This username is already used"); return;}
+        
+        const newUserData = await newUser({
+            "username": formValues["username"],
+            "email": formValues["email"],
+            "password": formValues["password"]
+        });
+        console.log(newUserData);
+        // TODO: go to homepage
+    }
 
     // Currently does nothing, should navigate to list
-    const signIn = React.useCallback(
-        (id) => () => {
-        },
-        [],
-    );
+    async function signIn() {
+        const user = await getUserByEmail(formValues["email"]);
+        if (user.length === 0) { console.error("This email does not exist in our database"); return;}
+
+        if (user.password === formValues["password"]) { /* TODO: go to homepage */ }
+    }
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        if (name !== "password"){
+            setFormValues({
+            ...formValues,
+            [name]: value,
+          });
+        } else { // we have to use crypto!
+            setFormValues({
+                ...formValues,
+                [name]: JSON.stringify(SHA256(value).words),
+              });
+        }
+        
+    };
 
 
     return (
@@ -55,7 +89,8 @@ function Login() {
                                             id="outlined-required"
                                             label="Username"
                                             variant="outlined"
-                                            onChange={un => setUsername(un)}
+                                            name="username"
+                                            onChange={handleInputChange}
                                         />
                                     </Grid>
                                     <Grid item>
@@ -64,22 +99,25 @@ function Login() {
                                             id="outlined-required"
                                             label="E-Mail"
                                             variant="outlined"
-                                            onChange={un => setEmail(un)}
+                                            name="email"
+                                            onChange={handleInputChange}
                                         />
                                     </Grid>
                                     <Grid item>
                                         <TextField
+                                            required
                                             id="outlined-password-input"
                                             label="Password"
                                             type="password"
                                             autoComplete="current-password"
                                             variant="outlined"
-                                            onChange={n => setPassword(n)}
+                                            name="password"
+                                            onChange={handleInputChange}
                                         />
                                     </Grid>
                                 </Grid>
                                 <div >
-                                    <Button onClick={signUp()}>
+                                    <Button onClick={async() => {await signUp(); }}>
                                         Sign up
                                     </Button>
                                 </div>
@@ -101,17 +139,20 @@ function Login() {
                                             id="outlined-required"
                                             label="E-Mail"
                                             variant="outlined"
-                                            onChange={n => setEmail(n)}
+                                            name="email"
+                                            onChange={handleInputChange}
                                         />
                                     </Grid>
                                     <Grid item>
                                         <TextField
+                                            required
                                             id="outlined-password-input"
                                             label="Password"
                                             type="password"
                                             autoComplete="current-password"
                                             variant="outlined"
-                                            onChange={n => setPassword(n)}
+                                            name="password"
+                                            onChange={handleInputChange}
                                         />
                                     </Grid>
                                 </Grid>
