@@ -3,7 +3,7 @@ import { createPaper, updatePaper, deletePaper } from '../../graphql/mutations';
 
 import { listPapers, getPaper } from "../../graphql/queries";
 
-export const newPaper = async (paperData) => {
+export async function newPaper (paperData) { // provide: title!, description!, likes, author!, journal, year, volume, issue, doi, issn, citationStorageLocation
 	await API.graphql({
 		query: createPaper,
 		variables: {
@@ -12,7 +12,11 @@ export const newPaper = async (paperData) => {
 	});
 }
 
-export const updatePaperById = async(paperData) => {
+export async function updatePaperById (paperData) {
+	try{
+		delete paperData["createdAt"];
+      	delete paperData["updatedAt"];
+	} catch (error) {}
 	await API.graphql({
 		query: updatePaper,
 		variables: {
@@ -22,7 +26,7 @@ export const updatePaperById = async(paperData) => {
 }
 
 
-export const deletePaperById = async (id) => {
+export async function deletePaperById (id) {
     try {
         await API.graphql({
           query: deletePaper,
@@ -40,18 +44,20 @@ export const deletePaperById = async (id) => {
 //QUERIES
 
 // List all items
-export const getAllPapers = async() => {
-	await API.graphql({
+export async function getAllPapers() {
+	const papers = await API.graphql({
 		query: listPapers
 	});
+	return papers.data.listPapers.items;
 }
 
 // Get a specific item
-export const getPaperById = async(paperId) => {
-	await API.graphql({
+export async function getPaperById (paperId) {
+	const paper = await API.graphql({
 		query: getPaper,
 		variables: { id: paperId }
 	});
+	return paper.data.getPaper;
 }
 
 
