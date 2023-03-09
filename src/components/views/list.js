@@ -10,44 +10,20 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
 
-
 //these imports probably should go somewhere else
 import Amplify from '@aws-amplify/core';
 import awsconfig from '../../aws-exports';
 
-//import {newPaper,deletedPaper,updatedPaper} from '../api/papers';
-import {deletePaperById, getPaperById} from '../api/papers';
-import {getListById, deletePaperFromList} from '../api/lists';
-
-const initialUserRows = [
-  {
-    id: 1,
-    username: 'MichelleSchr'
-  },
-  {
-    id: 2,
-    username: 'MichelleSchr'
-  },
-  {
-    id: 3,
-    username: 'MichelleSchr'
-  },
-  {
-    id: 4,
-    username: 'MichelleSchr'
-  },
-  {
-    id: 5,
-    username: 'MichelleSchr'
-  }
-]
+import { deletePaperById, getPaperById } from '../api/papers';
+import { getListById, deletePaperFromList } from '../api/lists';
+import { getUserById } from '../api/users';
 
 Amplify.configure(awsconfig);
 
 export default function List() {
-  const [files, setFiles] = useState([]);
   const [paperRows, setPaperRows] = React.useState([]);
-  const [userRows, setUserRows] = React.useState(initialUserRows);
+  const [userRows, setUserRows] = React.useState([]);
+  const [newUser, setUsers] = React.useState([]);
   const { listID } = useParams();
 
   // Currently only deletes item from list visually
@@ -62,15 +38,12 @@ export default function List() {
 
   useEffect(() => {
     fetchPapers(listID);
+    fetchUsers(listID);
   },
   []);
 
 
-  //fetch all the papers in the database (dynamodb nosql)
   const fetchPapers = async (listID) => {
-
-    //folder graphql in component has mutations and queries.js these is where you can find
-    // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
     const listData = await getListById(listID);
     const paperIds = listData.papers;
     let paperList = [];
@@ -79,10 +52,23 @@ export default function List() {
       paperList.push(paper);
     };
     setPaperRows(paperList);
+  };
 
-    // some test functions
-    deletePaperFromList("l12", 'a14');
-    // addPaperToList("l12", 'a14');
+  const fetchUsers = async (listID) => {
+    let userList = [];
+    const listData = await getListById(listID);
+    const userID = listData.listOwner;
+    const user = await getUserById(userID);
+    userList.push(user);
+
+    const peersIDs = listData.sharedWith;
+    userList.push()
+    for (const id of peersIDs){
+      const peer = await getUserById(id);
+      userList.push(peer);
+    };
+
+    setUserRows(userList);
   };
 
   // Currently only deletes item from list visually
@@ -206,6 +192,20 @@ export default function List() {
                 </Button>
               </Box>
               <Card sx={{height: 500, width: '100%'}}>
+                {/* <form onSubmit={addUser}>
+                  <FormGroup>
+                    <FormLabel>
+                        Title:
+                    </FormLabel>
+                    <TextField
+                        id="title"
+                        name="title"
+                        type="text"
+                        value={formValues.title}
+                        onChange={handleInputChange}
+                    />
+                  </FormGroup>
+                </form> */}
                 <DataGrid columns={userColumns} rows={userRows}/>
               </Card>
           </Box>

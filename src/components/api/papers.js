@@ -39,7 +39,7 @@ export async function deletePaperById (id) {
     } catch (error) {
         console.log('error on deleting paper', error);
     }
-  };
+};
 
 //QUERIES
 

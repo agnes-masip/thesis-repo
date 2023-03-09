@@ -25,7 +25,6 @@ export default function AddSource() {
   const handleSubmit = (event) => {
     event.preventDefault();
     newPaper(formValues);
-
   };
 
   const handleInputChange = (event) => {
