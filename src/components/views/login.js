@@ -5,9 +5,9 @@ import '../../App.css';
 import Amplify from '@aws-amplify/core';
 import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
-import {Box, Card, CardContent, Typography, Button} from "@mui/material";
+import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
 import TextField from '@mui/material/TextField';
-import EditIcon from "@mui/icons-material/Edit";
+
 
 
 
@@ -16,6 +16,10 @@ import EditIcon from "@mui/icons-material/Edit";
 
 
 function Login() {
+
+    const [username, setUsername] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
 
     // Currently does nothing, should navigate to list
     const signUp = React.useCallback(
@@ -36,77 +40,86 @@ function Login() {
         <div className="Content">
             <div>
                 <Box my={4} sx={{display: 'grid', gridTemplateRows: 'repeat(2, 1fr)' , gap: 1,}}>
-                    <Box sx={{ gridRow: '1'}}>
+                    <Box sx={{ gridRow: '1', margin: "50px" }} >
                         <div className="Title">
                             <Typography variant="h4" align="left" color="primary">
                                 Sign in
                             </Typography>
                         </div>
-                        <Card>
+                        <Card sx={{ height: "100%",display:'flex', justifyContent:'center',padding:"10px" }}>
                             <CardContent>
-                                <table>
-                                    <tr>
+                                <Grid container direction={"column"} spacing={4}>
+                                    <Grid item>
                                         <TextField
                                             required
                                             id="outlined-required"
                                             label="Username"
                                             variant="outlined"
+                                            onChange={un => setUsername(un)}
                                         />
-                                    </tr>
-                                    <tr>
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField
+                                            required
+                                            id="outlined-required"
+                                            label="E-Mail"
+                                            variant="outlined"
+                                            onChange={un => setEmail(un)}
+                                        />
+                                    </Grid>
+                                    <Grid item>
                                         <TextField
                                             id="outlined-password-input"
                                             label="Password"
                                             type="password"
                                             autoComplete="current-password"
                                             variant="outlined"
+                                            onChange={n => setPassword(n)}
                                         />
-                                    </tr>
-                                    <tr>
-                                        <TextField
-                                            required
-                                            id="outlined-required"
-                                            label="E-Mail"
-                                            variant="outlined"
-                                        />
-                                    </tr>
-                                </table>
-                                <Button onClick={signUp()} >
-                                    Sign up
-                                </Button>
+                                    </Grid>
+                                </Grid>
+                                <div >
+                                    <Button onClick={signUp()}>
+                                        Sign up
+                                    </Button>
+                                </div>
                             </CardContent>
                         </Card>
                     </Box>
-                    <Box sx={{gridRow: '1'}}>
+                    <Box sx={{gridRow: '1', margin: "50px" }} >
                         <div className="Title">
                             <Typography variant="h4" align="left" color="primary">
                                 Sign up
                             </Typography>
                         </div>
-                        <Card>
+                        <Card sx={{ height: "100%", display:'flex', justifyContent:'center',padding:"10px" }}>
                             <CardContent>
-                                <table>
-                                    <tr>
+                                <Grid container direction={"column"} spacing={4}>
+                                    <Grid item>
                                         <TextField
                                             required
                                             id="outlined-required"
                                             label="E-Mail"
                                             variant="outlined"
+                                            onChange={n => setEmail(n)}
                                         />
-                                    </tr>
-                                    <tr>
+                                    </Grid>
+                                    <Grid item>
                                         <TextField
                                             id="outlined-password-input"
                                             label="Password"
                                             type="password"
                                             autoComplete="current-password"
                                             variant="outlined"
+                                            onChange={n => setPassword(n)}
                                         />
-                                    </tr>
-                                </table>
-                                <Button onClick={signIn()} >
-                                    Sign in
-                                </Button>
+                                    </Grid>
+                                </Grid>
+                                <div >
+                                    <Button onClick={signIn()} >
+                                        Sign in
+                                    </Button>
+                                </div>
                             </CardContent>
                         </Card>
                     </Box>
