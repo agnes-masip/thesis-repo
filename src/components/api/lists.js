@@ -4,12 +4,18 @@ import { createList, updateList, deleteList} from '../../graphql/mutations';
 import { listLists, getList } from "../../graphql/queries";
 
 export async function createNewList (listData) { // provide: title, papers, listOwner, sharedWith
-    const newList = await API.graphql({
+    try{
+      const newList = await API.graphql({
         query: createList,
         variables: {
             input: listData
         }
     });
+    }catch(error){
+      console.log('error creating a list', error)
+    }
+    
+
 }
 
 export async function deleteListById (listId) {

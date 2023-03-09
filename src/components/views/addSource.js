@@ -9,13 +9,12 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { Alert } from '@material-ui/lab';
 
 //these imports probably should go somewhere else
-import Amplify from '@aws-amplify/core';
-import awsconfig from '../../aws-exports';
+
 import NavBar from "../navbar";
 import {newPaper} from '../api/papers';
 import {addPaperToList} from '../api/lists'
 
-Amplify.configure(awsconfig);
+
 
 export default function AddSource() {
   const { listID } = useParams();
@@ -25,7 +24,7 @@ export default function AddSource() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    newPaper(formValues);
+    newPaper(formValues).then(PaperId => addPaperToList(listID, PaperId))
 
   };
 

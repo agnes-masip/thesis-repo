@@ -8,18 +8,15 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DownloadIcon from '@mui/icons-material/Download';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+//import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import NavBar from '../navbar';
 import EditIcon from '@mui/icons-material/Edit';
 
 
-//these imports probably should go somewhere else
-import Amplify from '@aws-amplify/core';
-import awsconfig from '../../aws-exports';
 
 //import {newPaper,deletedPaper,updatedPaper} from '../api/papers';
 import {deletePaperById, getPaperById} from '../api/papers';
-import {getListById, deletePaperFromList} from '../api/lists';
+import {getListById} from '../api/lists';
 
 const initialUserRows = [
   {
@@ -44,10 +41,9 @@ const initialUserRows = [
   }
 ]
 
-Amplify.configure(awsconfig);
+
 
 export default function List() {
-  const [files, setFiles] = useState([]);
   const [paperRows, setPaperRows] = React.useState([]);
   const [userRows, setUserRows] = React.useState(initialUserRows);
   const { listID } = useParams();
@@ -71,8 +67,6 @@ export default function List() {
   //fetch all the papers in the database (dynamodb nosql)
   const fetchPapers = async (listID) => {
 
-    //folder graphql in component has mutations and queries.js these is where you can find
-    // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
     const listData = await getListById(listID);
     const paperIds = listData.papers;
     let paperList = [];
@@ -83,7 +77,7 @@ export default function List() {
     setPaperRows(paperList);
 
     // some test functions
-    deletePaperFromList("l12", 'a14');
+    // deletePaperFromList("l12", 'a14');
     // addPaperToList("l12", 'a14');
   };
 

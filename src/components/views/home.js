@@ -1,13 +1,10 @@
 
 import React, { useState, useEffect} from 'react';
 import '../../App.css';
-// import Amplify, { API, graphqlOperation } from 'aws-amplify';
-import Amplify from '@aws-amplify/core';
-import {API, graphqlOperation} from '@aws-amplify/api';
-import awsconfig from '../../aws-exports';
+
 import { Link } from "react-router-dom";
-import { listLists} from '../../graphql/queries';
-import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
+
+import {Box, Card, CardContent, Typography, Button} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -16,11 +13,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import NavBar from "../navbar";
 
 import { getAllListsForUser, deleteListById } from '../api/lists';
-import {deletePaperById} from "../api/papers";
-
-
-
-Amplify.configure(awsconfig);
+//import {deletePaperById} from "../api/papers";
 
 
 const initialUser = {name:"Najma", mail:"some@mail.ch", userId: "user2"};
@@ -28,10 +21,7 @@ const initialUser = {name:"Najma", mail:"some@mail.ch", userId: "user2"};
 
 function Home() {
 
-  // the variable papers is the data you can use in frontend
-  const [papers, setPapers] = useState([]);
-  const [title, setTitle] = useState([]);
-  const [author, setAuthor] = useState([]);
+  
   const [rows, setRows] = React.useState([]);
   const [listRows, setListRows] = React.useState([]);
   const [user, setUser] = React.useState(initialUser);
