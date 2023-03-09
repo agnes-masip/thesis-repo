@@ -17,6 +17,7 @@ import { API } from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 import { getList, getPaper } from '../../graphql/queries';
 import { deletePaper, updateList } from '../../graphql/mutations';
+import NavBar from "../navbar";
 
 const initialUserRows = [
   {
@@ -270,6 +271,8 @@ export default function List() {
   );
 
   return (
+  <div>
+    <NavBar/>
     <div className="Content">
       <div className="Title">
         <Typography variant="h4" align="left" color="primary">
@@ -312,5 +315,6 @@ export default function List() {
         </Box>
       </div>
     </div>
+  </div>
   );
 }

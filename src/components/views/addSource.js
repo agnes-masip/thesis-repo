@@ -8,6 +8,7 @@ import { Box, Button, Card, CardContent, FormLabel, FormGroup, TextField, Typogr
 import Amplify from '@aws-amplify/core';
 import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
+import NavBar from "../navbar";
 
 Amplify.configure(awsconfig);
 
@@ -29,6 +30,8 @@ export default function AddSource() {
   };
 
   return (
+  <div>
+    <NavBar/>
     <div className="Content">
       <div className="Title">
         <Typography variant="h4" align="left" color="primary">
@@ -184,5 +187,6 @@ export default function AddSource() {
         </Box>
       </div>
     </div>
+  </div>
   );
 }
