@@ -6,7 +6,11 @@ import Amplify from '@aws-amplify/core';
 import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
 import { listPapers, listLists } from '../../graphql/queries';
+=======
+import { listLists} from '../../graphql/queries';
+>>>>>>> addSource
 import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -95,10 +99,10 @@ function Home() {
 
       //folder graphql in component has mutations and queries.js these is where you can find
       // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
-      
+
       const listData = await API.graphql(graphqlOperation(listLists));
       const listList = listData.data.listLists.items;
-      
+
       setRows(listList)
 
 

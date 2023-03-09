@@ -3,6 +3,7 @@ import '../../App.css';
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+  import { useParams } from "react-router-dom";
 import { Box, Button, Card, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
@@ -18,11 +19,6 @@ import { API } from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 import {listPapers, getList, getPaper} from '../../graphql/queries';
 import {deletePaper, updateList} from '../../graphql/mutations';
-
-//creation of paper necessary import
-import { createPaper } from '../../graphql/mutations';
-
-//import {newPaper,deletedPaper,updatedPaper} from '../api/papers';
 
 const initialUserRows = [
   {
@@ -74,6 +70,29 @@ export default function List() {
 
   //fetch all the papers in the database (dynamodb nosql)
   const fetchPapers = async (listID) => {
+
+    //folder graphql in component has mutations and queries.js these is where you can find
+    // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
+    const listData = await getListById(listID);
+    const paperIds = listData.papers;
+    let paperList = [];
+    for (const paperId of paperIds){
+      const paper = await getPaperById(paperId)
+      paperList.push(paper);
+    };
+    setPaperRows(paperList);
+
+    // some test functions
+    deletePaperFromList("l12", 'a14');
+    // addPaperToList("l12", 'a14');
+  };
+
+  const getPaperById = async(paperId) => {
+    const paperData = await API.graphql({
+      query: getPaper,
+      variables: { id: paperId }
+    });
+    return paperData.data.getPaper;
   }
 
   const getListById = async(listID) => {
@@ -270,7 +289,7 @@ export default function List() {
                 Export
               </Button>
               <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
-                <Link to={'/addSource'} class="Link" style={{ textDecoration: 'none'}}>
+                <Link to={'/form/add'} class="Link" style={{ textDecoration: 'none'}}>
                   Add
                 </Link>
               </Button>
