@@ -1,49 +1,56 @@
 import { API } from "aws-amplify";
-import { createUser, updateUser, deleteUser } from '../graphql/mutations';
+import { createUser, updateUser, deleteUser } from '../../graphql/mutations';
 
-import { listUsers, getUser } from "../graphql/queries";
+import { listUsers, getUser } from "../../graphql/queries";
 
-const newUser = await API.graphql({
-    query: createUser,
-    variables: {
-        input: {
-		"username": "Lorem ipsum dolor sit amet",
-		"email": "test12346789@testemailtestemail.com",
-		"password": "Lorem ipsum dolor sit amet"
-	}
-    }
-});
-
-const updatedUser = await API.graphql({
-    query: updateUser,
-    variables: {
-        input: {
-		"username": "Lorem ipsum dolor sit amet",
-		"email": "test12346789@testemailtestemail.com",
-		"password": "Lorem ipsum dolor sit amet"
-	}
-    }
-});
-
-const deletedUser = await API.graphql({
-    query: deleteUser,
-    variables: {
-        input: {
-            id: "YOUR_RECORD_ID"
+export async function newUser (userData){ //provide: username, email, password
+    await API.graphql({
+        query: createUser,
+        variables: {
+            input: userData
         }
-    }
-});
+    });
+}
+
+export async function updateUserById (userData){
+    try {
+        delete userData["createdAt"];
+        delete userData["updatedAt"];
+    } catch (error) {}
+    await API.graphql({
+        query: updateUser,
+        variables: {
+            input: userData
+        }
+    });
+}
+
+export async function deleteUserById (userId){
+    await API.graphql({
+        query: deleteUser,
+        variables: {
+            input: {
+                id: userId
+            }
+        }
+    });
+}
 
 //QUERIES
 
 // List all items
-const allUsers = await API.graphql({
-    query: listUsers
-});
-console.log(allUser);
+export async function getAllUsers() {
+    const allUsers = await API.graphql({
+        query: listUsers
+    });
+    return allUsers.data.listUsers.items;
+}
 
 // Get a specific item
-const oneUser = await API.graphql({
-    query: getUser,
-    variables: { id: 'YOUR_RECORD_ID' }
-});
+export async function getUserById(userId) {
+    const user = await API.graphql({
+        query: getUser,
+        variables: { id: userId }
+    });
+    return user.data.getUser;
+}

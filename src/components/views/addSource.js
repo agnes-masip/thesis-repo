@@ -6,21 +6,20 @@ import { Box, Button, Card, CardContent, FormLabel, FormGroup, TextField, Typogr
 
 //these imports probably should go somewhere else
 import Amplify from '@aws-amplify/core';
-import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 import {newPaper} from '../api/papers'
 
 Amplify.configure(awsconfig);
 
 export default function AddSource() {
+  const { listID } = useParams();
   const [files, setFiles] = useState([]);
   const [formValues, setFormValues] = useState([]);
-  const { listID } = useParams();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     newPaper(formValues);
-    
+
   };
 
   const handleInputChange = (event) => {
