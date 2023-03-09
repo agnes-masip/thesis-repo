@@ -17,7 +17,7 @@ import Amplify from '@aws-amplify/core';
 import awsconfig from '../../aws-exports';
 
 import { deletePaperById, getPaperById } from '../api/papers';
-import { getListById, deletePaperFromList } from '../api/lists';
+import { getListById } from '../api/lists';
 import { getUserById } from '../api/users';
 
 Amplify.configure(awsconfig);
@@ -25,8 +25,6 @@ Amplify.configure(awsconfig);
 export default function List() {
   const [paperRows, setPaperRows] = React.useState([]);
   const [userRows, setUserRows] = React.useState([]);
-  // const listOwner = "";
-  const [newUser, setUsers] = React.useState([]);
   const { listID } = useParams();
 
   useEffect(() => {
@@ -61,7 +59,6 @@ export default function List() {
       userList.push(peer);
     };
 
-    // listOwner = ownerID
     setUserRows(userList);
   };
 
