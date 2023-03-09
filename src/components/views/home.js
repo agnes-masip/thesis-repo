@@ -5,6 +5,7 @@ import '../../App.css';
 import Amplify from '@aws-amplify/core';
 import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
+import { Link } from "react-router-dom";
 import { listLists} from '../../graphql/queries';
 import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
@@ -56,14 +57,6 @@ function Home() {
         [],
     );
 
-
-    // Currently does nothing, should navigate to list
-    const editList = React.useCallback(
-        (id) => () => {
-        },
-        [],
-    );
-
     const columns = React.useMemo(
         () => [
             { field: 'listname', headerName: 'Listname', headerClassName: 'data-grid-header', type: 'string', flex: 1.5 },
@@ -81,13 +74,12 @@ function Home() {
                     />,
                     <GridActionsCellItem
                         icon={<VisibilityIcon />}
-                        label="Edit"
-                        onClick={editList(params.id)}
+                        label="view"
                     />,
-                ],
+                ]
             },
         ],
-        [deleteSource, editList],
+        [deleteSource],
     );
 
 
@@ -103,10 +95,10 @@ function Home() {
 
       //folder graphql in component has mutations and queries.js these is where you can find
       // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
-      
+
       const listData = await API.graphql(graphqlOperation(listLists));
       const listList = listData.data.listLists.items;
-      
+
       setRows(listList)
 
 
@@ -200,7 +192,7 @@ function Home() {
   return (
     <div className="App">
       <header className="App-header">
-      
+
         <h1>Papers</h1>
           <table>
             <tbody>
@@ -215,7 +207,7 @@ function Home() {
                     <tr key='${paper.id}'>
                       <td>{paper.id}</td>
                       <td>{paper.title}</td>
-                      
+
                        {/*This button is to use if you create a form for the changes. Right now,
                          it only changes the title. }
 
