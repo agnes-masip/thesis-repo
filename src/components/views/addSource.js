@@ -8,6 +8,7 @@ import { Box, Button, Card, CardContent, FormLabel, FormGroup, TextField, Typogr
 import Amplify from '@aws-amplify/core';
 import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
+import {newPaper} from '../api/papers'
 
 Amplify.configure(awsconfig);
 
@@ -18,7 +19,8 @@ export default function AddSource() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('submit');
+    newPaper(formValues);
+    
   };
 
   const handleInputChange = (event) => {
@@ -87,11 +89,11 @@ export default function AddSource() {
                                     Description:
                                 </FormLabel>
                                 <TextField
-                                    id="desc"
-                                    name="desc"
-                                    label="desc"
+                                    id="description"
+                                    name="description"
+                                    label="description"
                                     type="text"
-                                    value={formValues.desc}
+                                    value={formValues.description}
                                     onChange={handleInputChange}
                                 />
                             </FormGroup>
