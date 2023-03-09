@@ -1,11 +1,45 @@
 
-type Paper {
+type Team @aws_iam @aws_api_key {
+  id: ID!
+  name: String!
+  teamOwner: String!
+  members: [String]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type User @aws_iam @aws_api_key {
+  id: ID!
+  username: String!
+  email: AWSEmail!
+  password: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type List @aws_iam @aws_api_key {
+  id: ID!
+  title: String!
+  papers: [String]
+  listOwner: String!
+  sharedWith: [String]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Paper @aws_iam @aws_api_key {
   id: ID!
   title: String!
   description: String!
-  likes: Int!
-  author: String!
-  list: String
+  likes: Int
+  author: [String!]
+  journal: String
+  year: Int
+  volume: String
+  issue: String
+  doi: String
+  issn: String
+  citationStorageLocation: AWSURL
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
@@ -160,7 +194,206 @@ enum ModelSortDirection {
   DESC
 }
 
-type ModelPaperConnection {
+type ModelTeamConnection @aws_api_key @aws_iam {
+  items: [Team]!
+  nextToken: String
+}
+
+input ModelTeamFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  teamOwner: ModelStringInput
+  members: ModelStringInput
+  and: [ModelTeamFilterInput]
+  or: [ModelTeamFilterInput]
+  not: ModelTeamFilterInput
+}
+
+type Query {
+  getTeam(id: ID!): Team @aws_api_key @aws_iam
+  listTeams(filter: ModelTeamFilterInput, limit: Int, nextToken: String): ModelTeamConnection @aws_api_key @aws_iam
+  getUser(id: ID!): User @aws_api_key @aws_iam
+  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection @aws_api_key @aws_iam
+  getList(id: ID!): List @aws_api_key @aws_iam
+  listLists(filter: ModelListFilterInput, limit: Int, nextToken: String): ModelListConnection @aws_api_key @aws_iam
+  getPaper(id: ID!): Paper @aws_api_key @aws_iam
+  listPapers(filter: ModelPaperFilterInput, limit: Int, nextToken: String): ModelPaperConnection @aws_api_key @aws_iam
+}
+
+input ModelTeamConditionInput {
+  name: ModelStringInput
+  teamOwner: ModelStringInput
+  members: ModelStringInput
+  and: [ModelTeamConditionInput]
+  or: [ModelTeamConditionInput]
+  not: ModelTeamConditionInput
+}
+
+input CreateTeamInput {
+  id: ID
+  name: String!
+  teamOwner: String!
+  members: [String]
+}
+
+input UpdateTeamInput {
+  id: ID!
+  name: String
+  teamOwner: String
+  members: [String]
+}
+
+input DeleteTeamInput {
+  id: ID!
+}
+
+type Mutation {
+  createTeam(input: CreateTeamInput!, condition: ModelTeamConditionInput): Team @aws_api_key @aws_iam
+  updateTeam(input: UpdateTeamInput!, condition: ModelTeamConditionInput): Team @aws_api_key @aws_iam
+  deleteTeam(input: DeleteTeamInput!, condition: ModelTeamConditionInput): Team @aws_api_key @aws_iam
+  createUser(input: CreateUserInput!, condition: ModelUserConditionInput): User @aws_api_key @aws_iam
+  updateUser(input: UpdateUserInput!, condition: ModelUserConditionInput): User @aws_api_key @aws_iam
+  deleteUser(input: DeleteUserInput!, condition: ModelUserConditionInput): User @aws_api_key @aws_iam
+  createList(input: CreateListInput!, condition: ModelListConditionInput): List @aws_api_key @aws_iam
+  updateList(input: UpdateListInput!, condition: ModelListConditionInput): List @aws_api_key @aws_iam
+  deleteList(input: DeleteListInput!, condition: ModelListConditionInput): List @aws_api_key @aws_iam
+  createPaper(input: CreatePaperInput!, condition: ModelPaperConditionInput): Paper @aws_api_key @aws_iam
+  updatePaper(input: UpdatePaperInput!, condition: ModelPaperConditionInput): Paper @aws_api_key @aws_iam
+  deletePaper(input: DeletePaperInput!, condition: ModelPaperConditionInput): Paper @aws_api_key @aws_iam
+}
+
+input ModelSubscriptionTeamFilterInput {
+  id: ModelSubscriptionIDInput
+  name: ModelSubscriptionStringInput
+  teamOwner: ModelSubscriptionStringInput
+  members: ModelSubscriptionStringInput
+  and: [ModelSubscriptionTeamFilterInput]
+  or: [ModelSubscriptionTeamFilterInput]
+}
+
+type Subscription {
+  onCreateTeam(filter: ModelSubscriptionTeamFilterInput): Team @aws_subscribe(mutations: ["createTeam"]) @aws_api_key @aws_iam
+  onUpdateTeam(filter: ModelSubscriptionTeamFilterInput): Team @aws_subscribe(mutations: ["updateTeam"]) @aws_api_key @aws_iam
+  onDeleteTeam(filter: ModelSubscriptionTeamFilterInput): Team @aws_subscribe(mutations: ["deleteTeam"]) @aws_api_key @aws_iam
+  onCreateUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations: ["createUser"]) @aws_api_key @aws_iam
+  onUpdateUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations: ["updateUser"]) @aws_api_key @aws_iam
+  onDeleteUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations: ["deleteUser"]) @aws_api_key @aws_iam
+  onCreateList(filter: ModelSubscriptionListFilterInput): List @aws_subscribe(mutations: ["createList"]) @aws_api_key @aws_iam
+  onUpdateList(filter: ModelSubscriptionListFilterInput): List @aws_subscribe(mutations: ["updateList"]) @aws_api_key @aws_iam
+  onDeleteList(filter: ModelSubscriptionListFilterInput): List @aws_subscribe(mutations: ["deleteList"]) @aws_api_key @aws_iam
+  onCreatePaper(filter: ModelSubscriptionPaperFilterInput): Paper @aws_subscribe(mutations: ["createPaper"]) @aws_api_key @aws_iam
+  onUpdatePaper(filter: ModelSubscriptionPaperFilterInput): Paper @aws_subscribe(mutations: ["updatePaper"]) @aws_api_key @aws_iam
+  onDeletePaper(filter: ModelSubscriptionPaperFilterInput): Paper @aws_subscribe(mutations: ["deletePaper"]) @aws_api_key @aws_iam
+}
+
+type ModelUserConnection @aws_api_key @aws_iam {
+  items: [User]!
+  nextToken: String
+}
+
+input ModelUserFilterInput {
+  id: ModelIDInput
+  username: ModelStringInput
+  email: ModelStringInput
+  password: ModelStringInput
+  and: [ModelUserFilterInput]
+  or: [ModelUserFilterInput]
+  not: ModelUserFilterInput
+}
+
+input ModelUserConditionInput {
+  username: ModelStringInput
+  email: ModelStringInput
+  password: ModelStringInput
+  and: [ModelUserConditionInput]
+  or: [ModelUserConditionInput]
+  not: ModelUserConditionInput
+}
+
+input CreateUserInput {
+  id: ID
+  username: String!
+  email: AWSEmail!
+  password: String!
+}
+
+input UpdateUserInput {
+  id: ID!
+  username: String
+  email: AWSEmail
+  password: String
+}
+
+input DeleteUserInput {
+  id: ID!
+}
+
+input ModelSubscriptionUserFilterInput {
+  id: ModelSubscriptionIDInput
+  username: ModelSubscriptionStringInput
+  email: ModelSubscriptionStringInput
+  password: ModelSubscriptionStringInput
+  and: [ModelSubscriptionUserFilterInput]
+  or: [ModelSubscriptionUserFilterInput]
+}
+
+type ModelListConnection @aws_api_key @aws_iam {
+  items: [List]!
+  nextToken: String
+}
+
+input ModelListFilterInput {
+  id: ModelIDInput
+  title: ModelStringInput
+  papers: ModelStringInput
+  listOwner: ModelStringInput
+  sharedWith: ModelStringInput
+  and: [ModelListFilterInput]
+  or: [ModelListFilterInput]
+  not: ModelListFilterInput
+}
+
+input ModelListConditionInput {
+  title: ModelStringInput
+  papers: ModelStringInput
+  listOwner: ModelStringInput
+  sharedWith: ModelStringInput
+  and: [ModelListConditionInput]
+  or: [ModelListConditionInput]
+  not: ModelListConditionInput
+}
+
+input CreateListInput {
+  id: ID
+  title: String!
+  papers: [String]
+  listOwner: String!
+  sharedWith: [String]
+}
+
+input UpdateListInput {
+  id: ID!
+  title: String
+  papers: [String]
+  listOwner: String
+  sharedWith: [String]
+}
+
+input DeleteListInput {
+  id: ID!
+}
+
+input ModelSubscriptionListFilterInput {
+  id: ModelSubscriptionIDInput
+  title: ModelSubscriptionStringInput
+  papers: ModelSubscriptionStringInput
+  listOwner: ModelSubscriptionStringInput
+  sharedWith: ModelSubscriptionStringInput
+  and: [ModelSubscriptionListFilterInput]
+  or: [ModelSubscriptionListFilterInput]
+}
+
+type ModelPaperConnection @aws_api_key @aws_iam {
   items: [Paper]!
   nextToken: String
 }
@@ -171,15 +404,16 @@ input ModelPaperFilterInput {
   description: ModelStringInput
   likes: ModelIntInput
   author: ModelStringInput
-  list: ModelStringInput
+  journal: ModelStringInput
+  year: ModelIntInput
+  volume: ModelStringInput
+  issue: ModelStringInput
+  doi: ModelStringInput
+  issn: ModelStringInput
+  citationStorageLocation: ModelStringInput
   and: [ModelPaperFilterInput]
   or: [ModelPaperFilterInput]
   not: ModelPaperFilterInput
-}
-
-type Query {
-  getPaper(id: ID!): Paper
-  listPapers(filter: ModelPaperFilterInput, limit: Int, nextToken: String): ModelPaperConnection
 }
 
 input ModelPaperConditionInput {
@@ -187,7 +421,13 @@ input ModelPaperConditionInput {
   description: ModelStringInput
   likes: ModelIntInput
   author: ModelStringInput
-  list: ModelStringInput
+  journal: ModelStringInput
+  year: ModelIntInput
+  volume: ModelStringInput
+  issue: ModelStringInput
+  doi: ModelStringInput
+  issn: ModelStringInput
+  citationStorageLocation: ModelStringInput
   and: [ModelPaperConditionInput]
   or: [ModelPaperConditionInput]
   not: ModelPaperConditionInput
@@ -197,9 +437,15 @@ input CreatePaperInput {
   id: ID
   title: String!
   description: String!
-  likes: Int!
-  author: String!
-  list: String
+  likes: Int
+  author: [String!]
+  journal: String
+  year: Int
+  volume: String
+  issue: String
+  doi: String
+  issn: String
+  citationStorageLocation: AWSURL
 }
 
 input UpdatePaperInput {
@@ -207,18 +453,18 @@ input UpdatePaperInput {
   title: String
   description: String
   likes: Int
-  author: String
-  list: String
+  author: [String!]
+  journal: String
+  year: Int
+  volume: String
+  issue: String
+  doi: String
+  issn: String
+  citationStorageLocation: AWSURL
 }
 
 input DeletePaperInput {
   id: ID!
-}
-
-type Mutation {
-  createPaper(input: CreatePaperInput!, condition: ModelPaperConditionInput): Paper
-  updatePaper(input: UpdatePaperInput!, condition: ModelPaperConditionInput): Paper
-  deletePaper(input: DeletePaperInput!, condition: ModelPaperConditionInput): Paper
 }
 
 input ModelSubscriptionPaperFilterInput {
@@ -227,14 +473,14 @@ input ModelSubscriptionPaperFilterInput {
   description: ModelSubscriptionStringInput
   likes: ModelSubscriptionIntInput
   author: ModelSubscriptionStringInput
-  list: ModelSubscriptionStringInput
+  journal: ModelSubscriptionStringInput
+  year: ModelSubscriptionIntInput
+  volume: ModelSubscriptionStringInput
+  issue: ModelSubscriptionStringInput
+  doi: ModelSubscriptionStringInput
+  issn: ModelSubscriptionStringInput
+  citationStorageLocation: ModelSubscriptionStringInput
   and: [ModelSubscriptionPaperFilterInput]
   or: [ModelSubscriptionPaperFilterInput]
-}
-
-type Subscription {
-  onCreatePaper(filter: ModelSubscriptionPaperFilterInput): Paper @aws_subscribe(mutations: ["createPaper"])
-  onUpdatePaper(filter: ModelSubscriptionPaperFilterInput): Paper @aws_subscribe(mutations: ["updatePaper"])
-  onDeletePaper(filter: ModelSubscriptionPaperFilterInput): Paper @aws_subscribe(mutations: ["deletePaper"])
 }
 
