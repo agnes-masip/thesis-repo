@@ -10,6 +10,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DownloadIcon from '@mui/icons-material/Download';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import NavBar from '../navbar';
+import EditIcon from '@mui/icons-material/Edit';
 
 
 //these imports probably should go somewhere else
@@ -112,13 +113,6 @@ export default function List() {
     [],
   );
 
-  // Currently does nothing
-  const listActions = React.useCallback(
-    (id) => () => {
-    },
-    [],
-  );
-
   const userColumns = React.useMemo(
     () => [
       { field: 'username', headerName: 'Username', headerClassName: 'data-grid-header', type: 'string', flex: 1},
@@ -165,15 +159,16 @@ export default function List() {
           label="Delete"
           onClick={deleteSource(params.id)}
         />,
+        <Link to={'/edit/' + listID + '/' + params.id}>
           <GridActionsCellItem
-          icon={<MoreHorizIcon />}
+          icon={<EditIcon />}
           label="Like"
-          onClick={listActions(params.id)}
-          />,
+          />
+        </Link>,
         ],
       },
     ],
-    [likeSource, downloadSource, deleteSource, listActions],
+    [likeSource, downloadSource, deleteSource],
   );
 
   return (
@@ -196,7 +191,7 @@ export default function List() {
                 Export
               </Button>
               <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
-                <Link to={'/form/add'} class="Link" style={{ textDecoration: 'none'}}>
+                <Link to={'/add/' + listID} class="Link" style={{ textDecoration: 'none'}}>
                   Add
                 </Link>
               </Button>

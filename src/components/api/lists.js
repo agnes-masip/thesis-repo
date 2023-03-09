@@ -20,14 +20,14 @@ export async function deleteListById (listId) {
                 id: listId
             }
         }
-    });   
+    });
 }
 
 
 //QUERIES
 
 async function getAllLists() {
-    const listData = await API.graphql({query: listLists}); 
+    const listData = await API.graphql({query: listLists});
     return listData.data.listLists.items;
 }
 
