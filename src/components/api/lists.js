@@ -3,40 +3,21 @@ import { createList, updateList, deleteList} from '../../graphql/mutations';
 
 import { listLists, getList } from "../../graphql/queries";
 
-const createNewList = async () =>{
+export async function createNewList (listData) { // provide: title, papers, listOwner, sharedWith
     const newList = await API.graphql({
         query: createList,
         variables: {
-            input: {
-            "title": "Lorem ipsum dolor sit amet",
-            "papers": [],
-            "listOwner": "Lorem ipsum dolor sit amet",
-            "sharedWith": []
-        }
+            input: listData
         }
     });
 }
 
-const updateAList = async () =>{
-    const updatedList = await API.graphql({
-        query: updateList,
-        variables: {
-            input: {
-            "title": "Lorem ipsum dolor sit amet",
-            "papers": [],
-            "listOwner": "Lorem ipsum dolor sit amet",
-            "sharedWith": []
-        }
-        }
-    });
-}
-
-const deleteAList = async () =>{
+export async function deleteListById (listId) {
     const deletedList = await API.graphql({
         query: deleteList,
         variables: {
             input: {
-                id: "YOUR_RECORD_ID"
+                id: listId
             }
         }
     });   
@@ -45,25 +26,18 @@ const deleteAList = async () =>{
 
 //QUERIES
 
-const getAllLists = async () =>{
-    // List all items
-const allLists = await API.graphql({
-    query: listLists
-});
-//onsole.log(allLists);  
+async function getAllLists() {
+    const listData = await API.graphql({query: listLists}); 
+    return listData.data.listLists.items;
 }
 
-const getAList = async () =>{
-    
-
-// Get a specific item
-const oneList = await API.graphql({
-    query: getList,
-    variables: { id: 'YOUR_RECORD_ID' }
-});    
+export async function getAllListsForUser(userId) {
+    const lists = await getAllLists();
+    return lists.filter(list => list.listOwner = userId);
 }
 
-export const getListById = async(listID) => {
+
+export async function getListById (listID) {
     const listData = await API.graphql({
       query: getList,
       variables: { id: listID }
@@ -72,7 +46,7 @@ export const getListById = async(listID) => {
 }
 
 // alter papers in list
-export const deletePaperFromList = async(listId, paperId) => {
+export async function deletePaperFromList (listId, paperId) {
     try{
       const list = await getListById(listId);
       let listData = list;
@@ -85,7 +59,7 @@ export const deletePaperFromList = async(listId, paperId) => {
     }
 }
 
-export const addPaperToList = async(listId, paperId) => {
+export async function addPaperToList (listId, paperId) {
     try {
       const list = await getListById (listId);
       let listData = list;
@@ -98,7 +72,7 @@ export const addPaperToList = async(listId, paperId) => {
     }
 }
 
-export const updateListById = async(listData) => {
+async function updateListById (listData) {
     try {
       delete listData["createdAt"];
       delete listData["updatedAt"];
