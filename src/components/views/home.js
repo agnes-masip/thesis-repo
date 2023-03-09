@@ -181,68 +181,7 @@ function Home() {
               </div>
           </div>
       </div>
-  )
-
-
-
-
-
-
-
-
-
-/*
-  return (
-    <div className="App">
-      <header className="App-header">
-
-        <h1>Papers</h1>
-          <table>
-            <tbody>
-              <tr>
-                <th>Paper ID</th>
-                <th>Paper Title</th>
-                <th>Paper Author</th>
-                <th>Button to edit data</th>
-              </tr>
-                {papers.map((paper) => {
-                  return (
-                    <tr key='${paper.id}'>
-                      <td>{paper.id}</td>
-                      <td>{paper.title}</td>
-
-                       {/*This button is to use if you create a form for the changes. Right now,
-                         it only changes the title. }
-
-                         <button onClick={() => updatePaper(paper.id, "idList")}> </button>
-
-                        {/* This button is to delete the paper.
-                         <button onClick={() => deletePaper(paper.id)}> </button> }
-                    </tr>
-                  );
-                })}
-              </tbody>
-          </table>
-          <h1>Papers in a specific list</h1>
-
-
-
-              {/*This is the form to upload papers.}
-          {/* <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="title">Title:</label>
-              <input type="text" id="title" value={title} onChange={(event) => setTitle(event.target.value)} />
-            </div>
-            <div>
-              <label htmlFor="body">Author:</label>
-              <input type="text" id="author" value={author}  onChange={(event) => setAuthor(event.target.value)} />
-            </div>
-             <button type="submit">Create paper</button>
-          </form> }
-      </header>
-    </div>
-  );
-*/
+    )
 }
 
 export default Home;

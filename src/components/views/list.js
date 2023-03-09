@@ -25,18 +25,9 @@ Amplify.configure(awsconfig);
 export default function List() {
   const [paperRows, setPaperRows] = React.useState([]);
   const [userRows, setUserRows] = React.useState([]);
+  // const listOwner = "";
   const [newUser, setUsers] = React.useState([]);
   const { listID } = useParams();
-
-  // Currently only deletes item from list visually
-  const deleteUser = React.useCallback(
-    (id) => () => {
-      setTimeout(() => {
-        setUserRows((prevUserRows) => prevUserRows.filter((row) => row.id !== id));
-      });
-    },
-    [],
-  );
 
   useEffect(() => {
     fetchPapers(listID);
@@ -59,9 +50,9 @@ export default function List() {
   const fetchUsers = async (listID) => {
     let userList = [];
     const listData = await getListById(listID);
-    const userID = listData.listOwner;
-    const user = await getUserById(userID);
-    userList.push(user);
+    const ownerID = listData.listOwner;
+    const owner = await getUserById(ownerID);
+    userList.push(owner);
 
     const peersIDs = listData.sharedWith;
     userList.push()
@@ -70,13 +61,17 @@ export default function List() {
       userList.push(peer);
     };
 
+    // listOwner = ownerID
     setUserRows(userList);
   };
 
-  const deleteSource = async (id) => {
-      // setPaperRows((prevPaperRows) => prevPaperRows.filter((row) => row.id !== id));
-      deletePaperById(id);
-    };
+  const deleteSource = async (sourceID) => {
+    deletePaperById(sourceID);
+  };
+
+  const deleteCollaborator = async (userID) => {
+    deleteCollaborator(userID);
+  };
 
   // Currently does nothing
   const likeSource = React.useCallback(
@@ -105,12 +100,12 @@ export default function List() {
           <GridActionsCellItem
           icon={<DeleteIcon />}
           label="delete"
-          onClick={deleteUser(params.id)}
+          onClick={deleteCollaborator(params.id)}
           />,
         ]
       },
     ],
-    [deleteUser],
+    [deleteCollaborator],
   );
 
   const paperColumns = React.useMemo(
@@ -171,7 +166,7 @@ export default function List() {
                 Export
               </Button>
               <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
-                <Link to={'/add/' + listID} class="Link" style={{ textDecoration: 'none'}}>
+                <Link to={'/add/' + listID} className="Link" style={{ textDecoration: 'none'}}>
                   Add
                 </Link>
               </Button>
