@@ -8,6 +8,8 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DownloadIcon from '@mui/icons-material/Download';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import NavBar from '../navbar';
 import EditIcon from '@mui/icons-material/Edit';
 
 
@@ -170,6 +172,8 @@ export default function List() {
   );
 
   return (
+  <div>
+    <NavBar/>
     <div className="Content">
       <div className="Title">
         <Typography variant="h4" align="left" color="primary">
@@ -212,5 +216,6 @@ export default function List() {
         </Box>
       </div>
     </div>
+  </div>
   );
 }

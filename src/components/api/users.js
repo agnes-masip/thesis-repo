@@ -4,12 +4,13 @@ import { createUser, updateUser, deleteUser } from '../../graphql/mutations';
 import { listUsers, getUser } from "../../graphql/queries";
 
 export async function newUser (userData){ //provide: username, email, password
-    await API.graphql({
+    const newUserData = await API.graphql({
         query: createUser,
         variables: {
             input: userData
         }
     });
+    return newUserData.data.createUser;
 }
 
 export async function updateUserById (userData){
@@ -53,4 +54,19 @@ export async function getUserById(userId) {
         variables: { id: userId }
     });
     return user.data.getUser;
+}
+
+export async function getUserByEmail(email){
+    const users = await getAllUsers();
+    return users.filter(user => user.email === email);
+}
+
+export async function userEmailExists(email){
+    const users = await getAllUsers();
+    return users.filter(user => user.email === email).length === 1;
+}
+
+export async function usernameExists(username){
+    const users = await getAllUsers();
+    return users.filter(user => user.username === username).length === 1;
 }
