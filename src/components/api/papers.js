@@ -7,40 +7,16 @@ export const newPaper = async (paperData) => {
 	await API.graphql({
 		query: createPaper,
 		variables: {
-			input: {
-			"title": "Lorem ipsum dolor sit amet",
-			"description": "Lorem ipsum dolor sit amet",
-			"likes": 1020,
-			"author": [],
-			"journal": "Lorem ipsum dolor sit amet",
-			"year": 1020,
-			"volume": "Lorem ipsum dolor sit amet",
-			"issue": "Lorem ipsum dolor sit amet",
-			"doi": "Lorem ipsum dolor sit amet",
-			"issn": "Lorem ipsum dolor sit amet",
-			"citationStorageLocation":  "https://www.google.com/"
-		}
+			input: paperData
 		}
 	});
 }
 
-export const updatedPaper = async(paperData) => {
+export const updatePaperById = async(paperData) => {
 	await API.graphql({
 		query: updatePaper,
 		variables: {
-			input: {
-				"title": paperData["title"],
-				"description": paperData["description"],
-				"likes": paperData["likes"],
-				"author": paperData["author"],
-				"journal": paperData["journal"],
-				"year": paperData["year"],
-				"volume": paperData["volume"],
-				"issue": paperData["issue"],
-				"doi": paperData["doi"],
-				"issn": paperData["issn"],
-				"citationStorageLocation": paperData["citationStorageLocation"]
-			}
+			input: paperData
 		}
 	})
 }
