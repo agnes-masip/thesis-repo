@@ -2,7 +2,6 @@ import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Box, Button, Card, Typography } from '@mui/material';
 import { useParams } from "react-router-dom";
 import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -19,11 +18,6 @@ import { API } from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 import { getList, getPaper } from '../../graphql/queries';
 import { deletePaper } from '../../graphql/mutations';
-
-//creation of paper necessary import
-import { createPaper } from '../../graphql/mutations';
-
-//import {newPaper,deletedPaper,updatedPaper} from '../api/papers';
 
 const initialUserRows = [
   {
