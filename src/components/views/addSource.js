@@ -8,6 +8,7 @@ import { Box, Button, Card, CardContent, FormLabel, FormGroup, TextField, Typogr
 import Amplify from '@aws-amplify/core';
 import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
+import {newPaper} from '../api/papers'
 
 Amplify.configure(awsconfig);
 
@@ -17,7 +18,8 @@ export default function AddSource() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('submit');
+    newPaper(formValues);
+    
   };
 
   const handleInputChange = (event) => {
@@ -52,7 +54,7 @@ export default function AddSource() {
             </Typography>
             <Card sx={{height: '100%', width: '100%'}}>
                 <CardContent>
-                    <form on Submit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
                         <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: 'repeat(2, 1fr)' }}>
                             <FormGroup>
                                 <FormLabel>
@@ -86,11 +88,11 @@ export default function AddSource() {
                                     Description:
                                 </FormLabel>
                                 <TextField
-                                    id="desc"
-                                    name="desc"
-                                    label="desc"
+                                    id="description"
+                                    name="description"
+                                    label="description"
                                     type="text"
-                                    value={formValues.desc}
+                                    value={formValues.description}
                                     onChange={handleInputChange}
                                 />
                             </FormGroup>
@@ -174,7 +176,7 @@ export default function AddSource() {
                             </FormGroup>
                         </Box>
                         <Box my={2}>
-                            <Button variant="contained" my={4}>
+                            <Button type ="submit" variant="contained" my={4}>
                                 Submit
                             </Button>
                         </Box>
