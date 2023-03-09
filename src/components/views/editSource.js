@@ -64,7 +64,6 @@ export default function EditSource() {
                                 <TextField
                                     id="title"
                                     name="title"
-                                    label="Title"
                                     type="text"
                                     value={formValues.title}
                                     onChange={handleInputChange}
@@ -78,7 +77,6 @@ export default function EditSource() {
                                 <TextField
                                     id="author"
                                     name="author"
-                                    label="Author"
                                     type="text"
                                     value={formValues.author}
                                     onChange={handleInputChange}
@@ -91,7 +89,6 @@ export default function EditSource() {
                                 <TextField
                                     id="desc"
                                     name="desc"
-                                    label="desc"
                                     type="text"
                                     value={formValues.desc}
                                     onChange={handleInputChange}
@@ -104,7 +101,6 @@ export default function EditSource() {
                                 <TextField
                                     id="doi"
                                     name="doi"
-                                    label="DOI"
                                     type="text"
                                     value={formValues.doi}
                                     onChange={handleInputChange}
@@ -117,7 +113,6 @@ export default function EditSource() {
                                 <TextField
                                     id="issn"
                                     name="issn"
-                                    label="ISSN"
                                     type="text"
                                     value={formValues.issn}
                                     onChange={handleInputChange}
@@ -130,7 +125,6 @@ export default function EditSource() {
                                 <TextField
                                     id="issue"
                                     name="issue"
-                                    label="Issue"
                                     type="text"
                                     value={formValues.issue}
                                     onChange={handleInputChange}
@@ -143,7 +137,6 @@ export default function EditSource() {
                                 <TextField
                                     id="journal"
                                     name="journal"
-                                    label="Journal"
                                     type="text"
                                     value={formValues.journal}
                                     onChange={handleInputChange}
@@ -156,7 +149,6 @@ export default function EditSource() {
                                 <TextField
                                     id="volume"
                                     name="volume"
-                                    label="Volume"
                                     type="text"
                                     value={formValues.volume}
                                     onChange={handleInputChange}
@@ -169,7 +161,6 @@ export default function EditSource() {
                                 <TextField
                                     id="year"
                                     name="year"
-                                    label="Year"
                                     type="number"
                                     value={formValues.year}
                                     onChange={handleInputChange}
