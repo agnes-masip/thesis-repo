@@ -73,16 +73,10 @@ export default function List() {
     setUserRows(userList);
   };
 
-  // Currently only deletes item from list visually
-  const deleteSource = React.useCallback(
-    (id) => () => {
-      setTimeout(() => {
-        setPaperRows((prevPaperRows) => prevPaperRows.filter((row) => row.id !== id));
-        deletePaperById(id);
-      });
-    },
-    [],
-  );
+  const deleteSource = async (id) => {
+      // setPaperRows((prevPaperRows) => prevPaperRows.filter((row) => row.id !== id));
+      deletePaperById(id);
+    };
 
   // Currently does nothing
   const likeSource = React.useCallback(
