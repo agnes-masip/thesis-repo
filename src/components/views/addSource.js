@@ -20,6 +20,7 @@ export default function AddSource() {
   const { listID } = useParams();
   const [files, setFiles] = useState([]);
   const [formValues, setFormValues] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
