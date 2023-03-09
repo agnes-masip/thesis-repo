@@ -11,10 +11,7 @@ import EditSource from './components/views/editSource';
 import Amplify from '@aws-amplify/core';
 import API from '@aws-amplify/api';
 import awsconfig from './aws-exports';
-import { listPapers} from './graphql/queries';
-// import { createTodo } from './graphql/mutations';
 import './App.css';
-// import { withAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 Amplify.configure(awsconfig);
 
@@ -63,8 +60,8 @@ function App() {
           <Route path='/' element={<Home/>} />
           <Route path='list/:listID' element={<List/>} />
           <Route path='user' element={<User/>} />
-          <Route path='add' element={<AddSource/>} />
-          <Route path='edit' element={<EditSource/>} />
+          <Route path='add/:listID' element={<AddSource/>} />
+          <Route path='edit/:sourceID' element={<EditSource/>} />
         </Routes>
       </ThemeProvider>
     </div>

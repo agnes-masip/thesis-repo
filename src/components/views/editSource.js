@@ -1,21 +1,36 @@
 import React from 'react';
 import '../../App.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Box, Button, Card, CardContent, FormLabel, FormGroup, TextField, Typography } from '@mui/material';
 
 //these imports probably should go somewhere else
 import Amplify from '@aws-amplify/core';
-import {API, graphqlOperation} from '@aws-amplify/api';
+import { API } from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
+import { getPaper } from '../../graphql/queries';
 
 Amplify.configure(awsconfig);
 
 export default function EditSource() {
-  const [formValues, setFormValues] = useState([]); // formvalues should initially contain the current paper data
+  const { sourceID } = useParams();
+  const [formValues, setFormValues] = useState([]);
+
+  useEffect(() => {
+    setInitialFormValues(sourceID);
+  },
+  []);
+
+  const setInitialFormValues = async(paperId) => {
+    const paperData = await API.graphql({
+        query: getPaper,
+        variables: { id: paperId }
+    });
+    setFormValues(paperData.data.getPaper);
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('submit');
   };
 
   const handleInputChange = (event) => {
@@ -40,7 +55,7 @@ export default function EditSource() {
             </Typography>
             <Card sx={{height: '100%', width: '100%'}}>
                 <CardContent>
-                    <form on Submit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
                         <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: 'repeat(2, 1fr)' }}>
                             <FormGroup>
                                 <FormLabel>
@@ -162,7 +177,7 @@ export default function EditSource() {
                             </FormGroup>
                         </Box>
                         <Box my={2}>
-                            <Button variant="contained" my={4}>
+                            <Button type="submit" variant="contained" my={4}>
                                 Submit
                             </Button>
                         </Box>
