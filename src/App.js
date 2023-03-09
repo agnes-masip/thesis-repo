@@ -6,6 +6,7 @@ import List from './components/views/list';
 import NavBar from './components/navbar';
 import User from './components/views/user';
 import AddSource from './components/views/addSource';
+import EditSource from './components/views/editSource';
 
 import Amplify from '@aws-amplify/core';
 import API from '@aws-amplify/api';
@@ -62,7 +63,8 @@ function App() {
           <Route path='/' element={<Home/>} />
           <Route path='list/:listID' element={<List/>} />
           <Route path='user' element={<User/>} />
-          <Route path='addSource' element={<AddSource/>} />
+          <Route path='add' element={<AddSource/>} />
+          <Route path='edit' element={<EditSource/>} />
         </Routes>
       </ThemeProvider>
     </div>

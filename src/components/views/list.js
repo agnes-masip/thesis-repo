@@ -287,7 +287,7 @@ export default function List() {
                 Export
               </Button>
               <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
-                <Link to={'/form/add'} class="Link" style={{ textDecoration: 'none'}}>
+                <Link to={'/add'} class="Link" style={{ textDecoration: 'none'}}>
                   Add
                 </Link>
               </Button>
