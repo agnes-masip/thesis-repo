@@ -3,13 +3,25 @@ import { createPaper, updatePaper, deletePaper } from '../../graphql/mutations';
 
 import { listPapers, getPaper } from "../../graphql/queries";
 
+<<<<<<< HEAD
+export async function newPaper(paperData) {
+	
+	const response = await API.graphql({
+=======
 export async function newPaper (paperData) { // provide: title!, description!, likes, author!, journal, year, volume, issue, doi, issn, citationStorageLocation
 	await API.graphql({
+>>>>>>> 68bf2b2dbdf354cdb3b23ad1d749610338984dd6
 		query: createPaper,
 		variables: {
 			input: paperData
 		}
 	});
+<<<<<<< HEAD
+	const newPaperId = response.data.createPaper.id;
+	return newPaperId;
+
+=======
+>>>>>>> 68bf2b2dbdf354cdb3b23ad1d749610338984dd6
 }
 
 export async function updatePaperById (paperData) {

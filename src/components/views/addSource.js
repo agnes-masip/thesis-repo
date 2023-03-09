@@ -11,7 +11,8 @@ import { Alert } from '@material-ui/lab';
 //these imports probably should go somewhere else
 import Amplify from '@aws-amplify/core';
 import awsconfig from '../../aws-exports';
-import {newPaper} from '../api/papers'
+import {newPaper} from '../api/papers';
+import {addPaperToList} from '../api/lists'
 
 Amplify.configure(awsconfig);
 
@@ -19,12 +20,11 @@ export default function AddSource() {
   const { listID } = useParams();
   const [files, setFiles] = useState([]);
   const [formValues, setFormValues] = useState([]);
-  const [open, setOpen] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     newPaper(formValues);
-    setOpen(true);
+
   };
 
   const handleInputChange = (event) => {
@@ -39,7 +39,7 @@ export default function AddSource() {
     setOpen(false);
   };
 
-  return (
+    return (
     <div className="Content">
       <div className="Title">
         <Box sx={{ display: 'grid', gridAutoColumns: '1fr'}}>
