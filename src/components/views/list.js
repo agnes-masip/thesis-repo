@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import FileUpload from "react-material-file-upload";
 import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
@@ -13,9 +14,10 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 //these imports probably should go somewhere else
 import Amplify from '@aws-amplify/core';
-import {API, graphqlOperation} from '@aws-amplify/api';
+import { API } from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
-import {listPapers} from '../../graphql/queries';
+import {listPapers, getList, getPaper} from '../../graphql/queries';
+import {deletePaper, updateList} from '../../graphql/mutations';
 
 //creation of paper necessary import
 import { createPaper } from '../../graphql/mutations';
@@ -45,14 +47,13 @@ const initialUserRows = [
   }
 ]
 
-
-
 Amplify.configure(awsconfig);
 
 export default function List() {
   const [files, setFiles] = useState([]);
   const [paperRows, setPaperRows] = React.useState([]);
   const [userRows, setUserRows] = React.useState(initialUserRows);
+  const { listID } = useParams();
 
   // Currently only deletes item from list visually
   const deleteUser = React.useCallback(
@@ -65,22 +66,78 @@ export default function List() {
   );
 
   useEffect(() => {
-    fetchPapers();
-}, []);
+    fetchPapers(listID);
+  },
+  []);
 
 
 
-//fetch all the papers in the database (dynamodb nosql)
-const fetchPapers = async () => {
+  //fetch all the papers in the database (dynamodb nosql)
+  const fetchPapers = async (listID) => {
 
-  //folder graphql in component has mutations and queries.js these is where you can find
-  // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
+  const getListById = async(listID) => {
+    const listData = await API.graphql({
+      query: getList,
+      variables: { id: listID }
+    });
+    return listData.data.getList;
+  }
 
-  const paperData = await API.graphql(graphqlOperation(listPapers));
-  const paperList = paperData.data.listPapers.items;
-  setPaperRows(paperList)
+  const deletePaperFromList = async(listId, paperId) => {
+    try{
+      const list = await getListById(listId);
+      let listData = list;
+      let listPapers = listData.papers;
+      if (listPapers.includes(paperId)) { listPapers = listPapers.filter(id => id != paperId); }
+      listData.papers = listPapers;
+      await updateListById(listData);
+    } catch (error) {
+      console.error("Error on deleting paper from list", error);
+    }
+  }
 
-};
+  const addPaperToList = async(listId, paperId) => {
+    try {
+      const list = await getListById (listId);
+      let listData = list;
+      let listPapers = listData.papers;
+      if (!listPapers.includes(paperId)) { listPapers.push(paperId); }
+      listData.papers = listPapers;
+      await updateListById(listData);
+    } catch (error) {
+      console.error('Error on adding paper to list', error);
+    }
+  }
+
+  const updateListById = async(listData) => {
+    try {
+      delete listData["createdAt"];
+      delete listData["updatedAt"];
+      await API.graphql({
+        query: updateList,
+        variables: {
+            input: listData
+        }
+      });
+    } catch (error) {
+      console.error("Error on update list", error);
+    }
+  }
+
+  const deletePaperById = async (id) => {
+    try {
+        await API.graphql({
+          query: deletePaper,
+          variables: {
+              input: {
+                  id: id
+              }
+          }
+      });
+    } catch (error) {
+        console.log('error on deleting paper', error);
+    }
+  };
 
 // create a new paper
 const createNewPaper = async () => {
@@ -104,14 +161,12 @@ const createNewPaper = async () => {
   });
 }
 
-
-
-
   // Currently only deletes item from list visually
   const deleteSource = React.useCallback(
     (id) => () => {
       setTimeout(() => {
         setPaperRows((prevPaperRows) => prevPaperRows.filter((row) => row.id !== id));
+        deletePaperById(id);
       });
     },
     [],
