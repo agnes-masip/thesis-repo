@@ -56,7 +56,6 @@ function App() {
   return (
     <div className="app">
       <ThemeProvider theme={theme}>
-        <NavBar/>
         <Routes>
           <Route path='/' element={<Home/>} />
           <Route path='list/:listID' element={<List/>} />

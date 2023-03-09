@@ -87,3 +87,31 @@ async function updateListById (listData) {
     }
 }
 
+// alter collaborators
+
+export async function deleteCollaboratorFromList (listId, userId) {
+    try{
+      const list = await getListById(listId);
+      let listData = list;
+      let collaborators = listData.sharedWith;
+      if (collaborators.includes(userId)) { collaborators = collaborators.filter(id => id != userId); }
+      listData.sharedWith = collaborators;
+      await updateListById(listData);
+    } catch (error) {
+      console.error("Error on deleting collaborator from list", error);
+    }
+}
+
+export async function addCollaboratorToList (listId, userId) {
+    try {
+      const list = await getListById (listId);
+      let listData = list;
+      let collaborators = listData.sharedWith;
+      if (!collaborators.includes(userId)) { collaborators.push(userId); }
+      listData.sharedWith = collaborators;
+      await updateListById(listData);
+    } catch (error) {
+      console.error('Error on adding collaborator to list', error);
+    }
+}
+

@@ -13,8 +13,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import NavBar from "../navbar";
 
-import { getAllListsForUser } from '../api/lists';
+import { getAllListsForUser, deleteListById } from '../api/lists';
+import {deletePaperById} from "../api/papers";
 
 
 
@@ -31,6 +33,7 @@ function Home() {
   const [title, setTitle] = useState([]);
   const [author, setAuthor] = useState([]);
   const [rows, setRows] = React.useState([]);
+  const [listRows, setListRows] = React.useState([]);
   const [user, setUser] = React.useState(initialUser);
 
 
@@ -45,10 +48,22 @@ function Home() {
         [],
     );
 
+
+    //
+    const deleteList = React.useCallback(
+        (id) => () => {
+            setTimeout(() => {
+                setListRows((prevListRows) => prevListRows.filter((row) => row.id !== id));
+                deleteListById(id);
+            });
+        },
+        [],
+    );
+
     const columns = React.useMemo(
         () => [
-            { field: 'listname', headerName: 'Listname', headerClassName: 'data-grid-header', type: 'string', flex: 1.5 },
-            { field: 'owner', headerName: 'Owner', headerClassName: 'data-grid-header', type: 'string', flex: 1 },
+            { field: 'title', headerName: 'Listname', headerClassName: 'data-grid-header', type: 'string', flex: 1.5 },
+            { field: 'listOwner', headerName: 'Owner', headerClassName: 'data-grid-header', type: 'string', flex: 1 },
             {
                 field: 'actions',
                 headerClassName: 'data-grid-header',
@@ -58,7 +73,7 @@ function Home() {
                     <GridActionsCellItem
                         icon={<DeleteIcon />}
                         label="Delete"
-                        onClick={deleteSource(params.id)}
+                        onClick={deleteList(params.id)}
                     />,
                     <Link to={'/list/' + params.id}>
                         <GridActionsCellItem
@@ -101,69 +116,71 @@ function Home() {
 
 
   return(
-      <div className="Content">
-          <div className="Title">
-              <Typography variant="h4" align="left" color="primary">
-                  Home
-              </Typography>
-          </div>
-          <div>
-              <Box my={4}>
-                  <Box sx={{display: 'grid', gridAutoColumns: '1fr', gap: 1,}}>
-                      <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
-                          User
-                      </Typography>
-                      <Button  endIcon={<EditIcon />} onClick={editProfile()} sx={{ gridRow: '1', gridColumn: '7/8' }}>
-                          Edit
-                      </Button>
+      <div>
+          <NavBar/>
+          <div className="Content">
+              <div className="Title">
+                  <Typography variant="h4" align="left" color="primary">
+                      Home
+                  </Typography>
+              </div>
+              <div>
+                  <Box my={4}>
+                      <Box sx={{display: 'grid', gridAutoColumns: '1fr', gap: 1,}}>
+                          <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
+                              User
+                          </Typography>
+                          <Button  endIcon={<EditIcon />} onClick={editProfile()} sx={{ gridRow: '1', gridColumn: '7/8' }}>
+                              Edit
+                          </Button>
+                      </Box>
+                      <Card>
+                          <CardContent>
+                              <table >
+                                  <tr>
+                                      <td>
+                                          <Typography color="primary">
+                                              Username:
+                                          </Typography>
+                                      </td>
+                                      <td>
+                                          <Typography>
+                                              {user.name}
+                                          </Typography>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>
+                                          <Typography color="primary">
+                                              E-mail:
+                                          </Typography>
+                                      </td>
+                                      <td>
+                                          <Typography>
+                                              {user.mail}
+                                          </Typography>
+                                      </td>
+                                  </tr>
+                              </table>
+                          </CardContent>
+                      </Card>
                   </Box>
-                  <Card>
-                      <CardContent>
-                          <table >
-                              <tr>
-                                  <td>
-                                      <Typography color="primary">
-                                          Username:
-                                      </Typography>
-                                  </td>
-                                  <td>
-                                      <Typography>
-                                          {user.name}
-                                      </Typography>
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td>
-                                      <Typography color="primary">
-                                          E-mail:
-                                      </Typography>
-                                  </td>
-                                  <td>
-                                      <Typography>
-                                          {user.mail}
-                                      </Typography>
-                                  </td>
-                              </tr>
-                          </table>
-                      </CardContent>
-                  </Card>
-              </Box>
-              <Box my={4}>
-                  <Box sx={{display: 'grid', gridAutoColumns: '1fr', gap: 1,}}>
-                      <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
-                          My Lists
-                      </Typography>
-                      <Button endIcon={<AddIcon />}  sx={{ gridRow: '1', gridColumn: '7/8' }}>
-                          Create
-                      </Button>
+                  <Box my={4}>
+                      <Box sx={{display: 'grid', gridAutoColumns: '1fr', gap: 1,}}>
+                          <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
+                              My Lists
+                          </Typography>
+                          <Button endIcon={<AddIcon />}  sx={{ gridRow: '1', gridColumn: '7/8' }}>
+                              Create
+                          </Button>
+                      </Box>
+                      <Card sx={{height: 400, width: '100%' }}>
+                          <DataGrid columns={columns} rows={rows}/>
+                      </Card>
                   </Box>
-                  <Card sx={{height: 400, width: '100%' }}>
-                      <DataGrid columns={columns} rows={rows}/>
-                  </Card>
-              </Box>
+              </div>
           </div>
       </div>
-
   )
 
 
