@@ -1,8 +1,11 @@
 import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Box, Button, Card, CardContent, FormLabel, FormGroup, TextField, Typography } from '@mui/material';
+import { Link, useParams } from "react-router-dom";
+import { Box, Button, Card, CardContent, FormLabel, FormGroup, Snackbar,
+         TextField, Typography } from '@mui/material';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import { Alert } from '@material-ui/lab';
 
 //these imports probably should go somewhere else
 import Amplify from '@aws-amplify/core';
@@ -14,10 +17,9 @@ import { getPaper } from "../../graphql/queries";
 Amplify.configure(awsconfig);
 
 export default function EditSource() {
-//   const initialFormValues = getPaperById(sourceID);
-//   console.log(initialFormValues);
-  const { sourceID } = useParams();
+  const { listID, sourceID } = useParams();
   const [formValues, setFormValues] = useState([]);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     setInitialFormValues(sourceID);
@@ -36,6 +38,7 @@ export default function EditSource() {
   const handleSubmit = (event) => {
     event.preventDefault();
     updatePaperById(formValues);
+    setOpen(true);
   };
 
   const handleInputChange = (event) => {
@@ -46,16 +49,27 @@ export default function EditSource() {
     });
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div className="Content">
       <div className="Title">
-        <Typography variant="h4" align="left" color="primary">
-          Edit Source
-        </Typography>
+        <Box sx={{ display: 'grid', gridAutoColumns: '1fr'}}>
+                <Typography variant="h4" align="left" color="primary" sx={{gridRow: '1', gridColumn: 'span 4'}}>
+                Edit Source
+                </Typography>
+                <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}}>
+                    <Link to={'/list/' + listID} className="Link" style={{ textDecoration: 'none'}}>
+                        Back
+                    </Link>
+                </Button>
+            </Box>
       </div>
       <div>
         <Box my={4}>
-            <Typography variant="h6" align="left" color="primary">
+            <Typography variant="h6" align="left" color="primary" sx={{gridRow: '1', gridColumn: '1/3'}}>
                 Source Information
             </Typography>
             <Card sx={{height: '100%', width: '100%'}}>
@@ -177,6 +191,15 @@ export default function EditSource() {
                                 Submit
                             </Button>
                         </Box>
+                        <Snackbar
+                            open={open}
+                            autoHideDuration={3000}
+                            onClose={handleClose}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
+                            <Alert onClose={handleClose} severity="success">
+                                Paper updated!
+                            </Alert>
+                        </Snackbar>
                     </form>
                 </CardContent>
             </Card>

@@ -1,8 +1,12 @@
 import React from 'react';
 import '../../App.css';
-import { useParams, useState } from "react";
+import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import FileUpload from "react-material-file-upload";
-import { Box, Button, Card, CardContent, FormLabel, FormGroup, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, FormLabel, FormGroup,
+         Snackbar, TextField, Typography } from '@mui/material';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import { Alert } from '@material-ui/lab';
 
 //these imports probably should go somewhere else
 import Amplify from '@aws-amplify/core';
@@ -15,11 +19,12 @@ export default function AddSource() {
   const { listID } = useParams();
   const [files, setFiles] = useState([]);
   const [formValues, setFormValues] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     newPaper(formValues);
-
+    setOpen(true);
   };
 
   const handleInputChange = (event) => {
@@ -30,12 +35,23 @@ export default function AddSource() {
     });
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div className="Content">
       <div className="Title">
-        <Typography variant="h4" align="left" color="primary">
-          Add New Source to ListName
-        </Typography>
+        <Box sx={{ display: 'grid', gridAutoColumns: '1fr'}}>
+                <Typography variant="h4" align="left" color="primary" sx={{gridRow: '1', gridColumn: 'span 4'}}>
+                Add New Source to ListName
+                </Typography>
+                <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}}>
+                    <Link to={'/list/' + listID} className="Link" style={{ textDecoration: 'none'}}>
+                        Back
+                    </Link>
+                </Button>
+            </Box>
       </div>
       <div>
         <Box my={4}>
@@ -49,7 +65,7 @@ export default function AddSource() {
             </Card>
         </Box>
         <Box my={4}>
-            <Typography variant="h6" align="left" color="primary">
+            <Typography variant="h6" align="left" color="primary" sx={{gridRow: '1', gridColumn: '1/3'}}>
                 Source Information
             </Typography>
             <Card sx={{height: '100%', width: '100%'}}>
@@ -180,6 +196,15 @@ export default function AddSource() {
                                 Submit
                             </Button>
                         </Box>
+                        <Snackbar
+                            open={open}
+                            autoHideDuration={3000}
+                            onClose={handleClose}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
+                            <Alert onClose={handleClose} severity="success">
+                                Paper updated!
+                            </Alert>
+                        </Snackbar>
                     </form>
                 </CardContent>
             </Card>

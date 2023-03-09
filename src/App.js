@@ -60,9 +60,9 @@ function App() {
         <Routes>
           <Route path='/' element={<Home/>} />
           <Route path='list/:listID' element={<List/>} />
-          <Route path='user' element={<User/>} />
+          {/* <Route path='user' element={<User/>} /> */}
           <Route path='add/:listID' element={<AddSource/>} />
-          <Route path='edit/:sourceID' element={<EditSource/>} />
+          <Route path='edit/:listID/:sourceID' element={<EditSource/>} />
           <Route path='login' element={<Login/>} />
         </Routes>
       </ThemeProvider>
