@@ -16,8 +16,8 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Amplify from '@aws-amplify/core';
 import { API } from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
-import { getList, getPaper } from '../../graphql/queries';
-import { deletePaper } from '../../graphql/mutations';
+import {listPapers, getList, getPaper} from '../../graphql/queries';
+import {deletePaper, updateList} from '../../graphql/mutations';
 
 
 const initialUserRows = [
@@ -81,10 +81,6 @@ export default function List() {
       paperList.push(paper);
     };
     setPaperRows(paperList);
-
-    // some test functions
-    deletePaperFromList("l12", 'a14');
-    // addPaperToList("l12", 'a14');
   };
 
   const getPaperById = async(paperId) => {
@@ -103,36 +99,36 @@ export default function List() {
     return listData.data.getList;
   }
 
-  const deletePaperFromList = async(listID, paperId) => {
+  const deletePaperFromList = async(listId, paperId) => {
     try{
-      const list = await getListById(listID);
+      const list = await getListById(listId);
       let listData = list;
       let listPapers = listData.papers;
-      if (listPapers.includes(paperId)) { listPapers = listPapers.filter(id => id !== paperId); }
+      if (listPapers.includes(paperId)) { listPapers = listPapers.filter(id => id != paperId); }
       listData.papers = listPapers;
-      await updateList(listData);
+      await updateListById(listData);
     } catch (error) {
       console.error("Error on deleting paper from list", error);
     }
   }
 
-  const addPaperToList = async(listID, paperId) => {
+  const addPaperToList = async(listId, paperId) => {
     try {
-      const list = await getListById (listID);
+      const list = await getListById (listId);
       let listData = list;
-      if (!listData.papers.includes(paperId)) { listData.papers.push(paperId); }
-      await updateList(listData);
+      let listPapers = listData.papers;
+      if (!listPapers.includes(paperId)) { listPapers.push(paperId); }
+      listData.papers = listPapers;
+      await updateListById(listData);
     } catch (error) {
       console.error('Error on adding paper to list', error);
     }
   }
 
-  const updateList = async(listData) => {
+  const updateListById = async(listData) => {
     try {
-      listData.remove("id");
-      listData.remove("createdAt");
-      listData.remove("updatedAt");
-      console.log(listData);
+      delete listData["createdAt"];
+      delete listData["updatedAt"];
       await API.graphql({
         query: updateList,
         variables: {
