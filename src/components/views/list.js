@@ -15,7 +15,8 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Amplify from '@aws-amplify/core';
 import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
-import {listPapers} from '../../graphql/queries';
+import {listPapers, getList, getPaper} from '../../graphql/queries';
+import {deletePaper} from '../../graphql/mutations';
 
 
 const initialUserRows = [
@@ -87,31 +88,109 @@ export default function List() {
   );
 
   useEffect(() => {
-    fetchPapers();
+    fetchPapers("l12");
 }, []);
 
 
 
 //fetch all the papers in the database (dynamodb nosql)
-const fetchPapers = async () => {
+const fetchPapers = async (listId) => {
 
   //folder graphql in component has mutations and queries.js these is where you can find
   // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
-  
-  const paperData = await API.graphql(graphqlOperation(listPapers));
-  const paperList = paperData.data.listPapers.items;
-  setRows(paperList)
 
+  const listData = await getListById(listId);
+  const paperIds = listData.papers;
+  let paperList = [];
+  for (const paperId of paperIds){
+    const paper = await getPaperById(paperId)
+    paperList.push(paper);
+  };
+  setPaperRows(paperList);
 
+  // some test functions
+  deletePaperFromList("l12", 'a14');
+  // addPaperToList("l12", 'a14');
 };
 
-  
+const getPaperById = async(paperId) => {
+  const paperData = await API.graphql({
+    query: getPaper,
+    variables: { id: paperId }
+  });
+  return paperData.data.getPaper;
+}
+
+const getListById = async(listId) => {
+  const listData = await API.graphql({
+    query: getList,
+    variables: { id: listId }
+  });
+  return listData.data.getList;
+}
+
+const deletePaperFromList = async(listId, paperId) => {
+  try{
+    const list = await getListById(listId);
+    let listData = list;
+    let listPapers = listData.papers;
+    if (listPapers.includes(paperId)) { listPapers = listPapers.filter(id => id != paperId); }
+    listData.papers = listPapers;
+    await updateList(listData);
+  } catch (error) {
+    console.error("Error on deleting paper from list", error);
+  }
+}
+
+const addPaperToList = async(listId, paperId) => {
+  try {
+    const list = await getListById (listId);
+    let listData = list;
+    if (!listData.papers.includes(paperId)) { listData.papers.push(paperId); }
+    await updateList(listData);
+  } catch (error) {
+    console.error('Error on adding paper to list', error);
+  }
+}
+
+const updateList = async(listData) => {
+  try {
+    listData.remove("id");
+    listData.remove("createdAt");
+    listData.remove("updatedAt");
+    console.log(listData);
+    await API.graphql({
+      query: updateList,
+      variables: {
+          input: listData
+      }
+    });
+  } catch (error) {
+    console.error("Error on update list", error);
+  } 
+}
+
+const deletePaperById = async (id) => {
+  try {
+      await API.graphql({
+        query: deletePaper,
+        variables: {
+            input: {
+                id: id
+            }
+        }
+    });
+  } catch (error) {
+      console.log('error on deleting paper', error);
+  }
+};
 
   // Currently only deletes item from list visually
   const deleteSource = React.useCallback(
     (id) => () => {
       setTimeout(() => {
         setPaperRows((prevPaperRows) => prevPaperRows.filter((row) => row.id !== id));
+        deletePaperById(id);
       });
     },
     [],
