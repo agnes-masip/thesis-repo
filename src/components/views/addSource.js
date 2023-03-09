@@ -1,6 +1,6 @@
 import React from 'react';
 import '../../App.css';
-import { useState } from "react";
+import { useParams, useState } from "react";
 import FileUpload from "react-material-file-upload";
 import { Box, Button, Card, CardContent, FormLabel, FormGroup, TextField, Typography } from '@mui/material';
 
@@ -15,6 +15,7 @@ Amplify.configure(awsconfig);
 export default function AddSource() {
   const [files, setFiles] = useState([]);
   const [formValues, setFormValues] = useState([]);
+  const { listID } = useParams();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -54,7 +55,7 @@ export default function AddSource() {
             </Typography>
             <Card sx={{height: '100%', width: '100%'}}>
                 <CardContent>
-                    <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                         <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: 'repeat(2, 1fr)' }}>
                             <FormGroup>
                                 <FormLabel>
@@ -176,7 +177,7 @@ export default function AddSource() {
                             </FormGroup>
                         </Box>
                         <Box my={2}>
-                            <Button type ="submit" variant="contained" my={4}>
+                            <Button type="submit" variant="contained" my={4}>
                                 Submit
                             </Button>
                         </Box>
