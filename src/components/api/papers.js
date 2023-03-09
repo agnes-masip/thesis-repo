@@ -4,13 +4,15 @@ import { createPaper, updatePaper, deletePaper } from '../../graphql/mutations';
 import { listPapers, getPaper } from "../../graphql/queries";
 
 export async function newPaper(paperData) {
-	console.log(paperData)
-	await API.graphql({
+	
+	const response = await API.graphql({
 		query: createPaper,
 		variables: {
 			input: paperData
 		}
 	});
+	const newPaperId = response.data.createPaper.id;
+	return newPaperId;
 
 }
 

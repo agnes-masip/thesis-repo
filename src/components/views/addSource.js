@@ -1,25 +1,29 @@
 import React from 'react';
 import '../../App.css';
-import { useParams, useState } from "react";
+import {useState } from "react";
+import {useParams} from "react-router-dom"
 import FileUpload from "react-material-file-upload";
 import { Box, Button, Card, CardContent, FormLabel, FormGroup, TextField, Typography } from '@mui/material';
 
 //these imports probably should go somewhere else
 import Amplify from '@aws-amplify/core';
-import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
-import {newPaper} from '../api/papers'
+import {newPaper} from '../api/papers';
+import {addPaperToList} from '../api/lists'
 
 Amplify.configure(awsconfig);
 
 export default function AddSource() {
-  const [files, setFiles] = useState([]);
-  const [formValues, setFormValues] = useState([]);
-  const { listID } = useParams();
+
+    const { listID } = useParams();
+    const [files, setFiles] = useState([]);
+    const [formValues, setFormValues] = useState([]);
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    newPaper(formValues);
+    newPaper(formValues).then(PaperId => addPaperToList(listID, PaperId))
+
     
   };
 
@@ -31,7 +35,7 @@ export default function AddSource() {
     });
   };
 
-  return (
+    return (
     <div className="Content">
       <div className="Title">
         <Typography variant="h4" align="left" color="primary">
