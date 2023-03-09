@@ -8,11 +8,14 @@ import { Box, Button, Card, CardContent, FormLabel, FormGroup, TextField, Typogr
 import Amplify from '@aws-amplify/core';
 import { API } from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
-import { getPaper } from '../../graphql/queries';
+import { updatePaperById } from "../api/papers";
+import { getPaper } from "../../graphql/queries";
 
 Amplify.configure(awsconfig);
 
 export default function EditSource() {
+//   const initialFormValues = getPaperById(sourceID);
+//   console.log(initialFormValues);
   const { sourceID } = useParams();
   const [formValues, setFormValues] = useState([]);
 
@@ -20,6 +23,7 @@ export default function EditSource() {
     setInitialFormValues(sourceID);
   },
   []);
+
 
   const setInitialFormValues = async(paperId) => {
     const paperData = await API.graphql({
@@ -31,6 +35,7 @@ export default function EditSource() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    updatePaperById(formValues);
   };
 
   const handleInputChange = (event) => {
@@ -64,7 +69,6 @@ export default function EditSource() {
                                 <TextField
                                     id="title"
                                     name="title"
-                                    label="Title"
                                     type="text"
                                     value={formValues.title}
                                     onChange={handleInputChange}
@@ -78,7 +82,6 @@ export default function EditSource() {
                                 <TextField
                                     id="author"
                                     name="author"
-                                    label="Author"
                                     type="text"
                                     value={formValues.author}
                                     onChange={handleInputChange}
@@ -91,7 +94,6 @@ export default function EditSource() {
                                 <TextField
                                     id="desc"
                                     name="desc"
-                                    label="desc"
                                     type="text"
                                     value={formValues.desc}
                                     onChange={handleInputChange}
@@ -104,7 +106,6 @@ export default function EditSource() {
                                 <TextField
                                     id="doi"
                                     name="doi"
-                                    label="DOI"
                                     type="text"
                                     value={formValues.doi}
                                     onChange={handleInputChange}
@@ -117,7 +118,6 @@ export default function EditSource() {
                                 <TextField
                                     id="issn"
                                     name="issn"
-                                    label="ISSN"
                                     type="text"
                                     value={formValues.issn}
                                     onChange={handleInputChange}
@@ -130,7 +130,6 @@ export default function EditSource() {
                                 <TextField
                                     id="issue"
                                     name="issue"
-                                    label="Issue"
                                     type="text"
                                     value={formValues.issue}
                                     onChange={handleInputChange}
@@ -143,7 +142,6 @@ export default function EditSource() {
                                 <TextField
                                     id="journal"
                                     name="journal"
-                                    label="Journal"
                                     type="text"
                                     value={formValues.journal}
                                     onChange={handleInputChange}
@@ -156,7 +154,6 @@ export default function EditSource() {
                                 <TextField
                                     id="volume"
                                     name="volume"
-                                    label="Volume"
                                     type="text"
                                     value={formValues.volume}
                                     onChange={handleInputChange}
@@ -169,7 +166,6 @@ export default function EditSource() {
                                 <TextField
                                     id="year"
                                     name="year"
-                                    label="Year"
                                     type="number"
                                     value={formValues.year}
                                     onChange={handleInputChange}
