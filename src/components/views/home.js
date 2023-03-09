@@ -14,12 +14,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
+import { getAllListsForUser } from '../api/lists';
+
 
 
 Amplify.configure(awsconfig);
 
 
-const initialUser = {name:"Najma", mail:"some@mail.ch"};
+const initialUser = {name:"Najma", mail:"some@mail.ch", userId: "user2"};
 
 
 function Home() {
@@ -83,13 +85,9 @@ function Home() {
 
       //folder graphql in component has mutations and queries.js these is where you can find
       // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
+      const listList = await getAllListsForUser(user.userId);
 
-      const listData = await API.graphql(graphqlOperation(listLists));
-      const listList = listData.data.listLists.items;
-
-      setRows(listList)
-
-
+      setRows(listList);
   };
 
 
