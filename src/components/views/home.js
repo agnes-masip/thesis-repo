@@ -14,7 +14,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
-import { getAllListsForUser } from '../api/lists';
+import { getAllListsForUser, deleteListById } from '../api/lists';
+import {deletePaperById} from "../api/papers";
 
 
 
@@ -31,6 +32,7 @@ function Home() {
   const [title, setTitle] = useState([]);
   const [author, setAuthor] = useState([]);
   const [rows, setRows] = React.useState([]);
+  const [listRows, setListRows] = React.useState([]);
   const [user, setUser] = React.useState(initialUser);
 
 
@@ -45,10 +47,22 @@ function Home() {
         [],
     );
 
+
+    //
+    const deleteList = React.useCallback(
+        (id) => () => {
+            setTimeout(() => {
+                setListRows((prevListRows) => prevListRows.filter((row) => row.id !== id));
+                deleteListById(id);
+            });
+        },
+        [],
+    );
+
     const columns = React.useMemo(
         () => [
-            { field: 'listname', headerName: 'Listname', headerClassName: 'data-grid-header', type: 'string', flex: 1.5 },
-            { field: 'owner', headerName: 'Owner', headerClassName: 'data-grid-header', type: 'string', flex: 1 },
+            { field: 'title', headerName: 'Listname', headerClassName: 'data-grid-header', type: 'string', flex: 1.5 },
+            { field: 'listOwner', headerName: 'Owner', headerClassName: 'data-grid-header', type: 'string', flex: 1 },
             {
                 field: 'actions',
                 headerClassName: 'data-grid-header',
@@ -58,7 +72,7 @@ function Home() {
                     <GridActionsCellItem
                         icon={<DeleteIcon />}
                         label="Delete"
-                        onClick={deleteSource(params.id)}
+                        onClick={deleteList(params.id)}
                     />,
                     <Link to={'/list/' + params.id}>
                         <GridActionsCellItem
