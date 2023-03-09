@@ -216,6 +216,5 @@ const handleClose = () => {
         </div>
       </div>
     </div>
-  </div>
   );
 }
