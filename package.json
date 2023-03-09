@@ -6,6 +6,7 @@
     "@aws-amplify/ui-react": "4.3.9",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@material-ui/lab": "^4.0.0-alpha.61",
     "@mui/icons-material": "^5.11.11",
     "@mui/material": "^5.11.11",
     "@mui/x-data-grid": "^6.0.0",

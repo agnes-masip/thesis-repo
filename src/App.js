@@ -7,14 +7,12 @@ import NavBar from './components/navbar';
 import User from './components/views/user';
 import Login from './components/views/login';
 import AddSource from './components/views/addSource';
+import EditSource from './components/views/editSource';
 
 import Amplify from '@aws-amplify/core';
 import API from '@aws-amplify/api';
 import awsconfig from './aws-exports';
-import { listPapers} from './graphql/queries';
-// import { createTodo } from './graphql/mutations';
 import './App.css';
-// import { withAuthenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 Amplify.configure(awsconfig);
 
@@ -62,9 +60,10 @@ function App() {
         <Routes>
           <Route path='/' element={<Home/>} />
           <Route path='list/:listID' element={<List/>} />
-          <Route path='user' element={<User/>} />
+          {/* <Route path='user' element={<User/>} /> */}
+          <Route path='add/:listID' element={<AddSource/>} />
+          <Route path='edit/:listID/:sourceID' element={<EditSource/>} />
           <Route path='login' element={<Login/>} />
-          <Route path='addSource' element={<AddSource/>} />
         </Routes>
       </ThemeProvider>
     </div>
