@@ -2,8 +2,8 @@ import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+  import { useParams } from "react-router-dom";
+import { Box, Button, Card, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -266,7 +266,7 @@ export default function List() {
                 Export
               </Button>
               <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
-                <Link to={'/addSource'} class="Link" style={{ textDecoration: 'none'}}>
+                <Link to={'/form/add'} class="Link" style={{ textDecoration: 'none'}}>
                   Add
                 </Link>
               </Button>
