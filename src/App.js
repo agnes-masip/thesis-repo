@@ -59,7 +59,7 @@ function App() {
         <NavBar/>
         <Routes>
           <Route path='/' element={<Home/>} />
-          <Route path='list' element={<List/>} />
+          <Route path='list/:listID' element={<List/>} />
           <Route path='user' element={<User/>} />
         </Routes>
       </ThemeProvider>

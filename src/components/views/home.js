@@ -5,6 +5,7 @@ import '../../App.css';
 import Amplify from '@aws-amplify/core';
 import {API, graphqlOperation} from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
+import { Link } from "react-router-dom";
 import { listPapers} from '../../graphql/queries';
 import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
@@ -56,14 +57,6 @@ function Home() {
         [],
     );
 
-
-    // Currently does nothing, should navigate to list
-    const editList = React.useCallback(
-        (id) => () => {
-        },
-        [],
-    );
-
     const columns = React.useMemo(
         () => [
             { field: 'listname', headerName: 'Listname', headerClassName: 'data-grid-header', type: 'string', flex: 1.5 },
@@ -81,13 +74,12 @@ function Home() {
                     />,
                     <GridActionsCellItem
                         icon={<VisibilityIcon />}
-                        label="Edit"
-                        onClick={editList(params.id)}
+                        label="view"
                     />,
-                ],
+                ]
             },
         ],
-        [deleteSource, editList],
+        [deleteSource],
     );
 
 
@@ -229,7 +221,7 @@ const deletePaper = async (id) => {
   return (
     <div className="App">
       <header className="App-header">
-      
+
         <h1>Papers</h1>
           <table>
             <tbody>
@@ -244,7 +236,7 @@ const deletePaper = async (id) => {
                     <tr key='${paper.id}'>
                       <td>{paper.id}</td>
                       <td>{paper.title}</td>
-                      
+
                        {/*This button is to use if you create a form for the changes. Right now,
                          it only changes the title. }
 
