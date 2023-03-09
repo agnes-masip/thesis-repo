@@ -58,10 +58,12 @@ function Home() {
                         label="Delete"
                         onClick={deleteSource(params.id)}
                     />,
-                    <GridActionsCellItem
-                        icon={<VisibilityIcon />}
-                        label="view"
-                    />,
+                    <Link to={'/list/' + params.id}>
+                        <GridActionsCellItem
+                            icon={<VisibilityIcon />}
+                            label="view"
+                        />
+                    </Link>,
                 ]
             },
         ],
