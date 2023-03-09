@@ -3,7 +3,7 @@ import '../../App.css';
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-  import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Box, Button, Card, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
