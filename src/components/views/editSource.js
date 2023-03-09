@@ -8,11 +8,14 @@ import { Box, Button, Card, CardContent, FormLabel, FormGroup, TextField, Typogr
 import Amplify from '@aws-amplify/core';
 import { API } from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
-import { getPaper } from '../../graphql/queries';
+import { updatePaperById } from "../api/papers";
+import { getPaper } from "../../graphql/queries";
 
 Amplify.configure(awsconfig);
 
 export default function EditSource() {
+//   const initialFormValues = getPaperById(sourceID);
+//   console.log(initialFormValues);
   const { sourceID } = useParams();
   const [formValues, setFormValues] = useState([]);
 
@@ -20,6 +23,7 @@ export default function EditSource() {
     setInitialFormValues(sourceID);
   },
   []);
+
 
   const setInitialFormValues = async(paperId) => {
     const paperData = await API.graphql({
@@ -31,6 +35,7 @@ export default function EditSource() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    updatePaperById(formValues);
   };
 
   const handleInputChange = (event) => {
