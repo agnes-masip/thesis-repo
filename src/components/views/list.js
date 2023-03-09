@@ -19,6 +19,10 @@ import awsconfig from '../../aws-exports';
 import {listPapers, getList, getPaper} from '../../graphql/queries';
 import {deletePaper, updateList} from '../../graphql/mutations';
 
+//creation of paper necessary import
+import { createPaper } from '../../graphql/mutations';
+
+//import {newPaper,deletedPaper,updatedPaper} from '../api/papers';
 
 const initialUserRows = [
   {
@@ -70,26 +74,6 @@ export default function List() {
 
   //fetch all the papers in the database (dynamodb nosql)
   const fetchPapers = async (listID) => {
-
-    //folder graphql in component has mutations and queries.js these is where you can find
-    // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
-    const listData = await getListById(listID);
-    const paperIds = listData.papers;
-    let paperList = [];
-    for (const paperId of paperIds){
-      const paper = await getPaperById(paperId)
-      paperList.push(paper);
-    };
-    setPaperRows(paperList);
-  };
-
-  const getPaperById = async(paperId) => {
-    const paperData = await API.graphql({
-      query: getPaper,
-      variables: { id: paperId }
-    });
-    return paperData.data.getPaper;
-  }
 
   const getListById = async(listID) => {
     const listData = await API.graphql({
@@ -155,6 +139,28 @@ export default function List() {
     }
   };
 
+// create a new paper
+const createNewPaper = async () => {
+  const newPaper = await API.graphql({
+    query: createPaper,
+    variables: {
+        input: {
+                "title": "Lorem ipsum dolor sit amet",
+                "description": "Lorem ipsum dolor sit amet",
+                "likes": 1020,
+                "author": [],
+                "journal": "Lorem ipsum dolor sit amet",
+                "year": 1020,
+                "volume": "Lorem ipsum dolor sit amet",
+                "issue": "Lorem ipsum dolor sit amet",
+                "doi": "Lorem ipsum dolor sit amet",
+                "issn": "Lorem ipsum dolor sit amet",
+                "citationStorageLocation":  "https://www.google.com/"
+        }
+    }
+  });
+}
+
   // Currently only deletes item from list visually
   const deleteSource = React.useCallback(
     (id) => () => {
@@ -190,7 +196,7 @@ export default function List() {
 
   const userColumns = React.useMemo(
     () => [
-      { field: 'username', header: 'Username', headerClassName: 'data-grid-header', type: 'string', flex: 1},
+      { field: 'username', headerName: 'Username', headerClassName: 'data-grid-header', type: 'string', flex: 1},
       {
         field: 'actions',
         headerClassName: 'data-grid-header',
@@ -253,46 +259,36 @@ export default function List() {
         </Typography>
       </div>
       <div>
-        <Box my={4} sx={{ display: 'grid', gap: 2, gridTemplateColumns: 'repeat(2, 1fr)' }}>
-          <Box>
-            <Typography variant="h6" align="left" color="primary">
-              New Source
-            </Typography>
-            <Card sx={{height: '100%', width: '100%'}}>
-              <CardContent>
-                <FileUpload value={files} onChange={setFiles} />
-              </CardContent>
-            </Card>
-          </Box>
-          <Box>
-            <Box sx={{ display: 'grid', gridAutoColumns: '1fr' }}>
+        <Box my={4} sx={{ display: 'grid', gap: 2, gridAutoColumns: '1fr' }}>
+          <Box sx={{ display: 'grid', gridAutoColumns: '1fr', gridColumn: '1/4' }}>
+            <Box sx={{ display: 'grid', gridAutoColumns: '1fr'}}>
               <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
-                Collaborators
+                Sources
               </Typography>
-              <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '4 / 5' }}>
-                Add user
+              <Button endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
+                Export
+              </Button>
+              <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
+                Add
               </Button>
             </Box>
-            <Card sx={{height: '100%', width: '100%'}}>
-              <DataGrid columns={userColumns} rows={userRows}/>
-            </Card>
-          </Box>
-        </Box>
-        <Box my={8}>
-          <Box sx={{ display: 'grid', gridAutoColumns: '1fr' }}>
-            <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
-              Sources
-            </Typography>
-            <Button endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '7/9', textAlign: 'right' }}>
-              Export Citations
-            </Button>
-            <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
-              Add Source
-            </Button>
-          </Box>
           <Card sx={{height: 500, width: '100%' }}>
             <DataGrid columns={paperColumns} rows={paperRows}/>
           </Card>
+          </Box>
+            <Box sx={{ display: 'grid', gridAutoColumns: '1fr', gridColumn: '4/5' }}>
+              <Box sx={{ display: 'grid', gridAutoColumns: '1fr'}}>
+                <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
+                  Collaborators
+                </Typography>
+                <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '5/6', textAlign: 'right' }}>
+                  Add
+                </Button>
+              </Box>
+              <Card sx={{height: 500, width: '100%'}}>
+                <DataGrid columns={userColumns} rows={userRows}/>
+              </Card>
+          </Box>
         </Box>
       </div>
     </div>
