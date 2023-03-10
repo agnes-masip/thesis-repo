@@ -25,12 +25,18 @@ function Home() {
   const [listRows, setListRows] = React.useState([]);
   const [user, setUser] = React.useState(initialUser);
 
+  // useEffect is to call the fetch every time we go to home.js
+  useEffect(() => {
+    fetchLists();
+}, []);
 
 
   const handleSubmit = (event) => {
     event.preventDefault();
     //need to change this when we fix login
     formValues.listOwner = initialUser.userId;
+    formValues.papers = [];
+    formValues.sharedWith = [];
     console.log(formValues);
     createNewList(formValues)
 
@@ -83,11 +89,7 @@ function Home() {
     );
 
 
-    // useEffect is to call the fetch every time we go to home.js
-  useEffect(() => {
-        fetchLists();
-    }, []);
-
+    
 
 
   //fetch all the papers in the database (dynamodb nosql)

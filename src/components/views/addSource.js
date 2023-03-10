@@ -24,6 +24,7 @@ export default function AddSource() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    formValues.likes = 0;
     newPaper(formValues).then(PaperId => addPaperToList(listID, PaperId))
 
   };

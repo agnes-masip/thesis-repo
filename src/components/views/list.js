@@ -8,6 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DownloadIcon from '@mui/icons-material/Download';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 //import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import NavBar from '../navbar';
 import EditIcon from '@mui/icons-material/Edit';
@@ -176,6 +177,11 @@ export default function List() {
         <Typography variant="h4" align="left" color="primary">
           My Literature List
         </Typography>
+        <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}}>
+                      <Link to={'/'} className="Link" style={{ textDecoration: 'none'}}>
+                          Back
+                      </Link>
+                  </Button>
       </div>
       <div>
         <Box my={4} sx={{ display: 'grid', gap: 2, gridAutoColumns: '1fr' }}>
