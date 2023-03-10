@@ -29,6 +29,7 @@ function Home() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    //need to change this when we fix login
     formValues.listOwner = initialUser.userId;
     console.log(formValues);
     createNewList(formValues)
