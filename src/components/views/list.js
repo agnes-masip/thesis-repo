@@ -70,7 +70,7 @@ export default function List() {
 
     const listData = await getListById(listID);
     const paperIds = listData.papers;
-    console.log(listData);
+    //console.log(listData);
     let paperList = [];
     if(paperIds != null){
       for (const paperId of paperIds){
@@ -86,16 +86,43 @@ export default function List() {
     // addPaperToList("l12", 'a14');
   };
 
-  // Currently only deletes item from list visually
+  
   const deleteSource = React.useCallback(
     (id) => () => {
       setTimeout(() => {
+        
         setPaperRows((prevPaperRows) => prevPaperRows.filter((row) => row.id !== id));
         deletePaperById(id);
       });
     },
     [],
   );
+
+  function exportJSONFile(jsonData, filename) {
+    const blob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+  
+    const link = document.createElement('a');
+    link.setAttribute('download', filename);
+    link.setAttribute('href', url);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+  
+  async function exportPaperList(listID) {
+    const listData = await getListById(listID);
+    const paperIds = listData.papers;
+  
+    let paperList = [];
+    if (paperIds != null) {
+      for (const paperId of paperIds) {
+        const paper = await getPaperById(paperId);
+        paperList.push(paper);
+      }
+    }
+    exportJSONFile(paperList, 'paper-list.json');
+}
 
   // Currently does nothing
   const likeSource = React.useCallback(
@@ -191,7 +218,7 @@ export default function List() {
               <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
                 Sources
               </Typography>
-              <Button endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
+              <Button onClick={() => exportPaperList(listID)} endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
                 Export
               </Button>
               <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
