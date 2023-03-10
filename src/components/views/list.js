@@ -70,6 +70,7 @@ export default function List() {
 
     const listData = await getListById(listID);
     const paperIds = listData.papers;
+    console.log(listData);
     let paperList = [];
     if(paperIds != null){
       for (const paperId of paperIds){
