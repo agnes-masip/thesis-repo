@@ -4,15 +4,14 @@ import '../../App.css';
 
 import { Link } from "react-router-dom";
 
-import {Box, Card, CardContent, Typography, Button} from "@mui/material";
+import {Box, Card, CardContent, Typography, Button, TextField} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import NavBar from "../navbar";
 
-import { getAllListsForUser, deleteListById } from '../api/lists';
+import { getAllListsForUser, deleteListById, createNewList } from '../api/lists';
 //import {deletePaperById} from "../api/papers";
 
 
@@ -21,28 +20,33 @@ const initialUser = {name:"Najma", mail:"some@mail.ch", userId: "user2"};
 
 function Home() {
 
-  
+  const [formValues, setFormValues] = useState([]);
   const [rows, setRows] = React.useState([]);
   const [listRows, setListRows] = React.useState([]);
   const [user, setUser] = React.useState(initialUser);
 
 
 
-    // Currently only deletes item from list visually
-    const deleteSource = React.useCallback(
-        (id) => () => {
-            setTimeout(() => {
-                setRows((prevRows) => prevRows.filter((row) => row.id !== id));
-            });
-        },
-        [],
-    );
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    formValues.listOwner = initialUser.userId;
+    console.log(formValues);
+    createNewList(formValues)
 
+  };
 
-    //
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
     const deleteList = React.useCallback(
         (id) => () => {
             setTimeout(() => {
+                console.log("fuck")
                 setListRows((prevListRows) => prevListRows.filter((row) => row.id !== id));
                 deleteListById(id);
             });
@@ -74,7 +78,7 @@ function Home() {
                 ]
             },
         ],
-        [deleteSource],
+        [deleteList],
     );
 
 
@@ -97,12 +101,6 @@ function Home() {
 
 
 
-    // Currently does nothing, should navigate to Profile
-    const editProfile = React.useCallback(
-        () => () => {
-        },
-        [],
-    );
 
 
   return(
@@ -120,9 +118,7 @@ function Home() {
                           <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
                               User
                           </Typography>
-                          <Button  endIcon={<EditIcon />} onClick={editProfile()} sx={{ gridRow: '1', gridColumn: '7/8' }}>
-                              Edit
-                          </Button>
+                          
                       </Box>
                       <Card>
                           <CardContent>
@@ -160,9 +156,19 @@ function Home() {
                           <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
                               My Lists
                           </Typography>
-                          <Button endIcon={<AddIcon />}  sx={{ gridRow: '1', gridColumn: '7/8' }}>
+                          <form onSubmit={handleSubmit}>
+                          <TextField
+                                      id="title"
+                                      name="title"
+                                      label="listName"
+                                      type="text"
+                                      value={formValues.title}
+                                      onChange={handleInputChange}
+                                  />
+                          <Button  type="submit" variant="contained" endIcon={<AddIcon />}  sx={{ gridRow: '1', gridColumn: '7/8' } }>
                               Create
                           </Button>
+                          </form>
                       </Box>
                       <Card sx={{height: 400, width: '100%' }}>
                           <DataGrid columns={columns} rows={rows}/>
