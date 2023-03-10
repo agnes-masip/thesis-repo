@@ -70,10 +70,13 @@ export default function List() {
     const listData = await getListById(listID);
     const paperIds = listData.papers;
     let paperList = [];
-    for (const paperId of paperIds){
-      const paper = await getPaperById(paperId)
-      paperList.push(paper);
-    };
+    if(paperIds != null){
+      for (const paperId of paperIds){
+        const paper = await getPaperById(paperId)
+        paperList.push(paper);
+      };
+    }
+    
     setPaperRows(paperList);
 
     // some test functions
