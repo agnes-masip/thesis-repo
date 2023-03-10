@@ -8,7 +8,8 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DownloadIcon from '@mui/icons-material/Download';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+//import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import NavBar from '../navbar';
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -19,8 +20,6 @@ import awsconfig from '../../aws-exports';
 import { deletePaperById, getPaperById } from '../api/papers';
 import { getListById } from '../api/lists';
 import { getUserById } from '../api/users';
-
-Amplify.configure(awsconfig);
 
 export default function List() {
   const [paperRows, setPaperRows] = React.useState([]);
@@ -37,11 +36,15 @@ export default function List() {
   const fetchPapers = async (listID) => {
     const listData = await getListById(listID);
     const paperIds = listData.papers;
+    //console.log(listData);
     let paperList = [];
-    for (const paperId of paperIds){
-      const paper = await getPaperById(paperId)
-      paperList.push(paper);
-    };
+    if(paperIds != null){
+      for (const paperId of paperIds){
+        const paper = await getPaperById(paperId)
+        paperList.push(paper);
+      };
+    }
+
     setPaperRows(paperList);
   };
 
@@ -69,6 +72,32 @@ export default function List() {
   const deleteCollaborator = async (userID) => {
     deleteCollaborator(userID);
   };
+
+  function exportJSONFile(jsonData, filename) {
+    const blob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.setAttribute('download', filename);
+    link.setAttribute('href', url);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  async function exportPaperList(listID) {
+    const listData = await getListById(listID);
+    const paperIds = listData.papers;
+
+    let paperList = [];
+    if (paperIds != null) {
+      for (const paperId of paperIds) {
+        const paper = await getPaperById(paperId);
+        paperList.push(paper);
+      }
+    }
+    exportJSONFile(paperList, 'paper-list.json');
+}
 
   // Currently does nothing
   const likeSource = React.useCallback(
@@ -151,6 +180,11 @@ export default function List() {
         <Typography variant="h4" align="left" color="primary">
           My Literature List
         </Typography>
+        <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}}>
+                      <Link to={'/'} className="Link" style={{ textDecoration: 'none'}}>
+                          Back
+                      </Link>
+                  </Button>
       </div>
       <div>
         <Box my={4} sx={{ display: 'grid', gap: 2, gridAutoColumns: '1fr' }}>
@@ -159,7 +193,7 @@ export default function List() {
               <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
                 Sources
               </Typography>
-              <Button endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
+              <Button onClick={() => exportPaperList(listID)} endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
                 Export
               </Button>
               <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>

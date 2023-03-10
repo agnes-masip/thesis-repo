@@ -3,17 +3,16 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/views/home';
 import List from './components/views/list';
-import NavBar from './components/navbar';
 import User from './components/views/user';
 //import Login from './components/views/login';
 import AddSource from './components/views/addSource';
 import EditSource from './components/views/editSource';
 
 import Amplify from '@aws-amplify/core';
-import API from '@aws-amplify/api';
 import awsconfig from './aws-exports';
 import './App.css';
 import '@aws-amplify/ui-react/styles.css';
+
 Amplify.configure(awsconfig);
 
 const theme = createTheme({
@@ -62,7 +61,7 @@ function App() {
           {/* <Route path='user' element={<User/>} /> */}
           <Route path='add/:listID' element={<AddSource/>} />
           <Route path='edit/:listID/:sourceID' element={<EditSource/>} />
-          {/* <Route path='login' element={<Login/>} /> /> */}
+          {/* <Route path='login' element={<Login/>} /> */}
         </Routes>
       </ThemeProvider>
     </div>

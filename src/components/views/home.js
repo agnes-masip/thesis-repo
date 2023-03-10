@@ -1,26 +1,18 @@
 
 import React, { useState, useEffect} from 'react';
 import '../../App.css';
-// import Amplify, { API, graphqlOperation } from 'aws-amplify';
-import Amplify from '@aws-amplify/core';
-import {API, graphqlOperation} from '@aws-amplify/api';
-import awsconfig from '../../aws-exports';
+
 import { Link } from "react-router-dom";
-import { listLists} from '../../graphql/queries';
-import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
+
+import {Box, Card, CardContent, Typography, Button, TextField} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import NavBar from "../navbar";
 
-import { getAllListsForUser, deleteListById } from '../api/lists';
-import {deletePaperById} from "../api/papers";
-
-
-
-Amplify.configure(awsconfig);
+import { getAllListsForUser, deleteListById, createNewList } from '../api/lists';
+//import {deletePaperById} from "../api/papers";
 
 
 const initialUser = {name:"Najma", mail:"some@mail.ch", userId: "user2"};
@@ -28,31 +20,40 @@ const initialUser = {name:"Najma", mail:"some@mail.ch", userId: "user2"};
 
 function Home() {
 
-  // the variable papers is the data you can use in frontend
-  const [papers, setPapers] = useState([]);
-  const [title, setTitle] = useState([]);
-  const [author, setAuthor] = useState([]);
+  const [formValues, setFormValues] = useState([]);
   const [rows, setRows] = React.useState([]);
   const [listRows, setListRows] = React.useState([]);
   const [user, setUser] = React.useState(initialUser);
 
+  // useEffect is to call the fetch every time we go to home.js
+  useEffect(() => {
+    fetchLists();
+}, []);
 
 
-    // Currently only deletes item from list visually
-    const deleteSource = React.useCallback(
-        (id) => () => {
-            setTimeout(() => {
-                setRows((prevRows) => prevRows.filter((row) => row.id !== id));
-            });
-        },
-        [],
-    );
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    //need to change this when we fix login
+    formValues.listOwner = initialUser.userId;
+    formValues.papers = [];
+    formValues.sharedWith = [];
+    console.log(formValues);
+    createNewList(formValues)
 
+  };
 
-    //
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
     const deleteList = React.useCallback(
         (id) => () => {
             setTimeout(() => {
+                console.log("fuck")
                 setListRows((prevListRows) => prevListRows.filter((row) => row.id !== id));
                 deleteListById(id);
             });
@@ -84,15 +85,11 @@ function Home() {
                 ]
             },
         ],
-        [deleteSource],
+        [deleteList],
     );
 
 
-    // useEffect is to call the fetch every time we go to home.js
-  useEffect(() => {
-        fetchLists();
-    }, []);
-
+    
 
 
   //fetch all the papers in the database (dynamodb nosql)
@@ -107,12 +104,6 @@ function Home() {
 
 
 
-    // Currently does nothing, should navigate to Profile
-    const editProfile = React.useCallback(
-        () => () => {
-        },
-        [],
-    );
 
 
   return(
@@ -130,9 +121,7 @@ function Home() {
                           <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
                               User
                           </Typography>
-                          <Button  endIcon={<EditIcon />} onClick={editProfile()} sx={{ gridRow: '1', gridColumn: '7/8' }}>
-                              Edit
-                          </Button>
+                          
                       </Box>
                       <Card>
                           <CardContent>
@@ -170,9 +159,19 @@ function Home() {
                           <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
                               My Lists
                           </Typography>
-                          <Button endIcon={<AddIcon />}  sx={{ gridRow: '1', gridColumn: '7/8' }}>
+                          <form onSubmit={handleSubmit}>
+                          <TextField
+                                      id="title"
+                                      name="title"
+                                      label="listName"
+                                      type="text"
+                                      value={formValues.title}
+                                      onChange={handleInputChange}
+                                  />
+                          <Button  type="submit" variant="contained" endIcon={<AddIcon />}  sx={{ gridRow: '1', gridColumn: '7/8' } }>
                               Create
                           </Button>
+                          </form>
                       </Box>
                       <Card sx={{height: 400, width: '100%' }}>
                           <DataGrid columns={columns} rows={rows}/>

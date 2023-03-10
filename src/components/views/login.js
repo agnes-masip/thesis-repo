@@ -1,10 +1,7 @@
 
 import React, { useState, useEffect} from 'react';
 import '../../App.css';
-// import Amplify, { API, graphqlOperation } from 'aws-amplify';
-import Amplify from '@aws-amplify/core';
-import {API, graphqlOperation} from '@aws-amplify/api';
-import awsconfig from '../../aws-exports';
+
 import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
 import TextField from '@mui/material/TextField';
 import {SHA256} from 'crypto-js';
@@ -12,9 +9,6 @@ import { getUserByEmail, newUser, userEmailExists, usernameExists } from '../api
 
 
 
-
-
-//Amplify.configure(awsconfig);
 
 
 function Login() {

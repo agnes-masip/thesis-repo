@@ -7,14 +7,10 @@ import { Box, Button, Card, CardContent, FormLabel, FormGroup, Snackbar,
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { Alert } from '@material-ui/lab';
 
-//these imports probably should go somewhere else
-import Amplify from '@aws-amplify/core';
-import { API } from '@aws-amplify/api';
-import awsconfig from '../../aws-exports';
-import { updatePaperById } from "../api/papers";
-import { getPaper } from "../../graphql/queries";
 
-Amplify.configure(awsconfig);
+import { updatePaperById, getPaperById } from "../api/papers";
+
+
 
 export default function EditSource() {
   const { listID, sourceID } = useParams();
@@ -28,10 +24,7 @@ export default function EditSource() {
 
 
   const setInitialFormValues = async(paperId) => {
-    const paperData = await API.graphql({
-        query: getPaper,
-        variables: { id: paperId }
-    });
+    const paperData = await getPaperById(paperId);
     setFormValues(paperData.data.getPaper);
   }
 

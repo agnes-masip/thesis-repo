@@ -5,12 +5,15 @@ import { listPapers, getPaper } from "../../graphql/queries";
 
 export async function newPaper (paperData) { // provide: title!, description!, likes, author!, journal, year, volume, issue, doi, issn, citationStorageLocation
 	try{
-		await API.graphql({
+		const response = await API.graphql({
 			query: createPaper,
 			variables: {
 				input: paperData
 			}
 		});
+		const { id } = response.data.createPaper;
+
+    	return id;
 	}catch(error){
 		console.log('error on creating paper', error);
 	}
@@ -21,13 +24,16 @@ export async function updatePaperById (paperData) {
 	try{
 		delete paperData["createdAt"];
       	delete paperData["updatedAt"];
-	} catch (error) {}
-	await API.graphql({
+		await API.graphql({
 		query: updatePaper,
 		variables: {
 			input: paperData
 		}
 	})
+	} catch (error) {
+		console.log("error updating the list")
+	}
+	
 }
 
 
