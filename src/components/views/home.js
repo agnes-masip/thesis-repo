@@ -76,12 +76,12 @@ function Home() {
                         label="Delete"
                         onClick={deleteList(params.id)}
                     />,
-                    <Link to={'/list/' + params.id}>
+                    <Link to={'/list/' + params.row.listOwner + '/' + params.id}>
                         <GridActionsCellItem
                             icon={<VisibilityIcon />}
                             label="view"
                         />
-                    </Link>,
+                    </Link>
                 ]
             },
         ],
@@ -89,7 +89,7 @@ function Home() {
     );
 
 
-    
+
 
 
   //fetch all the papers in the database (dynamodb nosql)
@@ -121,7 +121,7 @@ function Home() {
                           <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
                               User
                           </Typography>
-                          
+
                       </Box>
                       <Card>
                           <CardContent>

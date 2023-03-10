@@ -14,7 +14,7 @@ export async function createNewList (listData) { // provide: title, papers, list
     }catch(error){
       console.log('error creating a list', error)
     }
-    
+
 
 }
 
@@ -57,7 +57,7 @@ export async function deletePaperFromList (listId, paperId) {
       const list = await getListById(listId);
       let listData = list;
       let listPapers = listData.papers;
-      if (listPapers.includes(paperId)) { listPapers = listPapers.filter(id => id != paperId); }
+      if (listPapers.includes(paperId)) { listPapers = listPapers.filter(id => id !== paperId); }
       listData.papers = listPapers;
       await updateListById(listData);
     } catch (error) {
@@ -100,7 +100,7 @@ export async function deleteCollaboratorFromList (listId, userId) {
       const list = await getListById(listId);
       let listData = list;
       let collaborators = listData.sharedWith;
-      if (collaborators.includes(userId)) { collaborators = collaborators.filter(id => id != userId); }
+      if (collaborators.includes(userId)) { collaborators = collaborators.filter(id => id !== userId); }
       listData.sharedWith = collaborators;
       await updateListById(listData);
     } catch (error) {

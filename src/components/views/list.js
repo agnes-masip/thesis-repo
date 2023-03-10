@@ -2,29 +2,25 @@ import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Box, Button, Card, Typography } from '@mui/material';
+import { Box, Button, Card, FormGroup, FormLabel, TextField, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DownloadIcon from '@mui/icons-material/Download';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-//import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import NavBar from '../navbar';
 import EditIcon from '@mui/icons-material/Edit';
 
-//these imports probably should go somewhere else
-import Amplify from '@aws-amplify/core';
-import awsconfig from '../../aws-exports';
-
 import { deletePaperById, getPaperById } from '../api/papers';
-import { getListById } from '../api/lists';
+import { addCollaboratorToList, getListById } from '../api/lists';
 import { getUserById } from '../api/users';
 
 export default function List() {
-  const [paperRows, setPaperRows] = React.useState([]);
-  const [userRows, setUserRows] = React.useState([]);
-  const { listID } = useParams();
+  const { listOwner, listID } = useParams();
+  const [paperRows, setPaperRows] = useState([]);
+  const [userRows, setUserRows] = useState([]);
+  const [userFormValues, setUserFormValues] = useState([]);
 
   useEffect(() => {
     fetchPapers(listID);
@@ -36,7 +32,6 @@ export default function List() {
   const fetchPapers = async (listID) => {
     const listData = await getListById(listID);
     const paperIds = listData.papers;
-    //console.log(listData);
     let paperList = [];
     if(paperIds != null){
       for (const paperId of paperIds){
@@ -51,18 +46,17 @@ export default function List() {
   const fetchUsers = async (listID) => {
     let userList = [];
     const listData = await getListById(listID);
-    const ownerID = listData.listOwner;
-    const owner = await getUserById(ownerID);
-    userList.push(owner);
-
-    const peersIDs = listData.sharedWith;
-    userList.push()
-    for (const id of peersIDs){
-      const peer = await getUserById(id);
-      userList.push(peer);
+    const cIDs = listData.sharedWith;
+    for (const cID of cIDs){
+      const collaborator = await getUserById(cID);
+      userList.push(collaborator);
     };
 
-    setUserRows(userList);
+    setUserRows(userRows + userList);
+  };
+
+  const addCollaborator = async (userID) => {
+    addCollaboratorToList(userID);
   };
 
   const deleteSource = async (sourceID) => {
@@ -71,6 +65,19 @@ export default function List() {
 
   const deleteCollaborator = async (userID) => {
     deleteCollaborator(userID);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    addCollaborator(userFormValues);
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setUserFormValues({
+      ...userFormValues,
+      [name]: value,
+    });
   };
 
   function exportJSONFile(jsonData, filename) {
@@ -97,7 +104,7 @@ export default function List() {
       }
     }
     exportJSONFile(paperList, 'paper-list.json');
-}
+  }
 
   // Currently does nothing
   const likeSource = React.useCallback(
@@ -177,14 +184,16 @@ export default function List() {
     <NavBar/>
     <div className="Content">
       <div className="Title">
-        <Typography variant="h4" align="left" color="primary">
-          My Literature List
-        </Typography>
-        <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}}>
-                      <Link to={'/'} className="Link" style={{ textDecoration: 'none'}}>
-                          Back
-                      </Link>
-                  </Button>
+        <Box sx={{ display: 'grid', gap: 2, gridAutoColumns: '1fr' }}>
+          <Typography variant="h4" align="left" color="primary" sx={{gridRow: '1', gridColumn: '1/5'}}>
+            My Literature List
+          </Typography>
+          <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}}>
+            <Link to={'/'} className="Link" style={{ textDecoration: 'none'}}>
+                Back
+            </Link>
+          </Button>
+        </Box>
       </div>
       <div>
         <Box my={4} sx={{ display: 'grid', gap: 2, gridAutoColumns: '1fr' }}>
@@ -207,29 +216,27 @@ export default function List() {
           </Card>
           </Box>
             <Box sx={{ display: 'grid', gridAutoColumns: '1fr', gridColumn: '4/5' }}>
-              <Box sx={{ display: 'grid', gridAutoColumns: '1fr'}}>
+              <Box>
                 <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
                   Collaborators
                 </Typography>
-                <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '5/6', textAlign: 'right' }}>
-                  Add
-                </Button>
               </Box>
               <Card sx={{height: 500, width: '100%'}}>
-                {/* <form onSubmit={addUser}>
-                  <FormGroup>
-                    <FormLabel>
-                        Title:
-                    </FormLabel>
-                    <TextField
-                        id="title"
-                        name="title"
+                <form onSubmit={handleSubmit}>
+                  <FormGroup sx={{ display: 'grid', gridAutoColumns: '1fr' }}>
+                    <TextField sx={{ gridRow: '1', gridColumn: '1/6' }}
+                        id="username"
+                        name="username"
+                        label="Add User"
                         type="text"
-                        value={formValues.title}
+                        value={userFormValues.username}
                         onChange={handleInputChange}
                     />
+                    <Button type="submit" variant="contained" sx={{gridRow: '1', gridColumn: '6/7' }}>
+                      <AddIcon/>
+                    </Button>
                   </FormGroup>
-                </form> */}
+                </form>
                 <DataGrid columns={userColumns} rows={userRows}/>
               </Card>
           </Box>
