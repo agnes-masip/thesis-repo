@@ -70,7 +70,7 @@ function Home() {
                     <GridActionsCellItem
                         icon={<DeleteIcon />}
                         label="Delete"
-                        onClick={deleteList(params.id)}
+                        onClick={() => deleteList(params.id)}
                     />,
                     <Link to={'/list/' + params.row.listOwner + '/' + params.id}>
                         <GridActionsCellItem
