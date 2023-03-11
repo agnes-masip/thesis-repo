@@ -2,6 +2,7 @@ import { API } from "aws-amplify";
 import { createList, updateList, deleteList} from '../../graphql/mutations';
 
 import { listLists, getList } from "../../graphql/queries";
+import { getPaperById } from "./papers";
 
 export async function createNewList (listData) { // provide: title, papers, listOwner, sharedWith
     try{
@@ -11,6 +12,7 @@ export async function createNewList (listData) { // provide: title, papers, list
             input: listData
         }
     });
+    return newList.data.createList;
     }catch(error){
       console.log('error creating a list', error)
     }
@@ -121,3 +123,37 @@ export async function addCollaboratorToList (listId, userId) {
     }
 }
 
+// get bibtex export for paper
+
+export async function getBibtexReferenceForPaper (paperId) {
+    const paperData = await getPaperById(paperId);
+    const firstAuthor = paperData.author[0];
+    const firstAuthorLastName = firstAuthor.split(".").at(-1).trim();
+    const authors = paperData.author.join(" and ");
+    const volume = paperData.volume ? paperData.volume : "";
+    const issue = paperData.issue ? paperData.issue : "";
+    const doi = paperData.doi ? paperData.doi : "";
+    const issn = paperData.issn ? paperData.issn : "";
+    // missing: pages!
+    let reference = `@article{ ${firstAuthorLastName.replace(" ", "_")}:${paperData.year}
+        title = { ${paperData.title} },
+        author = { ${authors} },
+        journal = { ${paperData.journal} },
+        year = { ${paperData.year} },
+        volume = { ${volume },
+        issue = { ${issue} },
+        doi = { ${doi} },
+        issn = { ${issn} }
+    }`;
+    return reference;
+}
+
+export async function getBibtexForList (listId) {
+    const listData = await getListById(listId);
+    const paperIds = listData.papers;
+    let references = "";
+    for (let paperId of paperIds) {
+        references += await getBibtexReferenceForPaper(paperId) + "\n\n";
+    }
+    return references.slice(0, -4);
+}
