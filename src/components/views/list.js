@@ -45,6 +45,9 @@ export default function List() {
 
   const fetchUsers = async (listID) => {
     let userList = [];
+    const ownerUser = await getUserById(listOwner);
+    userList.push(ownerUser);
+
     const listData = await getListById(listID);
     const cIDs = listData.sharedWith;
     for (const cID of cIDs){
@@ -59,12 +62,10 @@ export default function List() {
     const userExists = await usernameExists(username);
 
     if (userExists) {
-      const listData = await getListById(listID);
-      const cIDs = listData.sharedWith;
       const users = await getUserByUsername(username);
       const user = users[0];
       const userID = user.id;
-      if (userID !== listOwner && (userRows.filter((row) => row.id == userID)).length == 0) {
+      if (userID !== listOwner && (userRows.filter((row) => row.id === userID)).length === 0) {
       addCollaboratorToList(listID, userID);
       setUserRows([...userRows, user]);
       }
@@ -150,13 +151,20 @@ export default function List() {
         headerClassName: 'data-grid-header',
         type: 'actions',
         flex: 0.25,
-        getActions: (params) => [
-          <GridActionsCellItem
-          icon={<DeleteIcon />}
-          label="delete"
-          onClick={() => deleteCollaborator(params.id)}
-          />,
-        ]
+        renderCell: (params) => {
+          // getActions: (params) => [
+          if (params.id !== listOwner) {
+            return <GridActionsCellItem
+              icon={<DeleteIcon />}
+              label="delete"
+              onClick={() => deleteCollaborator(params.id)}
+              />;
+          }
+          else {
+            return <p><i>Owner</i></p>
+          }
+          // ]
+        }
       },
     ],
     [deleteCollaborator],
