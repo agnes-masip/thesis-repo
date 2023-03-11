@@ -12,7 +12,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import NavBar from "../navbar";
 
 import { getAllListsForUser, deleteListById, createNewList } from '../api/lists';
-//import {deletePaperById} from "../api/papers";
 
 
 const initialUser = {name:"Najma", mail:"some@mail.ch", userId: "user2"};
@@ -37,9 +36,7 @@ function Home() {
     formValues.listOwner = initialUser.userId;
     formValues.papers = [];
     formValues.sharedWith = [];
-    console.log(formValues);
     createNewList(formValues)
-
   };
 
   const handleInputChange = (event) => {
@@ -53,7 +50,6 @@ function Home() {
     const deleteList = React.useCallback(
         (id) => () => {
             setTimeout(() => {
-                console.log("fuck")
                 setListRows((prevListRows) => prevListRows.filter((row) => row.id !== id));
                 deleteListById(id);
             });
@@ -76,35 +72,22 @@ function Home() {
                         label="Delete"
                         onClick={deleteList(params.id)}
                     />,
-                    <Link to={'/list/' + params.id}>
+                    <Link to={'/list/' + params.row.listOwner + '/' + params.id}>
                         <GridActionsCellItem
                             icon={<VisibilityIcon />}
                             label="view"
                         />
-                    </Link>,
+                    </Link>
                 ]
             },
         ],
         [deleteList],
     );
 
-
-    
-
-
-  //fetch all the papers in the database (dynamodb nosql)
   const fetchLists = async () => {
-
-      //folder graphql in component has mutations and queries.js these is where you can find
-      // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
       const listList = await getAllListsForUser(user.userId);
-
       setRows(listList);
   };
-
-
-
-
 
   return(
       <div>
@@ -121,7 +104,7 @@ function Home() {
                           <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
                               User
                           </Typography>
-                          
+
                       </Box>
                       <Card>
                           <CardContent>
@@ -180,68 +163,7 @@ function Home() {
               </div>
           </div>
       </div>
-  )
-
-
-
-
-
-
-
-
-
-/*
-  return (
-    <div className="App">
-      <header className="App-header">
-
-        <h1>Papers</h1>
-          <table>
-            <tbody>
-              <tr>
-                <th>Paper ID</th>
-                <th>Paper Title</th>
-                <th>Paper Author</th>
-                <th>Button to edit data</th>
-              </tr>
-                {papers.map((paper) => {
-                  return (
-                    <tr key='${paper.id}'>
-                      <td>{paper.id}</td>
-                      <td>{paper.title}</td>
-
-                       {/*This button is to use if you create a form for the changes. Right now,
-                         it only changes the title. }
-
-                         <button onClick={() => updatePaper(paper.id, "idList")}> </button>
-
-                        {/* This button is to delete the paper.
-                         <button onClick={() => deletePaper(paper.id)}> </button> }
-                    </tr>
-                  );
-                })}
-              </tbody>
-          </table>
-          <h1>Papers in a specific list</h1>
-
-
-
-              {/*This is the form to upload papers.}
-          {/* <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="title">Title:</label>
-              <input type="text" id="title" value={title} onChange={(event) => setTitle(event.target.value)} />
-            </div>
-            <div>
-              <label htmlFor="body">Author:</label>
-              <input type="text" id="author" value={author}  onChange={(event) => setAuthor(event.target.value)} />
-            </div>
-             <button type="submit">Create paper</button>
-          </form> }
-      </header>
-    </div>
-  );
-*/
+    )
 }
 
 export default Home;

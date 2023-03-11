@@ -40,15 +40,6 @@ const theme = createTheme({
   }
 });
 
-// const newTodo = await API.graphql({
-//   query: createTodo,
-//   variables: {
-//       input: {
-//   "name": "Lorem ipsum dolor sit amet",
-//   "description": "Lorem ipsum dolor sit amet"
-// }
-//   }
-// });
 
 function App() {
 
@@ -57,7 +48,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Routes>
           <Route path='/' element={<Home/>} />
-          <Route path='list/:listID' element={<List/>} />
+          <Route path='list/:listOwner/:listID' element={<List/>} />
           {/* <Route path='user' element={<User/>} /> */}
           <Route path='add/:listID' element={<AddSource/>} />
           <Route path='edit/:listID/:sourceID' element={<EditSource/>} />
