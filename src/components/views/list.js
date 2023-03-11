@@ -17,7 +17,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 //import {newPaper,deletedPaper,updatedPaper} from '../api/papers';
 import {deletePaperById, getPaperById} from '../api/papers';
-import {getListById} from '../api/lists';
+import {getListById, getBibtexForList} from '../api/lists';
 
 const initialUserRows = [
   {
@@ -111,17 +111,17 @@ export default function List() {
   }
   
   async function exportPaperList(listID) {
-    const listData = await getListById(listID);
-    const paperIds = listData.papers;
-  
-    let paperList = [];
-    if (paperIds != null) {
-      for (const paperId of paperIds) {
-        const paper = await getPaperById(paperId);
-        paperList.push(paper);
-      }
-    }
-    exportJSONFile(paperList, 'paper-list.json');
+    const references = await getBibtexForList(listID);
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(references));
+    element.setAttribute('download', "references.bib");
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
 }
 
   // Currently does nothing
