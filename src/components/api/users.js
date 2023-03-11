@@ -70,3 +70,8 @@ export async function usernameExists(username){
     const users = await getAllUsers();
     return users.filter(user => user.username === username).length === 1;
 }
+
+export async function getUserByUsername(username){
+    const users = await getAllUsers();
+    return users.filter(user => user.username === username);
+}

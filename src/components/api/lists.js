@@ -78,7 +78,7 @@ export async function addPaperToList (listId, paperId) {
     }
 }
 
-async function updateListById (listData) {
+export async function updateListById (listData) {
     try {
       delete listData["createdAt"];
       delete listData["updatedAt"];
