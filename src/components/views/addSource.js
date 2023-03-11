@@ -10,6 +10,7 @@ import { Alert } from '@material-ui/lab';
 
 import NavBar from "../navbar";
 import {newPaper} from '../api/papers';
+import { addPaperToList } from '../api/lists';
 
 
 export default function AddSource() {
@@ -21,7 +22,7 @@ export default function AddSource() {
   const handleSubmit = (event) => {
     event.preventDefault();
     formValues.likes = 0;
-    newPaper(formValues);
+    newPaper(formValues).then(PaperId => {addPaperToList(listID, PaperId)});
   };
 
   const handleInputChange = (event) => {

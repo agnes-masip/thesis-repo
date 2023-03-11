@@ -13,7 +13,7 @@ import NavBar from '../navbar';
 import EditIcon from '@mui/icons-material/Edit';
 
 import { deletePaperById, getPaperById } from '../api/papers';
-import { addCollaboratorToList, getListById } from '../api/lists';
+import { addCollaboratorToList, getListById, deleteCollaboratorFromList } from '../api/lists';
 import { getUserById, getUserByUsername, usernameExists } from '../api/users';
 
 export default function List() {
@@ -33,7 +33,7 @@ export default function List() {
     const listData = await getListById(listID);
     const paperIds = listData.papers;
     let paperList = [];
-    if(paperIds != null){
+    if (paperIds) {
       for (const paperId of paperIds){
         const paper = await getPaperById(paperId)
         paperList.push(paper);
@@ -59,11 +59,18 @@ export default function List() {
     const userExists = await usernameExists(username);
 
     if (userExists) {
+      const listData = await getListById(listID);
+      const cIDs = listData.sharedWith;
       const users = await getUserByUsername(username);
       const user = users[0];
       const userID = user.id;
+      if (userID !== listOwner && (userRows.filter((row) => row.id == userID)).length == 0) {
       addCollaboratorToList(listID, userID);
       setUserRows([...userRows, user]);
+      }
+      else {
+        alert(username + ' is already a list collaborator!');
+      }
     }
     else {
       alert('No user with username ' + username);
@@ -75,7 +82,10 @@ export default function List() {
   };
 
   const deleteCollaborator = async (userID) => {
-    // deleteCollaborator(userID);
+    setTimeout(() => {
+      setUserRows((prevRows) => prevRows.filter((row) => row.id !== userID));
+    });
+    deleteCollaboratorFromList(listID, userID);
   };
 
   const handleSubmit = (event) => {
@@ -144,7 +154,7 @@ export default function List() {
           <GridActionsCellItem
           icon={<DeleteIcon />}
           label="delete"
-          onClick={deleteCollaborator(params.id)}
+          onClick={() => deleteCollaborator(params.id)}
           />,
         ]
       },
@@ -166,17 +176,17 @@ export default function List() {
           <GridActionsCellItem
           icon={<ThumbUpIcon />}
           label="Like"
-          onClick={likeSource(params.id)}
+          onClick={() => likeSource(params.id)}
           />,
           <GridActionsCellItem
           icon={<DownloadIcon />}
           label="Like"
-          onClick={downloadSource(params.id)}
+          onClick={() => downloadSource(params.id)}
           />,
           <GridActionsCellItem
           icon={<DeleteIcon />}
           label="Delete"
-          onClick={deleteSource(params.id)}
+          onClick={() => deleteSource(params.id)}
         />,
         <Link to={'/edit/' + listID + '/' + params.id}>
           <GridActionsCellItem
