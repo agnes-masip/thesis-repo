@@ -2,7 +2,7 @@ import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Box, Button, Card, FormGroup, FormLabel, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, FormGroup, TextField, Typography } from '@mui/material';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,7 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { deletePaperById, getPaperById } from '../api/papers';
 import { addCollaboratorToList, getListById } from '../api/lists';
-import { getUserById } from '../api/users';
+import { getUserById, getUserByUsername, usernameExists } from '../api/users';
 
 export default function List() {
   const { listOwner, listID } = useParams();
@@ -52,11 +52,22 @@ export default function List() {
       userList.push(collaborator);
     };
 
-    setUserRows(userRows + userList);
+    setUserRows(userList);
   };
 
-  const addCollaborator = async (userID) => {
-    addCollaboratorToList(userID);
+  const addCollaborator = async (username) => {
+    const userExists = await usernameExists(username);
+
+    if (userExists) {
+      const users = await getUserByUsername(username);
+      const user = users[0];
+      const userID = user.id;
+      addCollaboratorToList(listID, userID);
+      setUserRows([...userRows, user]);
+    }
+    else {
+      alert('No user with username ' + username);
+    }
   };
 
   const deleteSource = async (sourceID) => {
@@ -64,12 +75,12 @@ export default function List() {
   };
 
   const deleteCollaborator = async (userID) => {
-    deleteCollaborator(userID);
+    // deleteCollaborator(userID);
   };
 
   const handleSubmit = (event) => {
+    addCollaborator(userFormValues.username);
     event.preventDefault();
-    addCollaborator(userFormValues);
   };
 
   const handleInputChange = (event) => {

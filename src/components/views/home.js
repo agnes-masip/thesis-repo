@@ -12,7 +12,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import NavBar from "../navbar";
 
 import { getAllListsForUser, deleteListById, createNewList } from '../api/lists';
-//import {deletePaperById} from "../api/papers";
 
 
 const initialUser = {name:"Najma", mail:"some@mail.ch", userId: "user2"};
@@ -37,9 +36,7 @@ function Home() {
     formValues.listOwner = initialUser.userId;
     formValues.papers = [];
     formValues.sharedWith = [];
-    console.log(formValues);
     createNewList(formValues)
-
   };
 
   const handleInputChange = (event) => {
@@ -53,7 +50,6 @@ function Home() {
     const deleteList = React.useCallback(
         (id) => () => {
             setTimeout(() => {
-                console.log("fuck")
                 setListRows((prevListRows) => prevListRows.filter((row) => row.id !== id));
                 deleteListById(id);
             });
@@ -88,23 +84,10 @@ function Home() {
         [deleteList],
     );
 
-
-
-
-
-  //fetch all the papers in the database (dynamodb nosql)
   const fetchLists = async () => {
-
-      //folder graphql in component has mutations and queries.js these is where you can find
-      // the get, updates, etc. these api features export a data structure, e.g: listPapers is the export of a get
       const listList = await getAllListsForUser(user.userId);
-
       setRows(listList);
   };
-
-
-
-
 
   return(
       <div>

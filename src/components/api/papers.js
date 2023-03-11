@@ -17,7 +17,7 @@ export async function newPaper (paperData) { // provide: title!, description!, l
 	}catch(error){
 		console.log('error on creating paper', error);
 	}
-	
+
 }
 
 export async function updatePaperById (paperData) {
@@ -33,7 +33,7 @@ export async function updatePaperById (paperData) {
 	} catch (error) {
 		console.log("error updating the list")
 	}
-	
+
 }
 
 
