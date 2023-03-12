@@ -140,7 +140,7 @@ export async function getBibtexReferenceForPaper (paperId) {
         author = { ${authors} },
         journal = { ${paperData.journal} },
         year = { ${paperData.year} },
-        volume = { ${volume },
+        volume = { ${volume} },
         issue = { ${issue} },
         doi = { ${doi} },
         issn = { ${issn} }
@@ -151,9 +151,10 @@ export async function getBibtexReferenceForPaper (paperId) {
 export async function getBibtexForList (listId) {
     const listData = await getListById(listId);
     const paperIds = listData.papers;
-    let references = "";
+    let references = [];
     for (let paperId of paperIds) {
-        references += await getBibtexReferenceForPaper(paperId) + "\n\n";
+        const bibtex = await getBibtexReferenceForPaper(paperId);
+        references.push(bibtex);
     }
-    return references.slice(0, -4);
+    return references.join("\n\n");
 }
