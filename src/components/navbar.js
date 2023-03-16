@@ -58,8 +58,6 @@ export default function NavBar() {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-
-                                {/* TODO: direct to actual log-out */}
                                 <MenuItem onClick={logOut}>
                                 <Link to={'/login'} style={{ textDecoration: 'none'}}>
                                         Log Out
