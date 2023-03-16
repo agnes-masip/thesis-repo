@@ -33,7 +33,7 @@ function Login() {
         const newUserData = await newUser({
             "username": formValues["username"],
             "email": formValues["email"],
-            "password": formValues["password"]
+            "password": JSON.stringify(SHA256(formValues["password"]).words)
         });
         console.log(newUserData);
         // TODO: go to homepage
@@ -44,23 +44,15 @@ function Login() {
         const user = await getUserByEmail(formValues["email"]);
         if (user.length === 0) { console.error("This email does not exist in our database"); return;}
 
-        if (user.password === formValues["password"]) { /* TODO: go to homepage */ }
+        if (user[0].password === JSON.stringify(SHA256(formValues["password"]).words)) { console.log("OK"); /* TODO: go to homepage */ }
     }
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        if (name !== "password"){
-            setFormValues({
+        setFormValues({
             ...formValues,
             [name]: value,
-          });
-        } else { // we have to use crypto!
-            setFormValues({
-                ...formValues,
-                [name]: JSON.stringify(SHA256(value).words),
-              });
-        }
-        
+            });        
     };
 
 
@@ -151,7 +143,7 @@ function Login() {
                                     </Grid>
                                 </Grid>
                                 <div >
-                                    <Button onClick={signIn()} >
+                                    <Button onClick={async() => {await signIn(); }} >
                                         Sign in
                                     </Button>
                                 </div>
