@@ -4,7 +4,7 @@ import '../../App.css';
 
 import { Link } from "react-router-dom";
 
-import {Box, Card, CardContent, Typography, Button, TextField} from "@mui/material";
+import {Box, Card, CardContent, FormGroup, Typography, Button, TextField} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from '@mui/icons-material/Add';
@@ -142,22 +142,24 @@ function Home() {
                           <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }} >
                               My Lists
                           </Typography>
-                          <form onSubmit={handleSubmit}>
-                          <TextField
-                                      id="title"
-                                      name="title"
-                                      label="listName"
-                                      type="text"
-                                      value={formValues.title}
-                                      onChange={handleInputChange}
-                                  />
-                          <Button  type="submit" variant="contained" endIcon={<AddIcon />}  sx={{ gridRow: '1', gridColumn: '7/8' } }>
-                              Create
-                          </Button>
-                          </form>
                       </Box>
-                      <Card sx={{height: 400, width: '100%' }}>
-                          <DataGrid columns={columns} rows={rows}/>
+                      <Card sx={{height: 500, width: '100%' }}>
+                            <form onSubmit={handleSubmit}>
+                                <FormGroup sx={{ display: 'grid', gridAutoColumns: '1fr' }}>
+                                    <TextField sx={{ gridRow: '1', gridColumn: '1/6' }}
+                                        id="title"
+                                        name="title"
+                                        label="listName"
+                                        type="text"
+                                        value={formValues.title}
+                                        onChange={handleInputChange}
+                                    />
+                                    <Button type="submit" variant="contained" sx={{gridRow: '1', gridColumn: '6/7' }}>
+                                    <AddIcon/>
+                                    </Button>
+                                </FormGroup>
+                            </form>
+                            <DataGrid columns={columns} rows={rows}/>
                       </Card>
                   </Box>
               </div>
