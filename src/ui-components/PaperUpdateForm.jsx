@@ -195,7 +195,7 @@ export default function PaperUpdateForm(props) {
   const initialValues = {
     title: "",
     description: "",
-    likes: "",
+    likes: [],
     author: [],
     journal: "",
     year: "",
@@ -227,7 +227,8 @@ export default function PaperUpdateForm(props) {
       : initialValues;
     setTitle(cleanValues.title);
     setDescription(cleanValues.description);
-    setLikes(cleanValues.likes);
+    setLikes(cleanValues.likes ?? []);
+    setCurrentLikesValue("");
     setAuthor(cleanValues.author ?? []);
     setCurrentAuthorValue("");
     setJournal(cleanValues.journal);
@@ -248,6 +249,8 @@ export default function PaperUpdateForm(props) {
     queryData();
   }, [idProp, paper]);
   React.useEffect(resetStateValues, [paperRecord]);
+  const [currentLikesValue, setCurrentLikesValue] = React.useState("");
+  const likesRef = React.createRef();
   const [currentAuthorValue, setCurrentAuthorValue] = React.useState("");
   const authorRef = React.createRef();
   const validations = {
@@ -414,22 +417,14 @@ export default function PaperUpdateForm(props) {
         hasError={errors.description?.hasError}
         {...getOverrideProps(overrides, "description")}
       ></TextField>
-      <TextField
-        label="Likes"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={likes}
-        onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
           if (onChange) {
             const modelFields = {
               title,
               description,
-              likes: value,
+              likes: values,
               author,
               journal,
               year,
@@ -440,18 +435,40 @@ export default function PaperUpdateForm(props) {
               citationStorageLocation,
             };
             const result = onChange(modelFields);
-            value = result?.likes ?? value;
+            values = result?.likes ?? values;
           }
-          if (errors.likes?.hasError) {
-            runValidationTasks("likes", value);
-          }
-          setLikes(value);
+          setLikes(values);
+          setCurrentLikesValue("");
         }}
-        onBlur={() => runValidationTasks("likes", likes)}
-        errorMessage={errors.likes?.errorMessage}
-        hasError={errors.likes?.hasError}
-        {...getOverrideProps(overrides, "likes")}
-      ></TextField>
+        currentFieldValue={currentLikesValue}
+        label={"Likes"}
+        items={likes}
+        hasError={errors?.likes?.hasError}
+        errorMessage={errors?.likes?.errorMessage}
+        setFieldValue={setCurrentLikesValue}
+        inputFieldRef={likesRef}
+        defaultFieldValue={""}
+      >
+        <TextField
+          label="Likes"
+          isRequired={false}
+          isReadOnly={false}
+          value={currentLikesValue}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.likes?.hasError) {
+              runValidationTasks("likes", value);
+            }
+            setCurrentLikesValue(value);
+          }}
+          onBlur={() => runValidationTasks("likes", currentLikesValue)}
+          errorMessage={errors.likes?.errorMessage}
+          hasError={errors.likes?.hasError}
+          ref={likesRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "likes")}
+        ></TextField>
+      </ArrayField>
       <ArrayField
         onChange={async (items) => {
           let values = items;

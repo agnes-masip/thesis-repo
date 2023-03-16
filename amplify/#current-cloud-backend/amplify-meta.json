@@ -36,12 +36,12 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
-      "lastPushTimeStamp": "2023-03-08T14:17:50.443Z",
+      "lastPushTimeStamp": "2023-03-16T15:32:47.080Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify7086d81be34e4-staging-153100-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apithesisrepo"
       },
-      "lastPushDirHash": "kUnjuU8gz/qJQpkR098u/30F4q4="
+      "lastPushDirHash": "m2LpKxJFGBiKvOTddRjbVa33zdY="
     }
   },
   "auth": {
@@ -79,7 +79,7 @@
         "IdentityPoolName": "thesisrepo70d67ac1_identitypool_70d67ac1__staging",
         "UserPoolName": "thesisrepo70d67ac1_userpool_70d67ac1"
       },
-      "lastPushTimeStamp": "2023-03-08T14:17:50.394Z",
+      "lastPushTimeStamp": "2023-03-16T15:32:47.027Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify7086d81be34e4-staging-153100-deployment/amplify-cfn-templates/auth/thesisrepo70d67ac1-cloudformation-template.json",
         "logicalId": "auththesisrepo70d67ac1"

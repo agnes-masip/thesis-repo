@@ -31,7 +31,7 @@ type Paper @aws_iam @aws_api_key {
   id: ID!
   title: String!
   description: String!
-  likes: Int
+  likes: [ID]
   author: [String!]
   journal: String
   year: Int
@@ -402,7 +402,7 @@ input ModelPaperFilterInput {
   id: ModelIDInput
   title: ModelStringInput
   description: ModelStringInput
-  likes: ModelIntInput
+  likes: ModelIDInput
   author: ModelStringInput
   journal: ModelStringInput
   year: ModelIntInput
@@ -419,7 +419,7 @@ input ModelPaperFilterInput {
 input ModelPaperConditionInput {
   title: ModelStringInput
   description: ModelStringInput
-  likes: ModelIntInput
+  likes: ModelIDInput
   author: ModelStringInput
   journal: ModelStringInput
   year: ModelIntInput
@@ -437,7 +437,7 @@ input CreatePaperInput {
   id: ID
   title: String!
   description: String!
-  likes: Int
+  likes: [ID]
   author: [String!]
   journal: String
   year: Int
@@ -452,7 +452,7 @@ input UpdatePaperInput {
   id: ID!
   title: String
   description: String
-  likes: Int
+  likes: [ID]
   author: [String!]
   journal: String
   year: Int
@@ -471,7 +471,7 @@ input ModelSubscriptionPaperFilterInput {
   id: ModelSubscriptionIDInput
   title: ModelSubscriptionStringInput
   description: ModelSubscriptionStringInput
-  likes: ModelSubscriptionIntInput
+  likes: ModelSubscriptionIDInput
   author: ModelSubscriptionStringInput
   journal: ModelSubscriptionStringInput
   year: ModelSubscriptionIntInput

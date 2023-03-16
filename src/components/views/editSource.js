@@ -16,6 +16,7 @@ export default function EditSource() {
   const { listID, sourceID } = useParams();
   const [formValues, setFormValues] = useState([]);
   const [open, setOpen] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     setInitialFormValues(sourceID);
@@ -25,14 +26,34 @@ export default function EditSource() {
 
   const setInitialFormValues = async(paperId) => {
     const paperData = await getPaperById(paperId);
-    setFormValues(paperData.data.getPaper);
+    setFormValues(paperData);
   }
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (typeof formValues.year !== 'integer') {
+      newErrors.integer = 'Sadly, this is not an integer :(';
+    }
+    if (!formValues.description) {
+        newErrors.description = 'No description? This is not allowed, sorry :(';
+    }
+    if (!formValues.title) {
+        newErrors.title = 'No title? Title is necessary, sorry :(';
+    }
+    if (!formValues.author) {
+        newErrors.title = 'No author? That is not possible, sorry :(';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    updatePaperById(formValues);
-    setOpen(true);
-  };
+    if(validateForm()){
+        updatePaperById(formValues);
+        setOpen(true); 
+    }
+  }
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -78,7 +99,10 @@ export default function EditSource() {
                                     name="title"
                                     type="text"
                                     value={formValues.title}
+                                    error={!!errors.title}
+                                    helperText={errors.title}
                                     onChange={handleInputChange}
+                                   
                                 />
                             </FormGroup>
                             {/* this one should probably be different bc its a list (first + last name) */}
@@ -90,6 +114,8 @@ export default function EditSource() {
                                     id="author"
                                     name="author"
                                     type="text"
+                                    error={!!errors.author}
+                                    helperText={errors.author}
                                     value={formValues.author}
                                     onChange={handleInputChange}
                                 />
@@ -102,6 +128,8 @@ export default function EditSource() {
                                     id="desc"
                                     name="desc"
                                     type="text"
+                                    error={!!errors.description}
+                                    helperText={errors.description}
                                     value={formValues.desc}
                                     onChange={handleInputChange}
                                 />
@@ -114,6 +142,7 @@ export default function EditSource() {
                                     id="doi"
                                     name="doi"
                                     type="text"
+                                    
                                     value={formValues.doi}
                                     onChange={handleInputChange}
                                 />
@@ -174,6 +203,8 @@ export default function EditSource() {
                                     id="year"
                                     name="year"
                                     type="number"
+                                    error={!!errors.integer}
+                                    helperText={errors.integer}
                                     value={formValues.year}
                                     onChange={handleInputChange}
                                 />
