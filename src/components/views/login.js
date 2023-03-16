@@ -2,67 +2,86 @@
 import React, { useState, useEffect} from 'react';
 import '../../App.css';
 
-import {Box, Card, CardContent, Typography, Button, Grid} from "@mui/material";
+import {Box, Card, CardContent, FormGroup, Typography, Button} from "@mui/material";
 import TextField from '@mui/material/TextField';
 import {SHA256} from 'crypto-js';
 import { getUserByEmail, newUser, userEmailExists, usernameExists } from '../api/users';
 
-
-
-
-
 function Login() {
-
-    const [username, setUsername] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [formValues, setFormValues] = useState([]);
+    const [signInFormValues, setSignInFormValues] = useState([]);
+    const [signUpFormValues, setSignUpFormValues] = useState([]);
 
     const testPass = JSON.stringify(SHA256("testpass").words);
 
     // Currently does nothing, should navigate to list
-    async function signUp() {
+    async function signUp(username, email, password) {
         // check if email's already used!
-        const emailExists = await userEmailExists(formValues["email"]);
-        if (emailExists) { console.error("This email is already used"); return;} // TODO: add actual error front-end
+        const emailExists = await userEmailExists(email);
+        if (emailExists) {
+            console.error("This email is already used");
+            return;
+        } // TODO: add actual error front-end
 
         // check if username's already used
-        const userExists = await usernameExists(formValues["username"]);
-        if (userExists) { console.error("This username is already used"); return;}
-        
+        const userExists = await usernameExists(username);
+        if (userExists) {
+            console.error("This username is already used");
+            return;
+        }
+
         const newUserData = await newUser({
-            "username": formValues["username"],
-            "email": formValues["email"],
-            "password": formValues["password"]
+            "username": username,
+            "email": email,
+            "password": password
         });
+
         console.log(newUserData);
         // TODO: go to homepage
     }
 
     // Currently does nothing, should navigate to list
-    async function signIn() {
-        const user = await getUserByEmail(formValues["email"]);
-        if (user.length === 0) { console.error("This email does not exist in our database"); return;}
-
-        if (user.password === formValues["password"]) { /* TODO: go to homepage */ }
+    async function signIn(email, password) {
+        const user = await getUserByEmail(email);
+        console.log(user[0]);
+        console.log(user[0].password);
+        console.log(password);
+        if (user.length === 0) {
+            console.error("This email does not exist in our database");
+            return;
+        }
+        if (user.password === password) { /* TODO: go to homepage */
+            console.log('log in OK');
+        }
+        else {
+            console.log('log in NOT OKK');
+        }
     }
 
-    const handleInputChange = (event) => {
+    const handleSignInInputChange = (event) => {
         const { name, value } = event.target;
-        if (name !== "password"){
-            setFormValues({
-            ...formValues,
+        setSignInFormValues({
+            ...signInFormValues,
             [name]: value,
-          });
-        } else { // we have to use crypto!
-            setFormValues({
-                ...formValues,
-                [name]: JSON.stringify(SHA256(value).words),
-              });
-        }
-        
+        });
     };
 
+    const handleSignInSubmit = (event) => {
+        event.preventDefault();
+        signIn(signInFormValues.email, signInFormValues.password);
+    };
+
+    const handleSignUpInputChange = (event) => {
+        const { name, value } = event.target;
+        setSignUpFormValues({
+            ...signUpFormValues,
+            [name]: value,
+        });
+    };
+
+    const handleSignUpSubmit = (event) => {
+        event.preventDefault();
+        signUp(signUpFormValues.username, signUpFormValues.email, signUpFormValues.password);
+    };
 
     return (
         <div className="Content">
@@ -76,45 +95,34 @@ function Login() {
                         </div>
                         <Card sx={{ height: "100%",display:'flex', justifyContent:'center',padding:"10px" }}>
                             <CardContent>
-                                <Grid container direction={"column"} spacing={4}>
-                                    <Grid item>
+                                <form onSubmit={handleSignInSubmit}>
+                                    <FormGroup>
                                         <TextField
                                             required
-                                            id="outlined-required"
-                                            label="Username"
-                                            variant="outlined"
-                                            name="username"
-                                            onChange={handleInputChange}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField
-                                            required
-                                            id="outlined-required"
-                                            label="E-Mail"
+                                            id="email-input"
+                                            label="E-mail"
                                             variant="outlined"
                                             name="email"
-                                            onChange={handleInputChange}
+                                            value={signInFormValues.email}
+                                            onChange={handleSignInInputChange}
                                         />
-                                    </Grid>
-                                    <Grid item>
+                                    </FormGroup>
+                                    <FormGroup>
                                         <TextField
                                             required
-                                            id="outlined-password-input"
+                                            id="password-input"
                                             label="Password"
                                             type="password"
-                                            autoComplete="current-password"
                                             variant="outlined"
                                             name="password"
-                                            onChange={handleInputChange}
+                                            value={signInFormValues.password}
+                                            onChange={handleSignInInputChange}
                                         />
-                                    </Grid>
-                                </Grid>
-                                <div >
-                                    <Button onClick={async() => {await signUp(); }}>
-                                        Sign up
+                                    </FormGroup>
+                                    <Button type="submit" variant="contained">
+                                        Sign in
                                     </Button>
-                                </div>
+                                </form>
                             </CardContent>
                         </Card>
                     </Box>
@@ -126,35 +134,45 @@ function Login() {
                         </div>
                         <Card sx={{ height: "100%", display:'flex', justifyContent:'center',padding:"10px" }}>
                             <CardContent>
-                                <Grid container direction={"column"} spacing={4}>
-                                    <Grid item>
-                                        <TextField
-                                            required
-                                            id="outlined-required"
-                                            label="E-Mail"
-                                            variant="outlined"
-                                            name="email"
-                                            onChange={handleInputChange}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField
-                                            required
-                                            id="outlined-password-input"
-                                            label="Password"
-                                            type="password"
-                                            autoComplete="current-password"
-                                            variant="outlined"
-                                            name="password"
-                                            onChange={handleInputChange}
-                                        />
-                                    </Grid>
-                                </Grid>
-                                <div >
-                                    <Button onClick={signIn()} >
-                                        Sign in
-                                    </Button>
-                                </div>
+                            <form onSubmit={handleSignUpSubmit}>
+                                <FormGroup>
+                                    <TextField
+                                        required
+                                        id="username-input"
+                                        label="Username"
+                                        variant="outlined"
+                                        name="username"
+                                        value={signUpFormValues.username}
+                                        onChange={handleSignUpInputChange}
+                                    />
+                                </FormGroup>
+                                <FormGroup>
+                                    <TextField
+                                        required
+                                        id="email-input"
+                                        label="E-mail"
+                                        variant="outlined"
+                                        name="email"
+                                        value={signUpFormValues.email}
+                                        onChange={handleSignUpInputChange}
+                                    />
+                                </FormGroup>
+                                <FormGroup>
+                                    <TextField
+                                        required
+                                        id="password-input"
+                                        label="Password"
+                                        type="password"
+                                        variant="outlined"
+                                        name="password"
+                                        value={signUpFormValues.password}
+                                        onChange={handleSignUpInputChange}
+                                    />
+                                </FormGroup>
+                                <Button type="submit" variant="contained">
+                                    Sign Up
+                                </Button>
+                            </form>
                             </CardContent>
                         </Card>
                     </Box>
