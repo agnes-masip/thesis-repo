@@ -9,31 +9,48 @@ import { getUserByEmail, newUser, userEmailExists, usernameExists } from '../api
 function Login() {
     const [signInFormValues, setSignInFormValues] = useState([]);
     const [signUpFormValues, setSignUpFormValues] = useState([]);
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+
+    async function validateForm(username, email, password) {
+        const newErrors = {};
+        if (!/^[a-zA-Z0-9]+$/.test(username)) {
+        newErrors.username = 'Only numbers and letters allowed';
+        }
+        if (!username) {
+            newErrors.username = (newErrors.username || '') + 'You forgot your username :(';
+        }
+        if (!password) {
+            newErrors.password = 'No password? Not possible.';
+        }
+        if (!email) {
+            newErrors.title = 'We need your email, sorry :(';
+        }
+
+        // check if email's already used!
+        const emailExists = await userEmailExists(email);
+        if (emailExists) { newErrors.email = (newErrors.email || '') + 'This email is already used';}
+
+         // check if username's already used
+        const userExists = await usernameExists(username);
+        if (userExists) { newErrors.username = (newErrors.username || '') + 'This username is already used';}
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+  };
 
     async function signUp(username, email, password) {
         // check if email's already used!
-        const emailExists = await userEmailExists(email);
-        if (emailExists) {
-            console.error("This email is already used");
-            return;
-        } // TODO: add actual error front-end
-
-        // check if username's already used
-        const userExists = await usernameExists(username);
-        if (userExists) {
-            console.error("This username is already used");
-            return;
+        if(validateForm(username,email,password)){
+            const newUserData = await newUser({
+                "username": username,
+                "email": email,
+                "password": JSON.stringify(SHA256(password).words)
+            });
+            document.cookie = "username=" + username + ";";
+            navigate('/' + username, { replace: true });
         }
-
-        const newUserData = await newUser({
-            "username": username,
-            "email": email,
-            "password": JSON.stringify(SHA256(password).words)
-        });
-
-        document.cookie = "username=" + username + ";";
-        navigate('/' + username, { replace: true });
+       
     }
 
     // Currently does nothing, should navigate to list
@@ -94,7 +111,7 @@ function Login() {
                                 <form onSubmit={handleSignInSubmit}>
                                     <FormGroup>
                                         <TextField
-                                            required
+                                            
                                             id="email-signin-input"
                                             label="E-mail"
                                             variant="outlined"
@@ -105,7 +122,6 @@ function Login() {
                                     </FormGroup>
                                     <FormGroup>
                                         <TextField
-                                            required
                                             id="password-signin-input"
                                             label="Password"
                                             type="password"
@@ -133,34 +149,40 @@ function Login() {
                             <form onSubmit={handleSignUpSubmit}>
                                 <FormGroup>
                                     <TextField
-                                        required
+                                        
                                         id="username-signup-input"
                                         label="Username"
                                         variant="outlined"
                                         name="username"
                                         value={signUpFormValues.username}
+                                        error={!!errors.username}
+                                        helperText={errors.username}
                                         onChange={handleSignUpInputChange}
                                     />
                                 </FormGroup>
                                 <FormGroup>
                                     <TextField
-                                        required
+                                        
                                         id="email-signup-input"
                                         label="E-mail"
                                         variant="outlined"
                                         name="email"
+                                        error={!!errors.email}
+                                        helperText={errors.email}
                                         value={signUpFormValues.email}
                                         onChange={handleSignUpInputChange}
                                     />
                                 </FormGroup>
                                 <FormGroup>
                                     <TextField
-                                        required
+                                        
                                         id="password-signup-input"
                                         label="Password"
                                         type="password"
                                         variant="outlined"
                                         name="password"
+                                        error={!!errors.password}
+                                        helperText={errors.password}
                                         value={signUpFormValues.password}
                                         onChange={handleSignUpInputChange}
                                     />
