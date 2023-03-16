@@ -17,14 +17,38 @@ function Login() {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [formValues, setFormValues] = useState([]);
+    const [errors, setErrors] = useState({});
 
     const testPass = JSON.stringify(SHA256("testpass").words);
 
-    // Currently does nothing, should navigate to list
-    async function signUp() {
+    const validateForm = () => {
+        const newErrors = {};
+        if (!/^[a-zA-Z0-9]+$/.test(formValues.username)) {
+        newErrors.userFormat = 'Only numbers and letters allowed';
+        }
+        if (!formValues.username) {
+            newErrors.username = 'You forgot your username :(';
+        }
+        if (!formValues.password) {
+            newErrors.password = 'No password? Not possible.';
+        }
+        if (!formValues.email) {
+            newErrors.title = 'We need your email, sorry :(';
+        }
+
         // check if email's already used!
         const emailExists = await userEmailExists(formValues["email"]);
-        if (emailExists) { console.error("This email is already used"); return;} // TODO: add actual error front-end
+        if (emailExists) { console.error("This email is already used"); return;}
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+  };
+
+    // Currently does nothing, should navigate to list
+    async function signUp() {
+        if(validateForm()){
+
+        }
+         // TODO: add actual error front-end
 
         // check if username's already used
         const userExists = await usernameExists(formValues["username"]);
@@ -33,9 +57,9 @@ function Login() {
         const newUserData = await newUser({
             "username": formValues["username"],
             "email": formValues["email"],
-            "password": JSON.stringify(SHA256(formValues["password"]).words)
+            "password": formValues["password"]
         });
-        console.log(newUserData);
+        //console.log(newUserData);
         // TODO: go to homepage
     }
 
@@ -44,15 +68,23 @@ function Login() {
         const user = await getUserByEmail(formValues["email"]);
         if (user.length === 0) { console.error("This email does not exist in our database"); return;}
 
-        if (user[0].password === JSON.stringify(SHA256(formValues["password"]).words)) { console.log("OK"); /* TODO: go to homepage */ }
+        if (user.password === formValues["password"]) { /* TODO: go to homepage */ }
     }
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setFormValues({
+        if (name !== "password"){
+            setFormValues({
             ...formValues,
             [name]: value,
-            });        
+          });
+        } else { // we have to use crypto!
+            setFormValues({
+                ...formValues,
+                [name]: JSON.stringify(SHA256(value).words),
+              });
+        }
+        
     };
 
 
@@ -143,7 +175,7 @@ function Login() {
                                     </Grid>
                                 </Grid>
                                 <div >
-                                    <Button onClick={async() => {await signIn(); }} >
+                                    <Button onClick={signIn()} >
                                         Sign in
                                     </Button>
                                 </div>
