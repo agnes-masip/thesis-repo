@@ -102,18 +102,6 @@ export default function List() {
     });
   };
 
-  function exportJSONFile(jsonData, filename) {
-    const blob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.setAttribute('download', filename);
-    link.setAttribute('href', url);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
   async function exportPaperList(listID) {
     const references = await getBibtexForList(listID);
     var element = document.createElement('a');
@@ -215,7 +203,7 @@ export default function List() {
       <div className="Title">
         <Box sx={{ display: 'grid', gap: 2, gridAutoColumns: '1fr' }}>
           <Typography variant="h4" align="left" color="primary" sx={{gridRow: '1', gridColumn: '1/5'}}>
-            My Literature List
+            List Details
           </Typography>
           <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}}>
             <Link to={'/'} className="Link" style={{ textDecoration: 'none'}}>

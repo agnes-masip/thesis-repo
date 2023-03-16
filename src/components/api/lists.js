@@ -16,8 +16,6 @@ export async function createNewList (listData) { // provide: title, papers, list
     }catch(error){
       console.log('error creating a list', error)
     }
-
-
 }
 
 export async function deleteListById (listId) {
@@ -55,7 +53,7 @@ export async function getListById (listID) {
 
 // alter papers in list
 export async function deletePaperFromList (listId, paperId) {
-    try{
+    try {
       const list = await getListById(listId);
       let listData = list;
       let listPapers = listData.papers;

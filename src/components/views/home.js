@@ -21,7 +21,6 @@ function Home() {
 
   const [formValues, setFormValues] = useState([]);
   const [rows, setRows] = React.useState([]);
-  const [listRows, setListRows] = React.useState([]);
   const [user, setUser] = React.useState(initialUser);
 
   // useEffect is to call the fetch every time we go to home.js
@@ -50,7 +49,7 @@ function Home() {
     const deleteList = React.useCallback(
         (id) => () => {
             setTimeout(() => {
-                setListRows((prevListRows) => prevListRows.filter((row) => row.id !== id));
+                setRows((prevRows) => prevRows.filter((row) => row.id !== id));
                 deleteListById(id);
             });
         },
