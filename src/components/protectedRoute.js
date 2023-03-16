@@ -1,10 +1,18 @@
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import React from "react";
+import { Navigate, useParams } from "react-router-dom";
+
 
 export const ProtectedRoute = ({ children }) => {
-  const { user } = useAuth();
-  if (!user) {
-    // return <Navigate to="/login" />;
+  const { username } = useParams();
+
+//   const navigate = useNavigate();
+
+  console.log(document.cookie);
+
+  if (document.cookie !== 'username=' + username) {
+    console.log("back!");
+    // navigate('/login', { replace: true });
+    return <Navigate to="/login"/>
   }
   return children;
 };

@@ -1,19 +1,16 @@
 
-import React, { useState, useEffect} from 'react';
 import '../../App.css';
-
-import {Box, Card, CardContent, FormGroup, Typography, Button} from "@mui/material";
-import TextField from '@mui/material/TextField';
+import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import {Box, Card, CardContent, FormGroup, TextField, Typography, Button} from "@mui/material";
 import {SHA256} from 'crypto-js';
 import { getUserByEmail, newUser, userEmailExists, usernameExists } from '../api/users';
 
 function Login() {
     const [signInFormValues, setSignInFormValues] = useState([]);
     const [signUpFormValues, setSignUpFormValues] = useState([]);
+    const navigate = useNavigate();
 
-    const testPass = JSON.stringify(SHA256("testpass").words);
-
-    // Currently does nothing, should navigate to list
     async function signUp(username, email, password) {
         // check if email's already used!
         const emailExists = await userEmailExists(email);
@@ -35,21 +32,21 @@ function Login() {
             "password": JSON.stringify(SHA256(password).words)
         });
 
-        // return <Navigate to="/" />;
+        document.cookie = "username=" + username + ";";
+        navigate('/' + username, { replace: true });
     }
 
     // Currently does nothing, should navigate to list
     async function signIn(email, password) {
         const user = await getUserByEmail(email);
-        console.log(user[0]);
-        console.log(user[0].password);
-        console.log(password);
+
         if (user.length === 0) {
             console.error("This email does not exist in our database");
-            return;
+            return false;
         }
-        if (user[0].password === JSON.stringify(SHA256(password).words)) { /* TODO: go to homepage */
-            console.log('log in OK');
+        if (user[0].password === JSON.stringify(SHA256(password).words)) { 
+            document.cookie = "username=" + user[0].username + ";";
+            navigate('/' + user[0].username, { replace: true });
         }
         else {
             console.log('log in NOT OKK');
@@ -98,7 +95,7 @@ function Login() {
                                     <FormGroup>
                                         <TextField
                                             required
-                                            id="email-input"
+                                            id="email-signin-input"
                                             label="E-mail"
                                             variant="outlined"
                                             name="email"
@@ -109,7 +106,7 @@ function Login() {
                                     <FormGroup>
                                         <TextField
                                             required
-                                            id="password-input"
+                                            id="password-signin-input"
                                             label="Password"
                                             type="password"
                                             variant="outlined"
@@ -137,7 +134,7 @@ function Login() {
                                 <FormGroup>
                                     <TextField
                                         required
-                                        id="username-input"
+                                        id="username-signup-input"
                                         label="Username"
                                         variant="outlined"
                                         name="username"
@@ -148,7 +145,7 @@ function Login() {
                                 <FormGroup>
                                     <TextField
                                         required
-                                        id="email-input"
+                                        id="email-signup-input"
                                         label="E-mail"
                                         variant="outlined"
                                         name="email"
@@ -159,7 +156,7 @@ function Login() {
                                 <FormGroup>
                                     <TextField
                                         required
-                                        id="password-input"
+                                        id="password-signup-input"
                                         label="Password"
                                         type="password"
                                         variant="outlined"

@@ -2,7 +2,7 @@
 import React, { useState, useEffect} from 'react';
 import '../../App.css';
 
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import {Box, Card, CardContent, FormGroup, Typography, Button, TextField} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
@@ -13,20 +13,20 @@ import NavBar from "../navbar";
 
 import { getAllListsForUser, deleteListById, createNewList } from '../api/lists';
 
-
 const initialUser = {name:"Najma", mail:"some@mail.ch", userId: "user2"};
 
 
 function Home() {
-
+  const { username } = useParams();
   const [formValues, setFormValues] = useState([]);
   const [rows, setRows] = React.useState([]);
   const [user, setUser] = React.useState(initialUser);
 
+
   // useEffect is to call the fetch every time we go to home.js
   useEffect(() => {
-    fetchLists();
-}, []);
+        fetchLists();
+  }, []);
 
 
   const handleSubmit = (event) => {
@@ -108,30 +108,32 @@ function Home() {
                       <Card>
                           <CardContent>
                               <table >
-                                  <tr>
-                                      <td>
-                                          <Typography color="primary">
-                                              Username:
-                                          </Typography>
-                                      </td>
-                                      <td>
-                                          <Typography>
-                                              {user.name}
-                                          </Typography>
-                                      </td>
-                                  </tr>
-                                  <tr>
-                                      <td>
-                                          <Typography color="primary">
-                                              E-mail:
-                                          </Typography>
-                                      </td>
-                                      <td>
-                                          <Typography>
-                                              {user.mail}
-                                          </Typography>
-                                      </td>
-                                  </tr>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <Typography color="primary">
+                                                    Username:
+                                                </Typography>
+                                            </td>
+                                            <td>
+                                                <Typography>
+                                                    {user.name}
+                                                </Typography>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Typography color="primary">
+                                                    E-mail:
+                                                </Typography>
+                                            </td>
+                                            <td>
+                                                <Typography>
+                                                    {user.mail}
+                                                </Typography>
+                                            </td>
+                                        </tr>
+                                  </tbody>
                               </table>
                           </CardContent>
                       </Card>
