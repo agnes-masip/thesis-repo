@@ -1,11 +1,13 @@
 import React from 'react'
 import { Box, AppBar, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams} from "react-router-dom";
 import { AccountCircle } from '@mui/icons-material';
 
 export default function NavBar() {
     const [auth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const { username } = useParams();
+    const navigate = useNavigate();
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -14,6 +16,11 @@ export default function NavBar() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const logOut = () => {
+        document.cookie = "username=" + username  + "; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        navigate('/login', { replace: true });
+    }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -51,9 +58,7 @@ export default function NavBar() {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                
-                                {/* TODO: direct to actual log-out */}
-                                <MenuItem onClick={handleClose}>
+                                <MenuItem onClick={logOut}>
                                 <Link to={'/login'} style={{ textDecoration: 'none'}}>
                                         Log Out
                                     </Link>
