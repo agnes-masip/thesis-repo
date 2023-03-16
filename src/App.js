@@ -3,7 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/views/home';
 import List from './components/views/list';
-//import Login from './components/views/login';
+import Login from './components/views/login';
 import AddSource from './components/views/addSource';
 import EditSource from './components/views/editSource';
 
@@ -50,7 +50,7 @@ function App() {
           <Route path='list/:listOwner/:listID' element={<List/>} />
           <Route path='add/:listID' element={<AddSource/>} />
           <Route path='edit/:listID/:sourceID' element={<EditSource/>} />
-          {/* <Route path='login' element={<Login/>} /> */}
+          <Route path='login' element={<Login/>} />
         </Routes>
       </ThemeProvider>
     </div>
