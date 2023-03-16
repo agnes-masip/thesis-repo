@@ -12,7 +12,7 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import NavBar from '../navbar';
 import EditIcon from '@mui/icons-material/Edit';
 
-import { deletePaperById, getPaperById } from '../api/papers';
+import { deletePaperById, getPaperById, likePaper } from '../api/papers';
 import { addCollaboratorToList, getListById, deleteCollaboratorFromList, getBibtexForList} from '../api/lists';
 import { getUserById, getUserByUsername, usernameExists } from '../api/users';
 
@@ -117,12 +117,10 @@ export default function List() {
 }
 
   // Currently does nothing
-  const likeSource = React.useCallback(
-    (id) => () => {
-
-    },
-    [],
-  );
+  async function likeSource (paperId) {
+    await likePaper(paperId);
+    await fetchPapers(listID); // this takes a little while!
+  }
 
   // Currently does nothing
   const downloadSource = React.useCallback(
@@ -172,7 +170,7 @@ export default function List() {
           <GridActionsCellItem
           icon={<ThumbUpIcon />}
           label="Like"
-          onClick={() => likeSource(params.id)}
+          onClick={async () => { await likeSource(params.id)} }
           />,
           <GridActionsCellItem
           icon={<DownloadIcon />}
@@ -219,7 +217,7 @@ export default function List() {
               <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
                 Sources
               </Typography>
-              <Button onClick={() => exportPaperList(listID)} endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
+              <Button onClick={async () => { await exportPaperList(listID)} } endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
                 Export
               </Button>
               <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
