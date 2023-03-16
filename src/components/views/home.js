@@ -2,7 +2,7 @@
 import React, { useState, useEffect} from 'react';
 import '../../App.css';
 
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import {Box, Card, CardContent, FormGroup, Typography, Button, TextField} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
@@ -12,27 +12,24 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import NavBar from "../navbar";
 
 import { getAllListsForUser, deleteListById, createNewList } from '../api/lists';
-
-
-const initialUser = {name:"Najma", mail:"some@mail.ch", userId: "user2"};
-
+import { getUserByUsername } from '../api/users';
 
 function Home() {
-
+  const { username } = useParams();
   const [formValues, setFormValues] = useState([]);
   const [rows, setRows] = React.useState([]);
-  const [user, setUser] = React.useState(initialUser);
+  const [user, setUser] = React.useState([]);
 
   // useEffect is to call the fetch every time we go to home.js
   useEffect(() => {
-    fetchLists();
-}, []);
+        fetchLists();
+  }, []);
 
 
   const handleSubmit = (event) => {
     event.preventDefault();
     //need to change this when we fix login
-    formValues.listOwner = initialUser.userId;
+    formValues.listOwner = "test";
     formValues.papers = [];
     formValues.sharedWith = [];
     createNewList(formValues)
@@ -71,7 +68,7 @@ function Home() {
                         label="Delete"
                         onClick={() => deleteList(params.id)}
                     />,
-                    <Link to={'/list/' + params.row.listOwner + '/' + params.id}>
+                    <Link to={'/list/' + username + '/' + params.row.listOwner + '/' + params.id}>
                         <GridActionsCellItem
                             icon={<VisibilityIcon />}
                             label="view"
@@ -84,7 +81,9 @@ function Home() {
     );
 
   const fetchLists = async () => {
-      const listList = await getAllListsForUser(user.userId);
+      const user = await getUserByUsername(username);
+      setUser(user[0]);
+      const listList = await getAllListsForUser(user[0].id);
       setRows(listList);
   };
 
@@ -108,30 +107,32 @@ function Home() {
                       <Card>
                           <CardContent>
                               <table >
-                                  <tr>
-                                      <td>
-                                          <Typography color="primary">
-                                              Username:
-                                          </Typography>
-                                      </td>
-                                      <td>
-                                          <Typography>
-                                              {user.name}
-                                          </Typography>
-                                      </td>
-                                  </tr>
-                                  <tr>
-                                      <td>
-                                          <Typography color="primary">
-                                              E-mail:
-                                          </Typography>
-                                      </td>
-                                      <td>
-                                          <Typography>
-                                              {user.mail}
-                                          </Typography>
-                                      </td>
-                                  </tr>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <Typography color="primary">
+                                                    Username:
+                                                </Typography>
+                                            </td>
+                                            <td>
+                                                <Typography>
+                                                    {user.name}
+                                                </Typography>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <Typography color="primary">
+                                                    E-mail:
+                                                </Typography>
+                                            </td>
+                                            <td>
+                                                <Typography>
+                                                    {user.mail}
+                                                </Typography>
+                                            </td>
+                                        </tr>
+                                  </tbody>
                               </table>
                           </CardContent>
                       </Card>

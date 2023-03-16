@@ -1,4 +1,4 @@
-import React  from 'react';
+import React, { useState }  from 'react';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/views/home';
@@ -6,6 +6,7 @@ import List from './components/views/list';
 import Login from './components/views/login';
 import AddSource from './components/views/addSource';
 import EditSource from './components/views/editSource';
+import { ProtectedRoute } from './components/protectedRoute';
 
 import Amplify from '@aws-amplify/core';
 import awsconfig from './aws-exports';
@@ -46,10 +47,39 @@ function App() {
     <div className="app">
       <ThemeProvider theme={theme}>
         <Routes>
-          <Route path='/' element={<Home/>} />
-          <Route path='list/:listOwner/:listID' element={<List/>} />
-          <Route path='add/:listID' element={<AddSource/>} />
-          <Route path='edit/:listID/:sourceID' element={<EditSource/>} />
+          <Route
+            path='/:username'
+            element={
+              <ProtectedRoute>
+                <Home/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='list/:username/:listOwner/:listID'
+            element={
+              <ProtectedRoute>
+                <List/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='add/:username/:listID'
+            element={
+              <ProtectedRoute>
+                <AddSource/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='edit/:username/:listID:sourceID'
+            element={
+              <ProtectedRoute>
+                <AddSource/>
+              </ProtectedRoute>
+            }
+          />
+          <Route path='/' element={<Login/>} />
           <Route path='login' element={<Login/>} />
         </Routes>
       </ThemeProvider>

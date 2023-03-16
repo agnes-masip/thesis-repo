@@ -17,7 +17,7 @@ import { addCollaboratorToList, getListById, deleteCollaboratorFromList, getBibt
 import { getUserById, getUserByUsername, usernameExists } from '../api/users';
 
 export default function List() {
-  const { listOwner, listID } = useParams();
+  const { username, listOwner, listID } = useParams();
   const [paperRows, setPaperRows] = useState([]);
   const [userRows, setUserRows] = useState([]);
   const [userFormValues, setUserFormValues] = useState([]);
@@ -184,7 +184,7 @@ export default function List() {
           label="Delete"
           onClick={() => deleteSource(params.id)}
         />,
-        <Link to={'/edit/' + listID + '/' + params.id}>
+        <Link to={'/edit/' + username + '/' + listID + '/' + params.id}>
           <GridActionsCellItem
           icon={<EditIcon />}
           label="Like"
@@ -206,7 +206,7 @@ export default function List() {
             List Details
           </Typography>
           <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}}>
-            <Link to={'/'} className="Link" style={{ textDecoration: 'none'}}>
+            <Link to={'/' + username} className="Link" style={{ textDecoration: 'none'}}>
                 Back
             </Link>
           </Button>
@@ -223,7 +223,7 @@ export default function List() {
                 Export
               </Button>
               <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
-                <Link to={'/add/' + listID} className="Link" style={{ textDecoration: 'none'}}>
+                <Link to={'/add/' + username + '/' + listID} className="Link" style={{ textDecoration: 'none'}}>
                   Add
                 </Link>
               </Button>
