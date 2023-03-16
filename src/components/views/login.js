@@ -21,7 +21,7 @@ function Login() {
 
     const testPass = JSON.stringify(SHA256("testpass").words);
 
-    const validateForm = () => {
+    async function validateForm() {
         const newErrors = {};
         if (!/^[a-zA-Z0-9]+$/.test(formValues.username)) {
         newErrors.userFormat = 'Only numbers and letters allowed';
@@ -38,7 +38,12 @@ function Login() {
 
         // check if email's already used!
         const emailExists = await userEmailExists(formValues["email"]);
-        if (emailExists) { console.error("This email is already used"); return;}
+        if (emailExists) { newErrors.email = (newErrors.email || '') + 'This email is already used';}
+
+         // check if username's already used
+        const userExists = await usernameExists(formValues["username"]);
+        if (userExists) { newErrors.username = (newErrors.username || '') + 'This username is already used';}
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
   };
@@ -46,19 +51,15 @@ function Login() {
     // Currently does nothing, should navigate to list
     async function signUp() {
         if(validateForm()){
+            const newUserData = await newUser({
+                "username": formValues["username"],
+                "email": formValues["email"],
+                "password": formValues["password"]
+            });
 
         }
          // TODO: add actual error front-end
-
-        // check if username's already used
-        const userExists = await usernameExists(formValues["username"]);
-        if (userExists) { console.error("This username is already used"); return;}
         
-        const newUserData = await newUser({
-            "username": formValues["username"],
-            "email": formValues["email"],
-            "password": formValues["password"]
-        });
         //console.log(newUserData);
         // TODO: go to homepage
     }
@@ -157,6 +158,8 @@ function Login() {
                                             id="outlined-required"
                                             label="E-Mail"
                                             variant="outlined"
+                                            error={!!errors.email}
+                                            helperText={errors.email}
                                             name="email"
                                             onChange={handleInputChange}
                                         />
@@ -168,6 +171,8 @@ function Login() {
                                             label="Password"
                                             type="password"
                                             autoComplete="current-password"
+                                            error={!!errors.password}
+                                            helperText={errors.password}
                                             variant="outlined"
                                             name="password"
                                             onChange={handleInputChange}
