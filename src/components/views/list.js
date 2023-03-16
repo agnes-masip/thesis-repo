@@ -35,7 +35,9 @@ export default function List() {
     let paperList = [];
     if (paperIds) {
       for (const paperId of paperIds){
-        const paper = await getPaperById(paperId)
+        let paper = await getPaperById(paperId)
+        const likeList = paper.likes;
+        paper.likes = likeList.length;
         paperList.push(paper);
       };
     }
@@ -118,7 +120,7 @@ export default function List() {
 
   // Currently does nothing
   async function likeSource (paperId) {
-    await likePaper(paperId);
+    await likePaper(paperId, "");
     await fetchPapers(listID); // this takes a little while!
   }
 

@@ -72,9 +72,13 @@ export async function getPaperById (paperId) {
 }
 
 // paper changes
-export async function likePaper (paperId){
+export async function likePaper (paperId, userId){
 	let currentPaper = await getPaperById(paperId);
-	currentPaper.likes = currentPaper.likes + 1;
+	let likeList = currentPaper.likes;
+	if (!likeList.includes(userId)) {
+		likeList.push(userId);
+	}
+	currentPaper.likes = likeList;
 	await updatePaperById(currentPaper);
 }
 
