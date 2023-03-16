@@ -12,27 +12,27 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import NavBar from "../navbar";
 
 import { getAllListsForUser, deleteListById, createNewList } from '../api/lists';
+import {getUserById} from "../api/users";
 
-
-const initialUser = {name:"Najma", mail:"some@mail.ch", userId: "user2"};
-
+const testUser = {userId: "user2"};
 
 function Home() {
 
   const [formValues, setFormValues] = useState([]);
   const [rows, setRows] = React.useState([]);
-  const [user, setUser] = React.useState(initialUser);
+  const [user, setUser] = React.useState(testUser);
 
   // useEffect is to call the fetch every time we go to home.js
   useEffect(() => {
     fetchLists();
+    fetchUser();
 }, []);
 
 
   const handleSubmit = (event) => {
     event.preventDefault();
     //need to change this when we fix login
-    formValues.listOwner = initialUser.userId;
+    formValues.listOwner = user.userId;
     formValues.papers = [];
     formValues.sharedWith = [];
     createNewList(formValues)
@@ -88,6 +88,11 @@ function Home() {
       setRows(listList);
   };
 
+  const fetchUser = async () => {
+      const currentUser = await getUserById(user.userId);
+      setUser(currentUser);
+  };
+
   return(
       <div>
           <NavBar/>
@@ -116,7 +121,7 @@ function Home() {
                                       </td>
                                       <td>
                                           <Typography>
-                                              {user.name}
+                                              {user.username}
                                           </Typography>
                                       </td>
                                   </tr>
@@ -128,7 +133,7 @@ function Home() {
                                       </td>
                                       <td>
                                           <Typography>
-                                              {user.mail}
+                                              {user.email}
                                           </Typography>
                                       </td>
                                   </tr>
