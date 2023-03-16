@@ -15,7 +15,7 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type PaperCreateFormInputValues = {
     title?: string;
     description?: string;
-    likes?: number;
+    likes?: string[];
     author?: string[];
     journal?: string;
     year?: number;
@@ -28,7 +28,7 @@ export declare type PaperCreateFormInputValues = {
 export declare type PaperCreateFormValidationValues = {
     title?: ValidationFunction<string>;
     description?: ValidationFunction<string>;
-    likes?: ValidationFunction<number>;
+    likes?: ValidationFunction<string>;
     author?: ValidationFunction<string>;
     journal?: ValidationFunction<string>;
     year?: ValidationFunction<number>;

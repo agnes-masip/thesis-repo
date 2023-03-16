@@ -24,7 +24,7 @@ type Paper @model @auth(rules: [{allow: public}]) {
   id: ID!
   title: String!
   description: String!
-  likes: Int
+  likes: [ID]
   author: [String!]
   journal: String
   year: Int
@@ -33,4 +33,5 @@ type Paper @model @auth(rules: [{allow: public}]) {
   doi: String
   issn: String
   citationStorageLocation: AWSURL
-} 
+}
+ 
