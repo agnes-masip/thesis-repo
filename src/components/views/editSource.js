@@ -10,10 +10,8 @@ import { Alert } from '@material-ui/lab';
 
 import { updatePaperById, getPaperById } from "../api/papers";
 
-
-
 export default function EditSource() {
-  const { listID, sourceID } = useParams();
+  const { username, listID, sourceID } = useParams();
   const [formValues, setFormValues] = useState([]);
   const [open, setOpen] = useState(false);
 
@@ -54,7 +52,7 @@ export default function EditSource() {
                 Edit Source
                 </Typography>
                 <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}}>
-                    <Link to={'/list/' + listID} className="Link" style={{ textDecoration: 'none'}}>
+                    <Link to={'/list/' +  username + '/' + listID} className="Link" style={{ textDecoration: 'none'}}>
                         Back
                     </Link>
                 </Button>

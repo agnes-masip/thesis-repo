@@ -55,9 +55,30 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path='list/:listOwner/:listID' element={<List/>} />
-          <Route path='add/:listID' element={<AddSource/>} />
-          <Route path='edit/:listID/:sourceID' element={<EditSource/>} />
+          <Route
+            path='list/:username/:listOwner/:listID'
+            element={
+              <ProtectedRoute>
+                <List/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='add/:username/:listID'
+            element={
+              <ProtectedRoute>
+                <AddSource/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='edit/:username/:listID:sourceID'
+            element={
+              <ProtectedRoute>
+                <AddSource/>
+              </ProtectedRoute>
+            }
+          />
           <Route path='/' element={<Login/>} />
           <Route path='login' element={<Login/>} />
         </Routes>

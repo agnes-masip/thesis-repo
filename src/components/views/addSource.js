@@ -14,7 +14,7 @@ import { addPaperToList } from '../api/lists';
 
 
 export default function AddSource() {
-  const { listID } = useParams();
+  const { username, listID } = useParams();
   const [files, setFiles] = useState([]);
   const [formValues, setFormValues] = useState([]);
   const [open, setOpen] = useState(false);
@@ -47,7 +47,7 @@ const handleClose = () => {
                   Add New Source to ListName
                   </Typography>
                   <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}}>
-                      <Link to={'/list/' + listID} className="Link" style={{ textDecoration: 'none'}}>
+                      <Link to={'/list/' + username  + '/' + listID} className="Link" style={{ textDecoration: 'none'}}>
                           Back
                       </Link>
                   </Button>
