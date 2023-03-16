@@ -32,10 +32,10 @@ function Login() {
         const newUserData = await newUser({
             "username": username,
             "email": email,
-            "password": password
+            "password": JSON.stringify(SHA256(password).words)
         });
 
-        return <Navigate to="/" />;
+        // return <Navigate to="/" />;
     }
 
     // Currently does nothing, should navigate to list
@@ -48,7 +48,7 @@ function Login() {
             console.error("This email does not exist in our database");
             return;
         }
-        if (user.password === password) { /* TODO: go to homepage */
+        if (user[0].password === JSON.stringify(SHA256(password).words)) { /* TODO: go to homepage */
             console.log('log in OK');
         }
         else {

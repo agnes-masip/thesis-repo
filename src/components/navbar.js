@@ -51,13 +51,13 @@ export default function NavBar() {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
+                                
+                                {/* TODO: direct to actual log-out */}
                                 <MenuItem onClick={handleClose}>
-                                    <Link to={'/user'} style={{ textDecoration: 'none'}}>
-                                        Profile
+                                <Link to={'/login'} style={{ textDecoration: 'none'}}>
+                                        Log Out
                                     </Link>
                                 </MenuItem>
-                                {/* TODO: direct to actual log-out */}
-                                <MenuItem onClick={handleClose}>Log Out</MenuItem>
                             </Menu>
                         </div>
                     )}

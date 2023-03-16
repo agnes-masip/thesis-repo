@@ -33,5 +33,4 @@ type Paper @model @auth(rules: [{allow: public}]) {
   doi: String
   issn: String
   citationStorageLocation: AWSURL
-}
- 
+} 
