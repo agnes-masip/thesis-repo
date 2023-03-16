@@ -13,16 +13,20 @@ import {newPaper} from '../api/papers';
 import { addPaperToList } from '../api/lists';
 
 
+
 export default function AddSource() {
   const { listID } = useParams();
   const [files, setFiles] = useState([]);
   const [formValues, setFormValues] = useState([]);
   const [open, setOpen] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if(validateForm()){
     formValues.likes = 0;
     newPaper(formValues).then(PaperId => {addPaperToList(listID, PaperId)});
+    }
   };
 
   const handleInputChange = (event) => {
@@ -36,6 +40,24 @@ export default function AddSource() {
 const handleClose = () => {
   setOpen(false);
 };
+
+const validateForm = () => {
+    const newErrors = {};
+        if ( !formValues.title) {
+            newErrors.title = 'Title is required.';
+        }
+        if ( !formValues.author) {
+             newErrors.author = 'Author is required.';
+        }
+        if ( !formValues.description) {
+            newErrors.description = 'Description is required.';
+        }
+        if ( typeof formValues.year !== 'integer') {
+            newErrors.year = 'Only numbers are allowed.';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+        };
 
   return (
   <div>
@@ -81,6 +103,8 @@ const handleClose = () => {
                                       name="title"
                                       label="Title"
                                       type="text"
+                                      error={!!errors.title}
+                                      helperText={errors.title}
                                       value={formValues.title}
                                       onChange={handleInputChange}
                                   />
@@ -95,6 +119,8 @@ const handleClose = () => {
                                       name="author"
                                       label="Author"
                                       type="text"
+                                      error={!!errors.author}
+                                      helperText={errors.author}
                                       value={formValues.author}
                                       onChange={handleInputChange}
                                   />
@@ -108,6 +134,8 @@ const handleClose = () => {
                                       name="description"
                                       label="description"
                                       type="text"
+                                      error={!!errors.description}
+                                      helperText={errors.description}
                                       value={formValues.description}
                                       onChange={handleInputChange}
                                   />
@@ -136,6 +164,7 @@ const handleClose = () => {
                                       type="text"
                                       value={formValues.issn}
                                       onChange={handleInputChange}
+                                      inputProps={{ maxLength: 9 }}
                                   />
                               </FormGroup>
                               <FormGroup>
