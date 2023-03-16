@@ -35,8 +35,7 @@ function Login() {
             "password": password
         });
 
-        console.log(newUserData);
-        // TODO: go to homepage
+        return <Navigate to="/" />;
     }
 
     // Currently does nothing, should navigate to list
