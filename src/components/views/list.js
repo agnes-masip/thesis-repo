@@ -35,10 +35,12 @@ export default function List() {
     let paperList = [];
     if (paperIds) {
       for (const paperId of paperIds){
-        let paper = await getPaperById(paperId)
-        const likeList = paper.likes;
-        paper.likes = likeList.length;
-        paperList.push(paper);
+        let paper = await getPaperById(paperId);
+        if (paper != null) {
+          const nrLikes = paper.likes.length;
+          paper.likes = nrLikes;
+          paperList.push(paper);
+        }        
       };
     }
 
@@ -120,7 +122,11 @@ export default function List() {
 
   // Currently does nothing
   async function likeSource (paperId) {
-    await likePaper(paperId, "");
+    const username = document.cookie.split("=")[1];
+    console.log(username);
+    const user = await getUserByUsername(username);
+    console.log(user[0].id);
+    await likePaper(paperId, user[0].id);
     await fetchPapers(listID); // this takes a little while!
   }
 
