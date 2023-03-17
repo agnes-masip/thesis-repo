@@ -53,7 +53,7 @@ function Login() {
 
     async function signUp(username, email, password) {
         // check if email's already used!
-        if(validateForm(username,email,password)){
+        if(await validateForm(username,email,password)){
             const newUserData = await newUser({
                 "username": username,
                 "email": email,
@@ -69,7 +69,7 @@ function Login() {
     async function signIn(email, password) {
         const user = await getUserByEmail(email);
 
-        if(validateFormSignIn(user,password)){
+        if(await validateFormSignIn(user,password)){
             if (user.length !== 0){
                 document.cookie = "username=" + user[0].username + ";";
                 navigate('/' + user[0].username, { replace: true });
