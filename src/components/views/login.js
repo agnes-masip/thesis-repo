@@ -9,47 +9,71 @@ import { getUserByEmail, newUser, userEmailExists, usernameExists } from '../api
 function Login() {
     const [signInFormValues, setSignInFormValues] = useState([]);
     const [signUpFormValues, setSignUpFormValues] = useState([]);
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+
+    async function validateForm(username, email, password) {
+        const newErrors = {};
+        if (!/^[a-zA-Z0-9]+$/.test(username)) {
+        newErrors.username = 'Only numbers and letters allowed';
+        }
+        if (!username) {
+            newErrors.username = (newErrors.username || '') + 'You forgot your username :(';
+        }
+        if (!password) {
+            newErrors.password = 'No password? Not possible.';
+        }
+        if (!email) {
+            newErrors.title = 'We need your email, sorry :(';
+        }
+
+        // check if email's already used!
+        const emailExists = await userEmailExists(email);
+        if (emailExists) { newErrors.email = (newErrors.email || '') + 'This email is already used';}
+
+         // check if username's already used
+        const userExists = await usernameExists(username);
+        if (userExists) { newErrors.username = (newErrors.username || '') + 'This username is already used';}
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+  };
+
+  async function validateFormSignIn(user, password) {
+    const newErrors = {};
+
+    if (user.length === 0) {
+        newErrors.emailNotExists = "This email does not exist in our database";   
+    }else if (user[0].password !== JSON.stringify(SHA256(password).words)){
+        newErrors.passwrong = "The password is incorrect";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+};
 
     async function signUp(username, email, password) {
         // check if email's already used!
-        const emailExists = await userEmailExists(email);
-        if (emailExists) {
-            console.error("This email is already used");
-            return;
-        } // TODO: add actual error front-end
-
-        // check if username's already used
-        const userExists = await usernameExists(username);
-        if (userExists) {
-            console.error("This username is already used");
-            return;
+        if(validateForm(username,email,password)){
+            const newUserData = await newUser({
+                "username": username,
+                "email": email,
+                "password": JSON.stringify(SHA256(password).words)
+            });
+            document.cookie = "username=" + username + ";";
+            navigate('/' + username, { replace: true });
         }
-
-        const newUserData = await newUser({
-            "username": username,
-            "email": email,
-            "password": JSON.stringify(SHA256(password).words)
-        });
-
-        document.cookie = "username=" + username + ";";
-        navigate('/' + username, { replace: true });
+       
     }
 
     // Currently does nothing, should navigate to list
     async function signIn(email, password) {
         const user = await getUserByEmail(email);
 
-        if (user.length === 0) {
-            console.error("This email does not exist in our database");
-            return false;
-        }
-        if (user[0].password === JSON.stringify(SHA256(password).words)) { 
-            document.cookie = "username=" + user[0].username + ";";
-            navigate('/' + user[0].username, { replace: true });
-        }
-        else {
-            console.log('log in NOT OKK');
+        if(validateFormSignIn(user,password)){
+            if (user.length !== 0){
+                document.cookie = "username=" + user[0].username + ";";
+                navigate('/' + user[0].username, { replace: true });
+            }  
         }
     }
 
@@ -94,23 +118,26 @@ function Login() {
                                 <form onSubmit={handleSignInSubmit}>
                                     <FormGroup>
                                         <TextField
-                                            required
+                                            
                                             id="email-signin-input"
                                             label="E-mail"
                                             variant="outlined"
                                             name="email"
+                                            error={!!errors.emailNotExists}
+                                            helperText={errors.emailNotExists}
                                             value={signInFormValues.email}
                                             onChange={handleSignInInputChange}
                                         />
                                     </FormGroup>
                                     <FormGroup>
                                         <TextField
-                                            required
                                             id="password-signin-input"
                                             label="Password"
                                             type="password"
                                             variant="outlined"
                                             name="password"
+                                            error={!!errors.passwrong}
+                                            helperText={errors.passwrong}
                                             value={signInFormValues.password}
                                             onChange={handleSignInInputChange}
                                         />
@@ -133,34 +160,40 @@ function Login() {
                             <form onSubmit={handleSignUpSubmit}>
                                 <FormGroup>
                                     <TextField
-                                        required
+                                        
                                         id="username-signup-input"
                                         label="Username"
                                         variant="outlined"
                                         name="username"
                                         value={signUpFormValues.username}
+                                        error={!!errors.username}
+                                        helperText={errors.username}
                                         onChange={handleSignUpInputChange}
                                     />
                                 </FormGroup>
                                 <FormGroup>
                                     <TextField
-                                        required
+                                        
                                         id="email-signup-input"
                                         label="E-mail"
                                         variant="outlined"
                                         name="email"
+                                        error={!!errors.email}
+                                        helperText={errors.email}
                                         value={signUpFormValues.email}
                                         onChange={handleSignUpInputChange}
                                     />
                                 </FormGroup>
                                 <FormGroup>
                                     <TextField
-                                        required
+                                        
                                         id="password-signup-input"
                                         label="Password"
                                         type="password"
                                         variant="outlined"
                                         name="password"
+                                        error={!!errors.password}
+                                        helperText={errors.password}
                                         value={signUpFormValues.password}
                                         onChange={handleSignUpInputChange}
                                     />
