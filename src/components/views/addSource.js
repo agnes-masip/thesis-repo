@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../App.css';
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import FileUpload from "react-material-file-upload";
 import { Box, Button, Card, CardContent, FormLabel, FormGroup,
          Snackbar, TextField, Typography } from '@mui/material';
@@ -14,15 +14,18 @@ import { addPaperToList } from '../api/lists';
 
 
 export default function AddSource() {
-  const { username, listID } = useParams();
+  const { username, listID, listOwner } = useParams();
   const [files, setFiles] = useState([]);
   const [formValues, setFormValues] = useState([]);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    formValues.likes = 0;
-    newPaper(formValues).then(PaperId => {addPaperToList(listID, PaperId)});
+    formValues.likes = [];
+    const createdPaperId = await newPaper(formValues);
+    await addPaperToList(listID, createdPaperId);
+    navigate('/list/' + username + '/' + listOwner + '/' + listID);
   };
 
   const handleInputChange = (event) => {
@@ -47,7 +50,7 @@ const handleClose = () => {
                   Add New Source to ListName
                   </Typography>
                   <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}}>
-                      <Link to={'/list/' + username  + '/' + listID} className="Link" style={{ textDecoration: 'none'}}>
+                      <Link to={'/list/' + username  + '/' + listOwner + '/' + listID} className="Link" style={{ textDecoration: 'none'}}>
                           Back
                       </Link>
                   </Button>

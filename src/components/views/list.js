@@ -251,7 +251,7 @@ export default function List() {
                 Export
               </Button>
               <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
-                <Link to={'/add/' + username + '/' + listID} className="Link" style={{ textDecoration: 'none'}}>
+                <Link to={'/add/' + username + '/' + listOwner + '/' + listID} className="Link" style={{ textDecoration: 'none'}}>
                   Add
                 </Link>
               </Button>

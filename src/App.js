@@ -64,7 +64,7 @@ function App() {
             }
           />
           <Route
-            path='add/:username/:listID'
+            path='add/:username/:listOwner/:listID'
             element={
               <ProtectedRoute>
                 <AddSource/>
