@@ -212,7 +212,7 @@ export default function List() {
           label="Delete"
           onClick={() => deleteSource(params.id)}
         />,
-        <Link to={'/edit/' + username + '/' + listID + '/' + params.id}>
+        <Link to={'/edit/' + username + '/' + listOwner + '/' + listID + '/' + params.id}>
           <GridActionsCellItem
           icon={<EditIcon />}
           label="Like"

@@ -72,7 +72,7 @@ function App() {
             }
           />
           <Route
-            path='edit/:username/:listID:sourceID'
+            path='edit/:username/:listOwner/:listID/:sourceID'
             element={
               <ProtectedRoute>
                 <AddSource/>
