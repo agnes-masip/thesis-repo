@@ -45,10 +45,10 @@ export default function EditSource() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if(validateForm()){
-        updatePaperById(formValues);
+        await updatePaperById(formValues);
         setOpen(true); 
     }
   }
