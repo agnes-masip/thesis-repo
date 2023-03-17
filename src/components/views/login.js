@@ -116,6 +116,8 @@ function Login() {
                                             label="E-mail"
                                             variant="outlined"
                                             name="email"
+                                            error={!!errors.email}
+                                            helperText={errors.email}
                                             value={signInFormValues.email}
                                             onChange={handleSignInInputChange}
                                         />
@@ -127,6 +129,8 @@ function Login() {
                                             type="password"
                                             variant="outlined"
                                             name="password"
+                                            error={!!errors.password}
+                                            helperText={errors.password}
                                             value={signInFormValues.password}
                                             onChange={handleSignInInputChange}
                                         />
