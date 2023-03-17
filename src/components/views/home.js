@@ -12,7 +12,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import NavBar from "../navbar";
 
 import { getAllListsForUser, deleteListById, createNewList } from '../api/lists';
-import { getUserByUsername } from '../api/users';
+import { getUserById, getUserByUsername } from '../api/users';
 
 function Home() {
   const { username } = useParams();
@@ -21,7 +21,7 @@ function Home() {
   const [user, setUser] = React.useState([]);
 
   // useEffect is to call the fetch every time we go to home.js
-  useEffect(() => {
+  useEffect(async () => {
         fetchLists();
   }, []);
 
@@ -83,9 +83,16 @@ function Home() {
     );
 
   const fetchLists = async () => {
-      const user = await getUserByUsername(username);
-      setUser(user[0]);
-      const listList = await getAllListsForUser(user[0].id);
+      const userData = await getUserByUsername(username);
+      const user = userData[0];
+      setUser(user);
+      const listList = await getAllListsForUser(user.id);
+      let lists = [];
+      for (let listData of listList) {
+        const listOwnerData = await getUserById(listData.listOwner);
+        listData.listOwner = listOwnerData.username;
+        lists.push(listData);
+      }
       setRows(listList);
   };
 
@@ -118,7 +125,7 @@ function Home() {
                                             </td>
                                             <td>
                                                 <Typography>
-                                                    {user.name}
+                                                    {user.username}
                                                 </Typography>
                                             </td>
                                         </tr>
@@ -130,7 +137,7 @@ function Home() {
                                             </td>
                                             <td>
                                                 <Typography>
-                                                    {user.mail}
+                                                    {user.email}
                                                 </Typography>
                                             </td>
                                         </tr>
