@@ -42,11 +42,10 @@ function Login() {
   async function validateFormSignIn(user, password) {
     const newErrors = {};
 
-
     if (user.length === 0) {
         newErrors.emailNotExists = "This email does not exist in our database";   
     }else if (user[0].password !== JSON.stringify(SHA256(password).words)){
-        newErrors.passwrong = "password Incorrect";
+        newErrors.passwrong = "The password is incorrect";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -69,9 +68,12 @@ function Login() {
     // Currently does nothing, should navigate to list
     async function signIn(email, password) {
         const user = await getUserByEmail(email);
+
         if(validateFormSignIn(user,password)){
-            document.cookie = "username=" + user[0].username + ";";
-            navigate('/' + user[0].username, { replace: true });
+            if (user.length !== 0){
+                document.cookie = "username=" + user[0].username + ";";
+                navigate('/' + user[0].username, { replace: true });
+            }  
         }
     }
 
