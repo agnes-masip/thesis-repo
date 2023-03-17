@@ -20,7 +20,7 @@ export default function List() {
   const { username, listOwner, listID } = useParams();
   const [paperRows, setPaperRows] = useState([]);
   const [userRows, setUserRows] = useState([]);
-  const [userFormValues, setUserFormValues] = useState([]);
+  const [userFormValues, setUserFormValues] = useState({username: ''});
   const [listOwnerID, setListOwnerID] = useState("");
   let papersLikedByUser = [];
 

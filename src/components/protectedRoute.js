@@ -10,7 +10,7 @@ export const ProtectedRoute = ({ children }) => {
   if (document.cookie !== 'username=' + username) {
     console.log("back!");
     // navigate('/login', { replace: true });
-    return <Navigate to="/login"/>
+    return <Navigate to="/"/>
   }
   return children;
 };

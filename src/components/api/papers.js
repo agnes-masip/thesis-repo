@@ -5,6 +5,9 @@ import { listPapers, getPaper } from "../../graphql/queries";
 
 export async function newPaper (paperData) { // provide: title!, description!, likes, author!, journal, year, volume, issue, doi, issn, citationStorageLocation
 	try{
+		delete paperData["createdAt"];
+      	delete paperData["updatedAt"];
+		delete paperData['id'];
 		const response = await API.graphql({
 			query: createPaper,
 			variables: {

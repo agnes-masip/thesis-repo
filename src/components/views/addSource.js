@@ -16,7 +16,22 @@ import { addPaperToList } from '../api/lists';
 export default function AddSource() {
   const { username, listID, listOwner } = useParams();
   const [files, setFiles] = useState([]);
-  const [formValues, setFormValues] = useState([]);
+  const [formValues, setFormValues] = useState({
+    id: '',
+    author: [],
+    citationStorageLocation: "https://www.google.com",
+    createdAt: '',
+    description: '',
+    doi: '',
+    issn: '',
+    issue: '',
+    journal: '',
+    likes: [],
+    title: '',
+    updatedAt: '',
+    volume: '',
+    year: 0
+  });
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 

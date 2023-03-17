@@ -12,7 +12,22 @@ import { updatePaperById, getPaperById } from "../api/papers";
 
 export default function EditSource() {
   const { username, listID, sourceID, listOwner } = useParams();
-  const [formValues, setFormValues] = useState([]);
+  const [formValues, setFormValues] = useState({
+    id: '',
+    author: [],
+    citationStorageLocation: "https://www.google.com",
+    createdAt: '',
+    description: '',
+    doi: '',
+    issn: '',
+    issue: '',
+    journal: '',
+    likes: [],
+    title: '',
+    updatedAt: '',
+    volume: '',
+    year: 0
+  });
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState({});
 

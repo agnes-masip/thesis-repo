@@ -7,8 +7,8 @@ import {SHA256} from 'crypto-js';
 import { getUserByEmail, newUser, userEmailExists, usernameExists } from '../api/users';
 
 function Login() {
-    const [signInFormValues, setSignInFormValues] = useState([]);
-    const [signUpFormValues, setSignUpFormValues] = useState([]);
+    const [signInFormValues, setSignInFormValues] = useState({email: '', password: ''});
+    const [signUpFormValues, setSignUpFormValues] = useState({username: '', email:'', password: ''});
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 

@@ -16,7 +16,7 @@ import { getUserById, getUserByUsername } from '../api/users';
 
 function Home() {
   const { username } = useParams();
-  const [formValues, setFormValues] = useState([]);
+  const [formValues, setFormValues] = useState({title: ''});
   const [rows, setRows] = React.useState([]);
   const [user, setUser] = React.useState([]);
 
