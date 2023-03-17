@@ -14,7 +14,7 @@ export async function createNewList (listData) { // provide: title, papers, list
     });
     return newList.data.createList;
     }catch(error){
-      console.log('error creating a list', error)
+      console.error('error creating a list', error)
     }
 }
 
@@ -39,7 +39,11 @@ async function getAllLists() {
 
 export async function getAllListsForUser(userId) {
     const lists = await getAllLists();
-    return lists.filter(list => list.listOwner = userId);
+    let userLists = [];
+    for (const list of lists) {
+      if (list.listOwner === userId || list.sharedWith.includes(userId)) { userLists.push(list); }
+    }
+    return userLists;
 }
 
 

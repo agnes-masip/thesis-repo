@@ -21,7 +21,7 @@ export default function List() {
   const [paperRows, setPaperRows] = useState([]);
   const [userRows, setUserRows] = useState([]);
   const [userFormValues, setUserFormValues] = useState([]);
-  // const [papersLikedByUser, setPapersLikedByUser] = useState([]);
+  const [listOwnerID, setListOwnerID] = useState("");
   let papersLikedByUser = [];
 
   useEffect(async() => {
@@ -55,8 +55,9 @@ export default function List() {
 
   const fetchUsers = async (listID) => {
     let userList = [];
-    const ownerUser = await getUserById(listOwner);
-    userList.push(ownerUser);
+    const ownerUser = await getUserByUsername(listOwner);
+    setListOwnerID(ownerUser[0].id);
+    userList.push(ownerUser[0]);
 
     const listData = await getListById(listID);
     const cIDs = listData.sharedWith;
@@ -64,7 +65,6 @@ export default function List() {
       const collaborator = await getUserById(cID);
       userList.push(collaborator);
     };
-
     setUserRows(userList);
   };
 
@@ -160,7 +160,7 @@ export default function List() {
         flex: 0.25,
         renderCell: (params) => {
           // getActions: (params) => [
-          if (params.id !== listOwner) {
+          if (params.id !== listOwnerID) {
             return <GridActionsCellItem
               icon={<DeleteIcon />}
               label="delete"
