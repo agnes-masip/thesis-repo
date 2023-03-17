@@ -45,15 +45,10 @@ function Home() {
     });
   };
 
-    const deleteList = React.useCallback(
-        (id) => () => {
-            setTimeout(() => {
-                setRows((prevRows) => prevRows.filter((row) => row.id !== id));
-                deleteListById(id);
-            });
-        },
-        [],
-    );
+    const deleteList = async(listId) => { 
+        await deleteListById(listId);
+        await fetchLists();
+    }
 
     const columns = React.useMemo(
         () => [
