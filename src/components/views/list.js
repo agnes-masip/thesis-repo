@@ -21,10 +21,13 @@ export default function List() {
   const [paperRows, setPaperRows] = useState([]);
   const [userRows, setUserRows] = useState([]);
   const [userFormValues, setUserFormValues] = useState([]);
+  // const [papersLikedByUser, setPapersLikedByUser] = useState([]);
+  let papersLikedByUser = [];
 
-  useEffect(() => {
-    fetchPapers(listID);
-    fetchUsers(listID);
+  useEffect(async() => {
+    await fetchPapers(listID);
+    await fetchUsers(listID);
+    await highlightLikedPapers();
   },
   []);
 
@@ -32,14 +35,17 @@ export default function List() {
   const fetchPapers = async (listID) => {
     const listData = await getListById(listID);
     const paperIds = listData.papers;
+    const user = await getUserByUsername(username);
     let paperList = [];
     if (paperIds) {
       for (const paperId of paperIds){
         let paper = await getPaperById(paperId);
         if (paper != null) {
-          const nrLikes = paper.likes.length;
+          const likedPapers = paper.likes;
+          const nrLikes = likedPapers.length;
           paper.likes = nrLikes;
           paperList.push(paper);
+          if (likedPapers.includes(user[0].id)) { papersLikedByUser.push(paperId); }
         }        
       };
     }
@@ -61,6 +67,13 @@ export default function List() {
 
     setUserRows(userList);
   };
+
+  const highlightLikedPapers = () => {
+    for (const paperId of papersLikedByUser){
+      const likeBtn = document.getElementById("like" + paperId);
+      likeBtn.classList.add("likeButtonHighlighted");
+    }
+  }
 
   const addCollaborator = async (username) => {
     const userExists = await usernameExists(username);
@@ -93,7 +106,7 @@ export default function List() {
     deleteCollaboratorFromList(listID, userID);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     addCollaborator(userFormValues.username);
     event.preventDefault();
   };
@@ -121,12 +134,12 @@ export default function List() {
 }
 
   // Currently does nothing
-  async function likeSource (paperId) {
+  const likeSource = async (paperId, event) => {
     const username = document.cookie.split("=")[1];
-    console.log(username);
     const user = await getUserByUsername(username);
-    console.log(user[0].id);
     await likePaper(paperId, user[0].id);
+    const likeBtn = document.getElementById("like" + paperId);
+    likeBtn.classList.add("likeButtonHighlighted")
     await fetchPapers(listID); // this takes a little while!
   }
 
@@ -178,7 +191,8 @@ export default function List() {
           <GridActionsCellItem
           icon={<ThumbUpIcon />}
           label="Like"
-          onClick={async () => { await likeSource(params.id)} }
+          id ={ "like" + params.id }
+          onClick={ () => likeSource(params.id) }
           />,
           <GridActionsCellItem
           icon={<DownloadIcon />}
