@@ -13,7 +13,7 @@ import NavBar from '../navbar';
 import EditIcon from '@mui/icons-material/Edit';
 
 import { deletePaperById, getPaperById, likePaper } from '../api/papers';
-import { addCollaboratorToList, getListById, deleteCollaboratorFromList, getBibtexForList} from '../api/lists';
+import { addCollaboratorToList, getListById, deleteCollaboratorFromList, getBibtexForList, getBibtexReferenceForPaper} from '../api/lists';
 import { getUserById, getUserByUsername, usernameExists } from '../api/users';
 
 export default function List() {
@@ -134,7 +134,7 @@ export default function List() {
 }
 
   // Currently does nothing
-  const likeSource = async (paperId, event) => {
+  const likeSource = async (paperId) => {
     const username = document.cookie.split("=")[1];
     const user = await getUserByUsername(username);
     await likePaper(paperId, user[0].id);
@@ -144,11 +144,19 @@ export default function List() {
   }
 
   // Currently does nothing
-  const downloadSource = React.useCallback(
-    (id) => () => {
-    },
-    [],
-  );
+  const downloadSource = async(paperId) => {
+    const references = await getBibtexReferenceForPaper(paperId);
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(references));
+    element.setAttribute('download', "references.bib");
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  }
 
   const userColumns = React.useMemo(
     () => [
