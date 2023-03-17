@@ -26,13 +26,15 @@ function Home() {
   }, []);
 
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    //need to change this when we fix login
-    formValues.listOwner = "test";
+    const user = await getUserByUsername(username);
+    formValues.listOwner = user[0].id;
     formValues.papers = [];
     formValues.sharedWith = [];
-    createNewList(formValues)
+    await createNewList(formValues);
+    await fetchLists();
+    // todo: empty formfields
   };
 
   const handleInputChange = (event) => {

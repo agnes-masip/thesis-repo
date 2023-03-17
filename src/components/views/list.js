@@ -12,7 +12,7 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import NavBar from '../navbar';
 import EditIcon from '@mui/icons-material/Edit';
 
-import { deletePaperById, getPaperById } from '../api/papers';
+import { deletePaperById, getPaperById, likePaper } from '../api/papers';
 import { addCollaboratorToList, getListById, deleteCollaboratorFromList, getBibtexForList} from '../api/lists';
 import { getUserById, getUserByUsername, usernameExists } from '../api/users';
 
@@ -21,10 +21,13 @@ export default function List() {
   const [paperRows, setPaperRows] = useState([]);
   const [userRows, setUserRows] = useState([]);
   const [userFormValues, setUserFormValues] = useState([]);
+  // const [papersLikedByUser, setPapersLikedByUser] = useState([]);
+  let papersLikedByUser = [];
 
-  useEffect(() => {
-    fetchPapers(listID);
-    fetchUsers(listID);
+  useEffect(async() => {
+    await fetchPapers(listID);
+    await fetchUsers(listID);
+    await highlightLikedPapers();
   },
   []);
 
@@ -32,11 +35,18 @@ export default function List() {
   const fetchPapers = async (listID) => {
     const listData = await getListById(listID);
     const paperIds = listData.papers;
+    const user = await getUserByUsername(username);
     let paperList = [];
     if (paperIds) {
       for (const paperId of paperIds){
-        const paper = await getPaperById(paperId)
-        paperList.push(paper);
+        let paper = await getPaperById(paperId);
+        if (paper != null) {
+          const likedPapers = paper.likes;
+          const nrLikes = likedPapers.length;
+          paper.likes = nrLikes;
+          paperList.push(paper);
+          if (likedPapers.includes(user[0].id)) { papersLikedByUser.push(paperId); }
+        }        
       };
     }
 
@@ -57,6 +67,13 @@ export default function List() {
 
     setUserRows(userList);
   };
+
+  const highlightLikedPapers = () => {
+    for (const paperId of papersLikedByUser){
+      const likeBtn = document.getElementById("like" + paperId);
+      likeBtn.classList.add("likeButtonHighlighted");
+    }
+  }
 
   const addCollaborator = async (username) => {
     const userExists = await usernameExists(username);
@@ -89,7 +106,7 @@ export default function List() {
     deleteCollaboratorFromList(listID, userID);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     addCollaborator(userFormValues.username);
     event.preventDefault();
   };
@@ -117,12 +134,14 @@ export default function List() {
 }
 
   // Currently does nothing
-  const likeSource = React.useCallback(
-    (id) => () => {
-
-    },
-    [],
-  );
+  const likeSource = async (paperId, event) => {
+    const username = document.cookie.split("=")[1];
+    const user = await getUserByUsername(username);
+    await likePaper(paperId, user[0].id);
+    const likeBtn = document.getElementById("like" + paperId);
+    likeBtn.classList.add("likeButtonHighlighted")
+    await fetchPapers(listID); // this takes a little while!
+  }
 
   // Currently does nothing
   const downloadSource = React.useCallback(
@@ -172,7 +191,8 @@ export default function List() {
           <GridActionsCellItem
           icon={<ThumbUpIcon />}
           label="Like"
-          onClick={() => likeSource(params.id)}
+          id ={ "like" + params.id }
+          onClick={ () => likeSource(params.id) }
           />,
           <GridActionsCellItem
           icon={<DownloadIcon />}
@@ -219,7 +239,7 @@ export default function List() {
               <Typography variant="h6" align="left" color="primary" sx={{ gridRow: '1', gridColumn: 'span 2' }}>
                 Sources
               </Typography>
-              <Button onClick={() => exportPaperList(listID)} endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
+              <Button onClick={async () => { await exportPaperList(listID)} } endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
                 Export
               </Button>
               <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
