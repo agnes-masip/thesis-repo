@@ -39,6 +39,19 @@ function Login() {
         return Object.keys(newErrors).length === 0;
   };
 
+  async function validateFormSignIn(user, password) {
+    const newErrors = {};
+
+
+    if (user.length === 0) {
+        newErrors.emailNotExists = "This email does not exist in our database";   
+    }else if (user[0].password !== JSON.stringify(SHA256(password).words)){
+        newErrors.passwrong = "password Incorrect";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+};
+
     async function signUp(username, email, password) {
         // check if email's already used!
         if(validateForm(username,email,password)){
@@ -56,17 +69,9 @@ function Login() {
     // Currently does nothing, should navigate to list
     async function signIn(email, password) {
         const user = await getUserByEmail(email);
-
-        if (user.length === 0) {
-            console.error("This email does not exist in our database");
-            return false;
-        }
-        if (user[0].password === JSON.stringify(SHA256(password).words)) { 
+        if(validateFormSignIn(user,password)){
             document.cookie = "username=" + user[0].username + ";";
             navigate('/' + user[0].username, { replace: true });
-        }
-        else {
-            console.log('log in NOT OKK');
         }
     }
 
@@ -116,8 +121,8 @@ function Login() {
                                             label="E-mail"
                                             variant="outlined"
                                             name="email"
-                                            error={!!errors.email}
-                                            helperText={errors.email}
+                                            error={!!errors.emailNotExists}
+                                            helperText={errors.emailNotExists}
                                             value={signInFormValues.email}
                                             onChange={handleSignInInputChange}
                                         />
@@ -129,8 +134,8 @@ function Login() {
                                             type="password"
                                             variant="outlined"
                                             name="password"
-                                            error={!!errors.password}
-                                            helperText={errors.password}
+                                            error={!!errors.passwrong}
+                                            helperText={errors.passwrong}
                                             value={signInFormValues.password}
                                             onChange={handleSignInInputChange}
                                         />
