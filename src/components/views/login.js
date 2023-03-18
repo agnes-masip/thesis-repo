@@ -112,9 +112,9 @@ function Login() {
                             </Typography>
                         </div>
                         <Card sx={{ height: "100%",display:'flex', justifyContent:'center',padding:"10px" }}>
-                            <CardContent>
+                            <CardContent sx={{width: "80%"}}>
                                 <form onSubmit={handleSignInSubmit}>
-                                    <FormGroup>
+                                    <FormGroup sx={{mb: "20px"}}>
                                         <TextField
 
                                             id="email-signin-input"
@@ -127,7 +127,7 @@ function Login() {
                                             onChange={handleSignInInputChange}
                                         />
                                     </FormGroup>
-                                    <FormGroup>
+                                    <FormGroup sx={{mb: "20px"}}>
                                         <TextField
                                             id="password-signin-input"
                                             label="Password"
@@ -140,7 +140,7 @@ function Login() {
                                             onChange={handleSignInInputChange}
                                         />
                                     </FormGroup>
-                                    <Button type="submit" variant="contained">
+                                    <Button type="submit" variant="contained" sx={{width: "100%"}}>
                                         Sign in
                                     </Button>
                                 </form>
@@ -154,9 +154,9 @@ function Login() {
                             </Typography>
                         </div>
                         <Card sx={{ height: "100%", display:'flex', justifyContent:'center',padding:"10px" }}>
-                            <CardContent>
+                            <CardContent sx={{width: "80%"}}>
                             <form onSubmit={handleSignUpSubmit}>
-                                <FormGroup>
+                                <FormGroup sx={{mb: "20px"}}>
                                     <TextField
 
                                         id="username-signup-input"
@@ -169,7 +169,7 @@ function Login() {
                                         onChange={handleSignUpInputChange}
                                     />
                                 </FormGroup>
-                                <FormGroup>
+                                <FormGroup sx={{mb: "20px"}}>
                                     <TextField
 
                                         id="email-signup-input"
@@ -182,7 +182,7 @@ function Login() {
                                         onChange={handleSignUpInputChange}
                                     />
                                 </FormGroup>
-                                <FormGroup>
+                                <FormGroup sx={{mb: "20px"}}>
                                     <TextField
 
                                         id="password-signup-input"
@@ -196,7 +196,7 @@ function Login() {
                                         onChange={handleSignUpInputChange}
                                     />
                                 </FormGroup>
-                                <Button type="submit" variant="contained">
+                                <Button type="submit" variant="contained" sx={{width: "100%"}}>
                                     Sign Up
                                 </Button>
                             </form>
