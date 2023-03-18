@@ -2,8 +2,8 @@
 import '../../App.css';
 import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react';
-import {Box, Card, CardContent, FormGroup, TextField, Typography, Button} from "@mui/material";
-import {SHA256} from 'crypto-js';
+import { Box, Card, CardContent, FormGroup, TextField, Typography, Button } from "@mui/material";
+import { SHA256 } from 'crypto-js';
 import { getUserByEmail, newUser, userEmailExists, usernameExists } from '../api/users';
 
 function Login() {
@@ -17,7 +17,7 @@ function Login() {
         if (emailExists) {
             console.error("This email is already used");
             return;
-        } // TODO: add actual error front-end
+        }
 
         // check if username's already used
         const userExists = await usernameExists(username);
@@ -44,7 +44,7 @@ function Login() {
             console.error("This email does not exist in our database");
             return false;
         }
-        if (user[0].password === JSON.stringify(SHA256(password).words)) { 
+        if (user[0].password === JSON.stringify(SHA256(password).words)) {
             document.cookie = "username=" + user[0].username + ";";
             navigate('/' + user[0].username, { replace: true });
         }
