@@ -19,7 +19,7 @@ export async function createNewList (listData) { // provide: title, papers, list
 }
 
 export async function deleteListById (listId) {
-    const deletedList = await API.graphql({
+    await API.graphql({
         query: deleteList,
         variables: {
             input: {

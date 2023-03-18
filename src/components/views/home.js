@@ -34,7 +34,7 @@ function Home() {
     formValues.sharedWith = [];
     await createNewList(formValues);
     await fetchLists();
-    // todo: empty formfields
+    setFormValues({title: ''});
   };
 
   const handleInputChange = (event) => {
@@ -45,7 +45,7 @@ function Home() {
     });
   };
 
-    const deleteList = async(listId) => { 
+    const deleteList = async(listId) => {
         await deleteListById(listId);
         await fetchLists();
     }

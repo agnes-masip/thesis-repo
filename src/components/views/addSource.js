@@ -204,6 +204,7 @@ const handleClose = () => {
                                       name="year"
                                       label="Year"
                                       type="number"
+                                      inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                                       value={formValues.year}
                                       onChange={handleInputChange}
                                   />

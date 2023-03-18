@@ -44,7 +44,7 @@ export default function EditSource() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (typeof formValues.year !== 'integer') {
+    if (typeof parseInt(formValues.year) !== 'number') {
       newErrors.integer = 'Sadly, this is not an integer :(';
     }
     if (!formValues.description) {
@@ -64,7 +64,7 @@ export default function EditSource() {
     event.preventDefault();
     if(validateForm()){
         await updatePaperById(formValues);
-        setOpen(true); 
+        setOpen(true);
     }
   }
 
@@ -115,7 +115,7 @@ export default function EditSource() {
                                     error={!!errors.title}
                                     helperText={errors.title}
                                     onChange={handleInputChange}
-                                   
+
                                 />
                             </FormGroup>
                             {/* this one should probably be different bc its a list (first + last name) */}
@@ -138,12 +138,12 @@ export default function EditSource() {
                                     Description:
                                 </FormLabel>
                                 <TextField
-                                    id="desc"
-                                    name="desc"
+                                    id="description"
+                                    name="description"
                                     type="text"
                                     error={!!errors.description}
                                     helperText={errors.description}
-                                    value={formValues.desc}
+                                    value={formValues.description}
                                     onChange={handleInputChange}
                                 />
                             </FormGroup>
@@ -155,7 +155,7 @@ export default function EditSource() {
                                     id="doi"
                                     name="doi"
                                     type="text"
-                                    
+
                                     value={formValues.doi}
                                     onChange={handleInputChange}
                                 />
@@ -216,6 +216,7 @@ export default function EditSource() {
                                     id="year"
                                     name="year"
                                     type="number"
+                                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                                     error={!!errors.integer}
                                     helperText={errors.integer}
                                     value={formValues.year}

@@ -53,7 +53,7 @@ function Login() {
 
     async function signUp(username, email, password) {
         if (await validateForm(username, email, password)) {
-            const newUserData = await newUser({
+            await newUser({
                 "username": username,
                 "email": email,
                 "password": JSON.stringify(SHA256(password).words)

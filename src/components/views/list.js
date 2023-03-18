@@ -24,14 +24,12 @@ export default function List() {
   const [listOwnerID, setListOwnerID] = useState("");
   let papersLikedByUser = [];
 
-  useEffect(() => {
-    async function fetchData() {
-      await fetchPapers(listID);
-      await fetchUsers(listID);
-      await highlightLikedPapers();
-    }
-  }, []);
-
+  useEffect(async() => {
+    await fetchPapers(listID);
+    await fetchUsers(listID);
+    await highlightLikedPapers();
+  },
+  []);
 
   const fetchPapers = async (listID) => {
     const listData = await getListById(listID);
@@ -84,8 +82,9 @@ export default function List() {
       const user = users[0];
       const userID = user.id;
       if (userID !== listOwner && (userRows.filter((row) => row.id === userID)).length === 0) {
-      addCollaboratorToList(listID, userID);
-      setUserRows([...userRows, user]);
+        addCollaboratorToList(listID, userID);
+        setUserRows([...userRows, user]);
+        setUserFormValues({username: ''});
       }
       else {
         alert(username + ' is already a list collaborator!');
