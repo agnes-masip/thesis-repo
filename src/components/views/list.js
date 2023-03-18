@@ -24,12 +24,13 @@ export default function List() {
   const [listOwnerID, setListOwnerID] = useState("");
   let papersLikedByUser = [];
 
-  useEffect(async() => {
-    await fetchPapers(listID);
-    await fetchUsers(listID);
-    await highlightLikedPapers();
-  },
-  []);
+  useEffect(() => {
+    async function fetchData() {
+      await fetchPapers(listID);
+      await fetchUsers(listID);
+      await highlightLikedPapers();
+    }
+  }, []);
 
 
   const fetchPapers = async (listID) => {
@@ -46,7 +47,7 @@ export default function List() {
           paper.likes = nrLikes;
           paperList.push(paper);
           if (likedPapers.includes(user[0].id)) { papersLikedByUser.push(paperId); }
-        }        
+        }
       };
     }
 

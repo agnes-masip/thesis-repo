@@ -56,7 +56,7 @@ function Login() {
             const newUserData = await newUser({
                 "username": username,
                 "email": email,
-                "password": password
+                "password": JSON.stringify(SHA256(password).words)
             });
             document.cookie = "username=" + username + ";";
             navigate('/' + username, { replace: true });
