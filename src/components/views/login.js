@@ -2,8 +2,8 @@
 import '../../App.css';
 import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react';
-import {Box, Card, CardContent, FormGroup, TextField, Typography, Button} from "@mui/material";
-import {SHA256} from 'crypto-js';
+import { Box, Card, CardContent, FormGroup, TextField, Typography, Button } from "@mui/material";
+import { SHA256 } from 'crypto-js';
 import { getUserByEmail, newUser, userEmailExists, usernameExists } from '../api/users';
 
 function Login() {
@@ -43,7 +43,7 @@ function Login() {
     const newErrors = {};
 
     if (user.length === 0) {
-        newErrors.emailNotExists = "This email does not exist in our database";   
+        newErrors.emailNotExists = "This email does not exist in our database";
     }else if (user[0].password !== JSON.stringify(SHA256(password).words)){
         newErrors.passwrong = "The password is incorrect";
     }
@@ -52,17 +52,15 @@ function Login() {
 };
 
     async function signUp(username, email, password) {
-        // check if email's already used!
-        if(await validateForm(username,email,password)){
+        if (await validateForm(username, email, password)) {
             const newUserData = await newUser({
                 "username": username,
                 "email": email,
-                "password": JSON.stringify(SHA256(password).words)
+                "password": password
             });
             document.cookie = "username=" + username + ";";
             navigate('/' + username, { replace: true });
         }
-       
     }
 
     // Currently does nothing, should navigate to list
@@ -73,7 +71,7 @@ function Login() {
             if (user.length !== 0){
                 document.cookie = "username=" + user[0].username + ";";
                 navigate('/' + user[0].username, { replace: true });
-            }  
+            }
         }
     }
 
@@ -118,7 +116,7 @@ function Login() {
                                 <form onSubmit={handleSignInSubmit}>
                                     <FormGroup>
                                         <TextField
-                                            
+
                                             id="email-signin-input"
                                             label="E-mail"
                                             variant="outlined"
@@ -160,7 +158,7 @@ function Login() {
                             <form onSubmit={handleSignUpSubmit}>
                                 <FormGroup>
                                     <TextField
-                                        
+
                                         id="username-signup-input"
                                         label="Username"
                                         variant="outlined"
@@ -173,7 +171,7 @@ function Login() {
                                 </FormGroup>
                                 <FormGroup>
                                     <TextField
-                                        
+
                                         id="email-signup-input"
                                         label="E-mail"
                                         variant="outlined"
@@ -186,7 +184,7 @@ function Login() {
                                 </FormGroup>
                                 <FormGroup>
                                     <TextField
-                                        
+
                                         id="password-signup-input"
                                         label="Password"
                                         type="password"
