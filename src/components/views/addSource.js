@@ -4,9 +4,8 @@ import { useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import FileUpload from "react-material-file-upload";
 import { Box, Button, Card, CardContent, FormLabel, FormGroup,
-         Snackbar, TextField, Typography } from '@mui/material';
+         TextField, Typography } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import { Alert } from '@material-ui/lab';
 
 import NavBar from "../navbar";
 import {newPaper} from '../api/papers';
@@ -32,15 +31,35 @@ export default function AddSource() {
     volume: '',
     year: 0
   });
-  const [open, setOpen] = useState(false);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (typeof parseInt(formValues.year) !== 'number') {
+      newErrors.integer = 'Sadly, this is not an integer :(';
+    }
+    if (!formValues.description) {
+        newErrors.description = 'No description? This is not allowed, sorry :(';
+    }
+    if (!formValues.title) {
+        newErrors.title = 'No title? Title is necessary, sorry :(';
+    }
+    if (!formValues.author) {
+        newErrors.title = 'No author? That is not possible, sorry :(';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     formValues.likes = [];
-    const createdPaperId = await newPaper(formValues);
-    await addPaperToList(listID, createdPaperId);
-    navigate('/list/' + username + '/' + listOwner + '/' + listID);
+    if (validateForm()){
+        const createdPaperId = await newPaper(formValues);
+        await addPaperToList(listID, createdPaperId);
+        navigate('/list/' + username + '/' + listOwner + '/' + listID);
+    }
   };
 
   const handleInputChange = (event) => {
@@ -50,10 +69,6 @@ export default function AddSource() {
       [name]: value,
     });
   };
-
-const handleClose = () => {
-  setOpen(false);
-};
 
   return (
   <div>
@@ -99,11 +114,12 @@ const handleClose = () => {
                                       name="title"
                                       label="Title"
                                       type="text"
+                                      error={!!errors.title}
+                                      helperText={errors.title}
                                       value={formValues.title}
                                       onChange={handleInputChange}
                                   />
                               </FormGroup>
-                              {/* this one should probably be different bc its a list (first + last name) */}
                               <FormGroup>
                                   <FormLabel>
                                       Author:
@@ -113,6 +129,8 @@ const handleClose = () => {
                                       name="author"
                                       label="Author"
                                       type="text"
+                                      error={!!errors.author}
+                                      helperText={errors.author}
                                       value={formValues.author}
                                       onChange={handleInputChange}
                                   />
@@ -126,6 +144,8 @@ const handleClose = () => {
                                       name="description"
                                       label="description"
                                       type="text"
+                                      error={!!errors.description}
+                                      helperText={errors.description}
                                       value={formValues.description}
                                       onChange={handleInputChange}
                                   />
@@ -205,6 +225,8 @@ const handleClose = () => {
                                       label="Year"
                                       type="number"
                                       inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                      error={!!errors.integer}
+                                      helperText={errors.integer}
                                       value={formValues.year}
                                       onChange={handleInputChange}
                                   />
@@ -215,15 +237,6 @@ const handleClose = () => {
                                   Submit
                               </Button>
                           </Box>
-                          <Snackbar
-                              open={open}
-                              autoHideDuration={3000}
-                              onClose={handleClose}
-                              anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
-                              <Alert onClose={handleClose} severity="success">
-                                  Paper updated!
-                              </Alert>
-                          </Snackbar>
                       </form>
                   </CardContent>
               </Card>

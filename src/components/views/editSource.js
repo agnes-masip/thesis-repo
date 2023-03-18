@@ -1,11 +1,9 @@
 import React from 'react';
 import '../../App.css';
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Box, Button, Card, CardContent, FormLabel, FormGroup, Snackbar,
-         TextField, Typography } from '@mui/material';
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { Box, Button, Card, CardContent, FormLabel, FormGroup, TextField, Typography } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import { Alert } from '@material-ui/lab';
 
 
 import { updatePaperById, getPaperById } from "../api/papers";
@@ -28,8 +26,8 @@ export default function EditSource() {
     volume: '',
     year: 0
   });
-  const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     setInitialFormValues(sourceID);
@@ -62,9 +60,9 @@ export default function EditSource() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if(validateForm()){
+    if (validateForm()){
         await updatePaperById(formValues);
-        setOpen(true);
+        navigate('/list/' + username + '/' + listOwner + '/' + listID);
     }
   }
 
@@ -74,10 +72,6 @@ export default function EditSource() {
       ...formValues,
       [name]: value,
     });
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   return (
@@ -118,7 +112,6 @@ export default function EditSource() {
 
                                 />
                             </FormGroup>
-                            {/* this one should probably be different bc its a list (first + last name) */}
                             <FormGroup>
                                 <FormLabel>
                                     Author:
@@ -155,7 +148,6 @@ export default function EditSource() {
                                     id="doi"
                                     name="doi"
                                     type="text"
-
                                     value={formValues.doi}
                                     onChange={handleInputChange}
                                 />
@@ -229,15 +221,6 @@ export default function EditSource() {
                                 Submit
                             </Button>
                         </Box>
-                        <Snackbar
-                            open={open}
-                            autoHideDuration={3000}
-                            onClose={handleClose}
-                            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}>
-                            <Alert onClose={handleClose} severity="success">
-                                Paper updated!
-                            </Alert>
-                        </Snackbar>
                     </form>
                 </CardContent>
             </Card>

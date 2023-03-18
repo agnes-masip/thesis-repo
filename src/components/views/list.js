@@ -96,6 +96,9 @@ export default function List() {
   };
 
   const deleteSource = async (sourceID) => {
+    setTimeout(() => {
+      setPaperRows((prevRows) => prevRows.filter((row) => row.id !== sourceID));
+    });
     deletePaperById(sourceID);
   };
 
