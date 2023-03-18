@@ -27,14 +27,19 @@ function Home() {
 
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    const user = await getUserByUsername(username);
-    formValues.listOwner = user[0].id;
-    formValues.papers = [];
-    formValues.sharedWith = [];
-    await createNewList(formValues);
-    await fetchLists();
-    setFormValues({title: ''});
+    if (formValues.title == "") {
+        window.alert('Please provide a name for the list')
+    }
+    else {
+        event.preventDefault();
+        const user = await getUserByUsername(username);
+        formValues.listOwner = user[0].id;
+        formValues.papers = [];
+        formValues.sharedWith = [];
+        await createNewList(formValues);
+        await fetchLists();
+        setFormValues({title: ''});
+    }
   };
 
   const handleInputChange = (event) => {
