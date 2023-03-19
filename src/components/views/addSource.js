@@ -233,7 +233,7 @@ export default function AddSource() {
                               </FormGroup>
                           </Box>
                           <Box my={2}>
-                              <Button name="add-submit-btn" type="submit" variant="contained" my={4}>
+                              <Button name="add-submit-btn" id="add-submit-btn" type="submit" variant="contained" my={4}>
                                   Submit
                               </Button>
                           </Box>

@@ -217,7 +217,7 @@ export default function EditSource() {
                             </FormGroup>
                         </Box>
                         <Box my={2}>
-                            <Button name="edit-submit-btn" type="submit" variant="contained" my={4}>
+                            <Button name="edit-submit-btn" id="edit-submit-btn" type="submit" variant="contained" my={4}>
                                 Submit
                             </Button>
                         </Box>
