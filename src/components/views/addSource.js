@@ -9,11 +9,13 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 import NavBar from "../navbar";
 import {newPaper} from '../api/papers';
-import { addPaperToList } from '../api/lists';
+import { addPaperToList, getListById } from '../api/lists';
+import { useEffect } from 'react';
+import { getUserById } from '../api/users';
 
 
 export default function AddSource() {
-  const { username, listID, listOwner } = useParams();
+  const { username, listID } = useParams();
   const [files, setFiles] = useState([]);
   const [formValues, setFormValues] = useState({
     id: '',
@@ -33,6 +35,15 @@ export default function AddSource() {
   });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [listOwner, setListOwner] = useState("");
+
+  useEffect(async() => {
+    const listData = await getListById(listID);
+    let listOwnerId = listData.listOwner;
+    const ownerData = await getUserById(listOwnerId);
+    setListOwner(ownerData.username);
+  },
+  []);
 
   const validateForm = () => {
     const newErrors = {};

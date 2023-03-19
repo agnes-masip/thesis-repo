@@ -7,9 +7,11 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 
 import { updatePaperById, getPaperById } from "../api/papers";
+import { getListById } from '../api/lists';
+import { getUserById } from '../api/users';
 
 export default function EditSource() {
-  const { username, listID, sourceID, listOwner } = useParams();
+  const { username, listID, sourceID } = useParams();
   const [formValues, setFormValues] = useState({
     id: '',
     author: [],
@@ -28,9 +30,14 @@ export default function EditSource() {
   });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [listOwner, setListOwner] = useState("");
 
-  useEffect(() => {
+  useEffect(async() => {
     setInitialFormValues(sourceID);
+    const listData = await getListById(listID);
+    let listOwnerId = listData.listOwner;
+    const ownerData = await getUserById(listOwnerId);
+    setListOwner(ownerData.username);
   },
   []);
 
@@ -62,6 +69,7 @@ export default function EditSource() {
     event.preventDefault();
     if (validateForm()){
         await updatePaperById(formValues);
+        console.log(listOwner);
         navigate('/list/' + username + '/' + listOwner + '/' + listID);
     }
   }

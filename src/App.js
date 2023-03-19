@@ -64,7 +64,7 @@ function App() {
             }
           />
           <Route
-            path='add/:username/:listOwner/:listID'
+            path='add/:username/:listID'
             element={
               <ProtectedRoute>
                 <AddSource/>
@@ -72,7 +72,7 @@ function App() {
             }
           />
           <Route
-            path='edit/:username/:listOwner/:listID/:sourceID'
+            path='edit/:username/:listID/:sourceID'
             element={
               <ProtectedRoute>
                 <EditSource/>
