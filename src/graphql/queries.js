@@ -116,8 +116,6 @@ export const getPaper = /* GraphQL */ `
     }
   }
 `;
-
-
 export const listPapers = /* GraphQL */ `
   query ListPapers(
     $filter: ModelPaperFilterInput

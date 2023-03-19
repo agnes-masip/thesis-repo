@@ -113,7 +113,7 @@ function Login() {
                         </div>
                         <Card sx={{ height: "100%",display:'flex', justifyContent:'center',padding:"10px" }}>
                             <CardContent sx={{width: "80%"}}>
-                                <form onSubmit={handleSignInSubmit}>
+                                <form onSubmit={handleSignInSubmit} className="signInClass">
                                     <FormGroup sx={{mb: "20px"}}>
                                         <TextField
 
@@ -140,7 +140,7 @@ function Login() {
                                             onChange={handleSignInInputChange}
                                         />
                                     </FormGroup>
-                                    <Button type="submit" variant="contained" sx={{width: "100%"}}>
+                                    <Button className="signInButtonClass" type="submit" variant="contained" sx={{width: "100%"}}>
                                         Sign in
                                     </Button>
                                 </form>
@@ -155,7 +155,7 @@ function Login() {
                         </div>
                         <Card sx={{ height: "100%", display:'flex', justifyContent:'center',padding:"10px" }}>
                             <CardContent sx={{width: "80%"}}>
-                            <form onSubmit={handleSignUpSubmit}>
+                            <form onSubmit={handleSignUpSubmit} className="signUpClass">
                                 <FormGroup sx={{mb: "20px"}}>
                                     <TextField
 
@@ -196,7 +196,7 @@ function Login() {
                                         onChange={handleSignUpInputChange}
                                     />
                                 </FormGroup>
-                                <Button type="submit" variant="contained" sx={{width: "100%"}}>
+                                <Button className="signUpButtonClass" type="submit" variant="contained" sx={{width: "100%"}}>
                                     Sign Up
                                 </Button>
                             </form>
