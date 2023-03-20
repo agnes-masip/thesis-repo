@@ -14,6 +14,7 @@
   },
   "api": {
     "thesisrepo": {
+      "service": "AppSync",
       "dependsOn": [],
       "output": {
         "authConfig": {
@@ -31,17 +32,17 @@
           }
         },
         "GraphQLAPIIdOutput": "ejkynjshhjfo5d77aj55f45yni",
-        "GraphQLAPIEndpointOutput": "https://kindbrzbdrdxni6jxwcrgbjmhe.appsync-api.us-east-1.amazonaws.com/graphql",
-        "GraphQLAPIKeyOutput": "da2-e6lpjamva5elvcitdknq7vqmsy"
+        "GraphQLAPIEndpointOutput": "http://172.26.0.1:20002/graphql",
+        "GraphQLAPIKeyOutput": "da2-fakeApiId123456"
       },
       "providerPlugin": "awscloudformation",
-      "service": "AppSync",
-      "lastPushTimeStamp": "2023-03-16T15:36:33.730Z",
+      "lastPushTimeStamp": "2023-03-19T14:41:18.419Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify7086d81be34e4-staging-153100-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apithesisrepo"
       },
-      "lastPushDirHash": "m2LpKxJFGBiKvOTddRjbVa33zdY="
+      "lastPushDirHash": "m2LpKxJFGBiKvOTddRjbVa33zdY=",
+      "testMode": true
     }
   },
   "auth": {
