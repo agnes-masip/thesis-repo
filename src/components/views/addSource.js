@@ -114,7 +114,7 @@ export default function AddSource() {
               </Typography>
               <Card sx={{height: '100%', width: '100%'}}>
                   <CardContent>
-                  <form onSubmit={handleSubmit}>
+                  <form onSubmit={handleSubmit} className='addSourceForm'>
                           <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: 'repeat(2, 1fr)' }}>
                               <FormGroup>
                                   <FormLabel>
@@ -244,7 +244,7 @@ export default function AddSource() {
                               </FormGroup>
                           </Box>
                           <Box my={2}>
-                              <Button name="add-submit-btn" id="add-submit-btn" type="submit" variant="contained" my={4}>
+                              <Button className='addSourceButton' name="add-submit-btn" id="add-submit-btn" type="submit" variant="contained" my={4}>
                                   Submit
                               </Button>
                           </Box>

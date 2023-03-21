@@ -9,7 +9,7 @@ context('Sign up', () => {
     cy.visit('http://localhost:3000/')
   })
 
-  it('.submit() - submit a form', () => {
+  it('sign up', () => {
     // https://on.cypress.io/submit
     cy.get('.signUpClass')
     .find('[id="username-signup-input"]').type('cypressTest')
