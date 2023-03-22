@@ -1,6 +1,6 @@
 projects:
   thesisrepo:
-    schemaPath: amplify/backend/api/thesisrepo/build/schema.graphql
+    schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.js
     excludes:

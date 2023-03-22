@@ -6,15 +6,15 @@ context('Sign up', () => {
   it('sign up', () => {
     // https://on.cypress.io/submit
     cy.get('.signUpClass')
-    .find('[id="username-signup-input"]').type('cypressDemo2')
+    .find('[id="username-signup-input"]').type('cypressDemo4')
   cy.get('.signUpClass')
-    .find('[id="email-signup-input"]').type('cypressD2@gmail.com')
+    .find('[id="email-signup-input"]').type('cypressD4@gmail.com')
   cy.get('.signUpClass')
     .find('[id="password-signup-input"]').type('cypressPassword')
   
   cy.get('.signUpButtonClass').click()
   
-  cy.url().should('include','/cypressDemo2')
+  cy.url().should('eq','http://localhost:3000/cypressDemo4')
   })
 
   
@@ -28,7 +28,7 @@ context('Sign up', () => {
       
       cy.get('.signInButtonClass').click()
       
-      cy.url().should('include','/canary')
+      cy.url().should('eq','http://localhost:3000/canary')
   
     })
     

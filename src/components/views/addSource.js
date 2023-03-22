@@ -9,13 +9,11 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 import NavBar from "../navbar";
 import {newPaper} from '../api/papers';
-import { addPaperToList, getListById } from '../api/lists';
-import { useEffect } from 'react';
-import { getUserById } from '../api/users';
+import { addPaperToList } from '../api/lists';
 
 
 export default function AddSource() {
-  const { username, listID } = useParams();
+  const { username, listID, listOwner } = useParams();
   const [files, setFiles] = useState([]);
   const [formValues, setFormValues] = useState({
     id: '',
@@ -35,15 +33,6 @@ export default function AddSource() {
   });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const [listOwner, setListOwner] = useState("");
-
-  useEffect(async() => {
-    const listData = await getListById(listID);
-    let listOwnerId = listData.listOwner;
-    const ownerData = await getUserById(listOwnerId);
-    setListOwner(ownerData.username);
-  },
-  []);
 
   const validateForm = () => {
     const newErrors = {};
@@ -114,7 +103,7 @@ export default function AddSource() {
               </Typography>
               <Card sx={{height: '100%', width: '100%'}}>
                   <CardContent>
-                  <form onSubmit={handleSubmit} className='addSourceForm'>
+                  <form onSubmit={handleSubmit}>
                           <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: 'repeat(2, 1fr)' }}>
                               <FormGroup>
                                   <FormLabel>
@@ -244,7 +233,7 @@ export default function AddSource() {
                               </FormGroup>
                           </Box>
                           <Box my={2}>
-                              <Button className='addSourceButton' name="add-submit-btn" id="add-submit-btn" type="submit" variant="contained" my={4}>
+                              <Button type="submit" variant="contained" my={4}>
                                   Submit
                               </Button>
                           </Box>

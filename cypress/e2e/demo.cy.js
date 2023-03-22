@@ -10,7 +10,7 @@ context('Demo - Full Test', () => {
     
     cy.get('.signInButtonClass').click()
 
-    cy.url().should('include','canary')
+    cy.url().should('eq','http://localhost:3000/canary')
 
       cy.get('.listForm')
         .find('[id="title"]').type('newListTitle')

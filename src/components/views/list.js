@@ -215,7 +215,7 @@ export default function List() {
           label="Delete"
           onClick={() => deleteSource(params.id)}
         />,
-        <Link to={'/edit/' + username + '/' + listID + '/' + params.id}>
+        <Link to={'/edit/' + username + '/' + listOwner + '/' + listID + '/' + params.id}>
           <GridActionsCellItem
           icon={<EditIcon />}
           label="Like"
@@ -253,8 +253,8 @@ export default function List() {
               <Button onClick={async () => { await exportPaperList(listID)} } endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
                 Export
               </Button>
-              <Button className='addSourceButton' endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
-                <Link to={'/add/' + username + '/' + listID} className="Link" style={{ textDecoration: 'none'}}>
+              <Button className="addSourceButton" endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
+                <Link to={'/add/' + username + '/' + listOwner + '/' + listID} className="Link" style={{ textDecoration: 'none'}}>
                   Add
                 </Link>
               </Button>
