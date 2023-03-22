@@ -3,7 +3,8 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/views/home';
 import List from './components/views/list';
-import Login from './components/views/login';
+import LogIn from './components/views/login';
+import SignUp from './components/views/signup'
 import AddSource from './components/views/addSource';
 import EditSource from './components/views/editSource';
 import { ProtectedRoute } from './components/protectedRoute';
@@ -64,7 +65,7 @@ function App() {
             }
           />
           <Route
-            path='add/:username/:listOwner/:listID'
+            path='add/:username/:listID'
             element={
               <ProtectedRoute>
                 <AddSource/>
@@ -72,15 +73,16 @@ function App() {
             }
           />
           <Route
-            path='edit/:username/:listOwner/:listID/:sourceID'
+            path='edit/:username/:listID/:sourceID'
             element={
               <ProtectedRoute>
                 <EditSource/>
               </ProtectedRoute>
             }
           />
-          <Route path='/' element={<Login/>} />
-          <Route path='login' element={<Login/>} />
+          <Route path='/' element={<LogIn/>} />
+          <Route path='login' element={<LogIn/>} />
+          <Route path='signup' element={<SignUp/>} />
         </Routes>
       </ThemeProvider>
     </div>

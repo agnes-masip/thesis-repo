@@ -27,7 +27,7 @@ function Home() {
 
 
   const handleSubmit = async (event) => {
-    if (formValues.title == "") {
+    if (formValues.title === "") {
         window.alert('Please provide a name for the list')
     }
     else {
@@ -71,7 +71,7 @@ function Home() {
                         onClick={() => deleteList(params.id)}
                     />,
                     <Link to={'/list/' + username + '/' + params.row.listOwner + '/' + params.id}>
-                        <GridActionsCellItem
+                        <GridActionsCellItem className='viewButton'
                             icon={<VisibilityIcon />}
                             label="view"
                         />
@@ -168,7 +168,7 @@ function Home() {
                                     </Button>
                                 </FormGroup>
                             </form>
-                            <DataGrid columns={columns} rows={rows}/>
+                            <DataGrid columns={columns} rows={rows} className="listDataGrid"/>
                       </Card>
                   </Box>
               </div>
