@@ -5,12 +5,10 @@ function sleep(ms) {
   }
 
 context('Demo - Full Test', () => {
-  beforeEach(() => {
-    cy.visit('http://localhost:3000/')
-  })
 
   it('sign in', () => {
     // https://on.cypress.io/submit
+    cy.visit('http://localhost:3000/')
     cy.get('.signInClass')
       .find('[id="email-signin-input"]').type('demo@gmail.com')
     cy.get('.signInClass')
