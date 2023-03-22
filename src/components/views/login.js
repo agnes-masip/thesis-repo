@@ -1,45 +1,17 @@
-
-import '../../App.css';
-import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react';
-import { Box, Card, CardContent, FormGroup, TextField, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { Avatar, Button, TextField, Link, Paper, Box, Grid, Typography }from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { SHA256 } from 'crypto-js';
-import { getUserByEmail, newUser, userEmailExists, usernameExists } from '../api/users';
+import image from "./../img/login.jpg"
+import { getUserByEmail } from '../api/users';
 
-function Login() {
-    const [signInFormValues, setSignInFormValues] = useState({email: '', password: ''});
-    const [signUpFormValues, setSignUpFormValues] = useState({username: '', email:'', password: ''});
-    const [errors, setErrors] = useState({});
-    const navigate = useNavigate();
+export default function LogIn() {
+  const [formValues, setFormValues] = useState({email: '', password: ''});
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
-    async function validateForm(username, email, password) {
-        const newErrors = {};
-        if (!/^[a-zA-Z0-9]+$/.test(username)) {
-        newErrors.username = 'Only numbers and letters allowed';
-        }
-        if (!username) {
-            newErrors.username = (newErrors.username || '') + 'You forgot your username :(';
-        }
-        if (!password) {
-            newErrors.password = 'No password? Not possible.';
-        }
-        if (!email) {
-            newErrors.title = 'We need your email, sorry :(';
-        }
-
-        // check if email's already used!
-        const emailExists = await userEmailExists(email);
-        if (emailExists) { newErrors.email = (newErrors.email || '') + 'This email is already used';}
-
-         // check if username's already used
-        const userExists = await usernameExists(username);
-        if (userExists) { newErrors.username = (newErrors.username || '') + 'This username is already used';}
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-  };
-
-  async function validateFormSignIn(user, password) {
+  async function validateForm(user, password) {
     const newErrors = {};
 
     if (user.length === 0) {
@@ -49,168 +21,119 @@ function Login() {
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  async function signIn(email, password) {
+    const user = await getUserByEmail(email);
+
+    if(await validateForm(user,password)){
+        if (user.length !== 0){
+            document.cookie = "username=" + user[0].username + ";";
+            navigate('/' + user[0].username, { replace: true });
+        }
+    }
+  }
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormValues({
+        ...formValues,
+        [name]: value,
+    });
 };
 
-    async function signUp(username, email, password) {
-        if (await validateForm(username, email, password)) {
-            await newUser({
-                "username": username,
-                "email": email,
-                "password": JSON.stringify(SHA256(password).words)
-            });
-            document.cookie = "username=" + username + ";";
-            navigate('/' + username, { replace: true });
-        }
-    }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    signIn(formValues.email, formValues.password);
+  };
 
-    // Currently does nothing, should navigate to list
-    async function signIn(email, password) {
-        const user = await getUserByEmail(email);
-
-        if(await validateFormSignIn(user,password)){
-            if (user.length !== 0){
-                document.cookie = "username=" + user[0].username + ";";
-                navigate('/' + user[0].username, { replace: true });
-            }
-        }
-    }
-
-    const handleSignInInputChange = (event) => {
-        const { name, value } = event.target;
-        setSignInFormValues({
-            ...signInFormValues,
-            [name]: value,
-        });
-    };
-
-    const handleSignInSubmit = (event) => {
-        event.preventDefault();
-        signIn(signInFormValues.email, signInFormValues.password);
-    };
-
-    const handleSignUpInputChange = (event) => {
-        const { name, value } = event.target;
-        setSignUpFormValues({
-            ...signUpFormValues,
-            [name]: value,
-        });
-    };
-
-    const handleSignUpSubmit = (event) => {
-        event.preventDefault();
-        signUp(signUpFormValues.username, signUpFormValues.email, signUpFormValues.password);
-    };
-
-    return (
-        <div className="Content">
-            <div>
-                <Box my={4} sx={{display: 'grid', gridTemplateRows: 'repeat(2, 1fr)' , gap: 1,}}>
-                    <Box sx={{ gridRow: '1', margin: "50px" }} >
-                        <div className="Title">
-                            <Typography variant="h4" align="left" color="primary">
-                                Sign in
-                            </Typography>
-                        </div>
-                        <Card sx={{ height: "100%",display:'flex', justifyContent:'center',padding:"10px" }}>
-                            <CardContent sx={{width: "80%"}}>
-                                <form onSubmit={handleSignInSubmit}>
-                                    <FormGroup sx={{mb: "20px"}}>
-                                        <TextField
-
-                                            id="email-signin-input"
-                                            label="E-mail"
-                                            variant="outlined"
-                                            name="email"
-                                            error={!!errors.emailNotExists}
-                                            helperText={errors.emailNotExists}
-                                            value={signInFormValues.email}
-                                            onChange={handleSignInInputChange}
-                                        />
-                                    </FormGroup>
-                                    <FormGroup sx={{mb: "20px"}}>
-                                        <TextField
-                                            id="password-signin-input"
-                                            label="Password"
-                                            type="password"
-                                            variant="outlined"
-                                            name="password"
-                                            error={!!errors.passwrong}
-                                            helperText={errors.passwrong}
-                                            value={signInFormValues.password}
-                                            onChange={handleSignInInputChange}
-                                        />
-                                    </FormGroup>
-                                    <Button type="submit" variant="contained" sx={{width: "100%"}}>
-                                        Sign in
-                                    </Button>
-                                </form>
-                            </CardContent>
-                        </Card>
-                    </Box>
-                    <Box sx={{gridRow: '1', margin: "50px" }} >
-                        <div className="Title">
-                            <Typography variant="h4" align="left" color="primary">
-                                Sign up
-                            </Typography>
-                        </div>
-                        <Card sx={{ height: "100%", display:'flex', justifyContent:'center',padding:"10px" }}>
-                            <CardContent sx={{width: "80%"}}>
-                            <form onSubmit={handleSignUpSubmit}>
-                                <FormGroup sx={{mb: "20px"}}>
-                                    <TextField
-
-                                        id="username-signup-input"
-                                        label="Username"
-                                        variant="outlined"
-                                        name="username"
-                                        value={signUpFormValues.username}
-                                        error={!!errors.username}
-                                        helperText={errors.username}
-                                        onChange={handleSignUpInputChange}
-                                    />
-                                </FormGroup>
-                                <FormGroup sx={{mb: "20px"}}>
-                                    <TextField
-
-                                        id="email-signup-input"
-                                        label="E-mail"
-                                        variant="outlined"
-                                        name="email"
-                                        error={!!errors.email}
-                                        helperText={errors.email}
-                                        value={signUpFormValues.email}
-                                        onChange={handleSignUpInputChange}
-                                    />
-                                </FormGroup>
-                                <FormGroup sx={{mb: "20px"}}>
-                                    <TextField
-
-                                        id="password-signup-input"
-                                        label="Password"
-                                        type="password"
-                                        variant="outlined"
-                                        name="password"
-                                        error={!!errors.password}
-                                        helperText={errors.password}
-                                        value={signUpFormValues.password}
-                                        onChange={handleSignUpInputChange}
-                                    />
-                                </FormGroup>
-                                <Button type="submit" variant="contained" sx={{width: "100%"}}>
-                                    Sign Up
-                                </Button>
-                            </form>
-                            </CardContent>
-                        </Card>
-                    </Box>
-                </Box>
-            </div>
-        </div>
-    )
-
+  return (
+    <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
+          sx={{
+            backgroundImage:`url(${image})`,
+            backgroundRepeat: 'no-repeat',
+            backgroundColor: 'primay',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+            <Box
+                sx={{
+                my: 8,
+                mx: 4,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                }}
+            >
+                <Typography variant="h4" color="primary">
+                    LitHub
+                </Typography>
+            </Box>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    error={!!errors.emailNotExists}
+                    helperText={errors.emailNotExists}
+                    value={formValues.email}
+                    onChange={handleInputChange}
+                />
+                <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    error={!!errors.passwrong}
+                    helperText={errors.passwrong}
+                    value={formValues.password}
+                    onChange={handleInputChange}
+                />
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                >
+                    Sign In
+                </Button>
+                <Link href="/signup" variant="body2">
+                Don't have an account? Sign up
+                </Link>
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+  );
 }
-
-
-
-
-export default Login;
