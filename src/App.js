@@ -12,6 +12,7 @@ import Amplify from '@aws-amplify/core';
 import awsconfig from './aws-exports';
 import './App.css';
 import '@aws-amplify/ui-react/styles.css';
+import SignInSide from './components/views/login2';
 
 Amplify.configure(awsconfig);
 
@@ -81,6 +82,7 @@ function App() {
           />
           <Route path='/' element={<Login/>} />
           <Route path='login' element={<Login/>} />
+          <Route path='login2' element={<SignInSide/>} />
         </Routes>
       </ThemeProvider>
     </div>

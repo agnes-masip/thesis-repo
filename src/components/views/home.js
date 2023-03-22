@@ -27,7 +27,7 @@ function Home() {
 
 
   const handleSubmit = async (event) => {
-    if (formValues.title == "") {
+    if (formValues.title === "") {
         window.alert('Please provide a name for the list')
     }
     else {
