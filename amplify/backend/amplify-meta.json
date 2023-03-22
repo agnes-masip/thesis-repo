@@ -36,7 +36,7 @@
         "GraphQLAPIKeyOutput": "da2-fakeApiId123456"
       },
       "providerPlugin": "awscloudformation",
-      "lastPushTimeStamp": "2023-03-19T14:41:18.419Z",
+      "lastPushTimeStamp": "2023-03-21T10:02:45.740Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify7086d81be34e4-staging-153100-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apithesisrepo"
