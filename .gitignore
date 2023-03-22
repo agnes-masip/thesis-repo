@@ -28,3 +28,6 @@ yarn-error.log*
 node_modules/
 
 #amplify-do-not-edit-end
+
+amplify/mock-data
+amplify/mock-api-resources
