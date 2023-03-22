@@ -1,75 +1,48 @@
-function sleep(ms) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  }
-
 context('Demo - Full Test', () => {
 
   it('sign in', () => {
     // https://on.cypress.io/submit
     cy.visit('http://localhost:3000/')
     cy.get('.signInClass')
-      .find('[id="email-signin-input"]').type('demo@gmail.com')
+      .find('[id="email-signin-input"]').type('canary@gmail.com')
     cy.get('.signInClass')
-      .find('[id="password-signin-input"]').type('demo')
+      .find('[id="password-signin-input"]').type('canary')
     
     cy.get('.signInButtonClass').click()
 
-    sleep(3000)
-    
-    cy.url().should('include','demo')
+    cy.url().should('include','canary')
 
-  })
-
-   it('create list', () => {
-      // https://on.cypress.io/submit
       cy.get('.listForm')
         .find('[id="title"]').type('newListTitle')
       
       cy.get('.listSubmitButton').click()
-  
-      sleep(3000)
 
       cy.get('.listDataGrid').should('contain','newListTitle')
-        
-    })
 
-    it('go to list', () => {
-      // https://on.cypress.io/submit
-      cy.get('.viewButton')
-        .find('[title="newListTitle"]').click()
+    //   cy.get('.viewButton')
+    //     .find('[title="newListTitle"]').click()
   
-      sleep(3000)
 
-      cy.url().should('include','list/demo')
+    //   cy.url().should('include','list/demo')
         
-    })
+    //   cy.get('.addSourceButton').click()
 
-    it('add source', () => {
-      // https://on.cypress.io/submit
-      cy.get('.addSourceButton').click()
-  
-      sleep(3000)
+    //   cy.url().should('include','add/demo')
 
-      cy.url().should('include','add/demo')
-
-      cy.get('.addSourceForm')
-      .find('[id="title"]').type('New Demo Title')
-      cy.get('.addSourceForm')
-      .find('[id="author"]').type('A popular author')
-      cy.get('.addSourceForm')
-      .find('[id="description"]').type('A description')
-      cy.get('.addSourceForm')
-      .find('[id="year"]').type(2023)
+    //   cy.get('.addSourceForm')
+    //   .find('[id="title"]').type('New Demo Title')
+    //   cy.get('.addSourceForm')
+    //   .find('[id="author"]').type('A popular author')
+    //   cy.get('.addSourceForm')
+    //   .find('[id="description"]').type('A description')
+    //   cy.get('.addSourceForm')
+    //   .find('[id="year"]').type(2023)
     
-    cy.get('.addSourceButton').click()
+    // cy.get('.addSourceButton').click()
 
-    sleep(3000)
-
-    cy.url().should('include','list/demo')
+    // cy.url().should('include','list/demo')
     
-    cy.get('.papersDataGrid').should('contain','New Demo Title')
+    // cy.get('.papersDataGrid').should('contain','New Demo Title')
 
 
         

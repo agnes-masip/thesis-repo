@@ -163,7 +163,7 @@ function Home() {
                                         value={formValues.title}
                                         onChange={handleInputChange}
                                     />
-                                    <Button className type="submit" variant="contained" sx={{gridRow: '1', gridColumn: '6/7' }}>
+                                    <Button type="submit" variant="contained" sx={{gridRow: '1', gridColumn: '6/7' }} className="listSubmitButton">
                                     <AddIcon/>
                                     </Button>
                                 </FormGroup>

@@ -140,7 +140,7 @@ function Login() {
                                             onChange={handleSignInInputChange}
                                         />
                                     </FormGroup>
-                                    <Button className="signInButtonClass" type="submit" variant="contained" sx={{width: "100%"}}>
+                                    <Button type="submit" variant="contained" sx={{width: "100%"}} className="signInButtonClass">
                                         Sign in
                                     </Button>
                                 </form>
@@ -196,7 +196,7 @@ function Login() {
                                         onChange={handleSignUpInputChange}
                                     />
                                 </FormGroup>
-                                <Button className="signUpButtonClass" type="submit" variant="contained" sx={{width: "100%"}}>
+                                <Button type="submit" variant="contained" sx={{width: "100%"}} className="signUpButtonClass">
                                     Sign Up
                                 </Button>
                             </form>

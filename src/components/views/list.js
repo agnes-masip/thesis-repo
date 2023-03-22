@@ -260,7 +260,7 @@ export default function List() {
               </Button>
             </Box>
           <Card sx={{height: 500, width: '100%' }}>
-            <DataGrid className='papersDataGrid' columns={paperColumns} rows={paperRows}/>
+            <DataGrid className="papersDataGrid" columns={paperColumns} rows={paperRows}/>
           </Card>
           </Box>
             <Box sx={{ display: 'grid', gridAutoColumns: '1fr', gridColumn: '4/5' }}>

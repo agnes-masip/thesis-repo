@@ -1,9 +1,3 @@
-function sleep(ms) {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  }
-
 context('Sign up', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000/')
@@ -12,17 +6,15 @@ context('Sign up', () => {
   it('sign up', () => {
     // https://on.cypress.io/submit
     cy.get('.signUpClass')
-    .find('[id="username-signup-input"]').type('cypressTest')
+    .find('[id="username-signup-input"]').type('cypressDemo2')
   cy.get('.signUpClass')
-    .find('[id="email-signup-input"]').type('cypressT@gmail.com')
+    .find('[id="email-signup-input"]').type('cypressD2@gmail.com')
   cy.get('.signUpClass')
     .find('[id="password-signup-input"]').type('cypressPassword')
   
   cy.get('.signUpButtonClass').click()
-
-  sleep(3000)
   
-  cy.url().should('include','cypressTest')
+  cy.url().should('include','/cypressDemo2')
   })
 
   
@@ -35,10 +27,8 @@ context('Sign up', () => {
         .find('[id="password-signin-input"]').type('canary')
       
       cy.get('.signInButtonClass').click()
-  
-      sleep(3000)
       
-      cy.url().should('include','cypress')
+      cy.url().should('include','/canary')
   
     })
     
