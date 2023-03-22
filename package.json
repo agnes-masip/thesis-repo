@@ -47,8 +47,6 @@
     ]
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.1",
-    "cypress": "^12.8.1",
-    "typescript": "^5.0.2"
+    "cypress": "^12.8.1"
   }
 }
