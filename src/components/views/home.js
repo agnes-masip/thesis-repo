@@ -71,7 +71,7 @@ function Home() {
                         onClick={() => deleteList(params.id)}
                     />,
                     <Link to={'/list/' + username + '/' + params.row.listOwner + '/' + params.id}>
-                        <GridActionsCellItem
+                        <GridActionsCellItem className='viewButton'
                             icon={<VisibilityIcon />}
                             label="view"
                         />
@@ -153,7 +153,7 @@ function Home() {
                           </Typography>
                       </Box>
                       <Card sx={{height: 500, width: '100%' }}>
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleSubmit} className="listForm">
                                 <FormGroup sx={{ display: 'grid', gridAutoColumns: '1fr' }}>
                                     <TextField sx={{ gridRow: '1', gridColumn: '1/6' }}
                                         id="title"
@@ -163,12 +163,12 @@ function Home() {
                                         value={formValues.title}
                                         onChange={handleInputChange}
                                     />
-                                    <Button type="submit" variant="contained" sx={{gridRow: '1', gridColumn: '6/7' }}>
+                                    <Button type="submit" variant="contained" sx={{gridRow: '1', gridColumn: '6/7' }} className="listSubmitButton">
                                     <AddIcon/>
                                     </Button>
                                 </FormGroup>
                             </form>
-                            <DataGrid columns={columns} rows={rows}/>
+                            <DataGrid columns={columns} rows={rows} className="listDataGrid"/>
                       </Card>
                   </Box>
               </div>

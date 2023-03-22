@@ -253,14 +253,14 @@ export default function List() {
               <Button onClick={async () => { await exportPaperList(listID)} } endIcon={<DownloadIcon />} sx={{ gridRow: '1', gridColumn: '8/9', textAlign: 'right' }}>
                 Export
               </Button>
-              <Button endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
+              <Button className="addSourceButton" endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
                 <Link to={'/add/' + username + '/' + listOwner + '/' + listID} className="Link" style={{ textDecoration: 'none'}}>
                   Add
                 </Link>
               </Button>
             </Box>
           <Card sx={{height: 500, width: '100%' }}>
-            <DataGrid columns={paperColumns} rows={paperRows}/>
+            <DataGrid className="papersDataGrid" columns={paperColumns} rows={paperRows}/>
           </Card>
           </Box>
             <Box sx={{ display: 'grid', gridAutoColumns: '1fr', gridColumn: '4/5' }}>
