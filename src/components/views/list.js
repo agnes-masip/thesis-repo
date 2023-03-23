@@ -215,7 +215,7 @@ export default function List() {
           label="Delete"
           onClick={() => deleteSource(params.id)}
         />,
-        <Link to={'/edit/' + username + '/' + listOwner + '/' + listID + '/' + params.id}>
+        <Link to={'/edit/' + username + '/' + listID + '/' + params.id}>
           <GridActionsCellItem
           icon={<EditIcon />}
           label="Like"
@@ -254,7 +254,7 @@ export default function List() {
                 Export
               </Button>
               <Button className="addSourceButton" endIcon={<AddIcon />} sx={{ gridRow: '1', gridColumn: '9/10', textAlign: 'right' }}>
-                <Link to={'/add/' + username + '/' + listOwner + '/' + listID} className="Link" style={{ textDecoration: 'none'}}>
+                <Link to={'/add/' + username  + '/' + listID} className="Link" style={{ textDecoration: 'none'}}>
                   Add
                 </Link>
               </Button>
