@@ -129,25 +129,27 @@ export async function addCollaboratorToList (listId, userId) {
 
 export async function getBibtexReferenceForPaper (paperId) {
     const paperData = await getPaperById(paperId);
-    const firstAuthor = paperData.author[0];
-    const firstAuthorLastName = firstAuthor.split(".").at(-1).trim();
-    const authors = paperData.author.join(" and ");
-    const volume = paperData.volume ? paperData.volume : "";
-    const issue = paperData.issue ? paperData.issue : "";
-    const doi = paperData.doi ? paperData.doi : "";
-    const issn = paperData.issn ? paperData.issn : "";
-    // missing: pages!
-    let reference = `@article{ ${firstAuthorLastName.replace(" ", "_")}:${paperData.year}
-        title = { ${paperData.title} },
-        author = { ${authors} },
-        journal = { ${paperData.journal} },
-        year = { ${paperData.year} },
-        volume = { ${volume} },
-        issue = { ${issue} },
-        doi = { ${doi} },
-        issn = { ${issn} }
-    }`;
-    return reference;
+    if (paperData){ 
+      const firstAuthor = paperData.author[0];
+      const firstAuthorLastName = firstAuthor.split(".").at(-1).trim();
+      const authors = paperData.author.join(" and ");
+      const volume = paperData.volume ? paperData.volume : "";
+      const issue = paperData.issue ? paperData.issue : "";
+      const doi = paperData.doi ? paperData.doi : "";
+      const issn = paperData.issn ? paperData.issn : "";
+      // missing: pages!
+      let reference = `@article{ ${firstAuthorLastName.replace(" ", "_")}:${paperData.year}
+          title = { ${paperData.title} },
+          author = { ${authors} },
+          journal = { ${paperData.journal} },
+          year = { ${paperData.year} },
+          volume = { ${volume} },
+          issue = { ${issue} },
+          doi = { ${doi} },
+          issn = { ${issn} }
+      }`;
+      return reference;
+    }
 }
 
 export async function getBibtexForList (listId) {
