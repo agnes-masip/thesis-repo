@@ -219,6 +219,7 @@ export default function List() {
           <GridActionsCellItem
           icon={<EditIcon />}
           label="Like"
+          id={params.row.title}
           />
         </Link>,
         ],
@@ -236,7 +237,7 @@ export default function List() {
           <Typography variant="h4" align="left" color="primary" sx={{gridRow: '1', gridColumn: '1/5'}}>
             List Details
           </Typography>
-          <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}}>
+          <Button startIcon={<KeyboardBackspaceIcon/>} sx={{gridRow: '1', gridColumn: '9/10'}} className="backButton">
             <Link to={'/' + username} className="Link" style={{ textDecoration: 'none'}}>
                 Back
             </Link>

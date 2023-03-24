@@ -69,11 +69,14 @@ function Home() {
                         icon={<DeleteIcon />}
                         label="Delete"
                         onClick={() => deleteList(params.id)}
+                        id = {'delete' + params.row.title}
+
                     />,
                     <Link to={'/list/' + username + '/' + params.row.listOwner + '/' + params.id}>
                         <GridActionsCellItem className='viewButton'
                             icon={<VisibilityIcon />}
                             label="view"
+                            id={'see' + params.row.title}
                         />
                     </Link>
                 ]

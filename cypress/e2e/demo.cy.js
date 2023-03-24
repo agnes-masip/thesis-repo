@@ -19,33 +19,56 @@ context('Demo - Full Test', () => {
 
       cy.get('.listDataGrid').should('contain','newListTitle')
 
-    //   cy.get('.viewButton')
-    //     .find('[title="newListTitle"]').click()
+      cy.get('#seenewListTitle').click()
   
 
-    //   cy.url().should('include','list/demo')
+      cy.url().should('include','list/canary')
         
-    //   cy.get('.addSourceButton').click()
+      cy.get('.addSourceButton').click()
 
-    //   cy.url().should('include','add/demo')
+      cy.url().should('include','add/canary')
 
-    //   cy.get('.addSourceForm')
-    //   .find('[id="title"]').type('New Demo Title')
-    //   cy.get('.addSourceForm')
-    //   .find('[id="author"]').type('A popular author')
-    //   cy.get('.addSourceForm')
-    //   .find('[id="description"]').type('A description')
-    //   cy.get('.addSourceForm')
-    //   .find('[id="year"]').type(2023)
+      cy.get('.addSourceForm')
+      .find('[id="title"]').type('New Demo Title')
+      cy.get('.addSourceForm')
+      .find('[id="author"]').type('A popular author')
+      cy.get('.addSourceForm')
+      .find('[id="description"]').type('A description')
+      cy.get('.addSourceForm')
+      .find('[id="year"]').type(2023)
     
-    // cy.get('.addSourceButton').click()
+    cy.get('.addSourceButton').click()
 
-    // cy.url().should('include','list/demo')
+    cy.url().should('include','list/canary')
     
-    // cy.get('.papersDataGrid').should('contain','New Demo Title')
+    cy.get('.papersDataGrid').should('contain','New Demo Title')
 
+    cy.get('.papersDataGrid')
+    .find('[id="New Demo Title"]').click();
 
-        
+    cy.wait(1000)
+
+    cy.get('.editSourceForm')
+    .find('[id="title"]').type("2")
+
+    cy.get('.editSourceButton').click()
+
+    cy.url().should('include', 'list/canary')
+
+    cy.wait(1000)
+
+    cy.get('.papersDataGrid').should('contain', 'New Demo Title2')
+
+    cy.get('.backButton').click()
+
+    cy.url().should('eq','http://localhost:3000/canary')
+
+    cy.get('#deletenewListTitle').click()
+
+    cy.wait(1000)
+
+    cy.get('.listDataGrid').should('not.contain', 'newListTitle')
+      
     })
 
   

@@ -102,7 +102,7 @@ export default function EditSource() {
             </Typography>
             <Card sx={{height: '100%', width: '100%'}}>
                 <CardContent>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} className="editSourceForm">
                         <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: 'repeat(2, 1fr)' }}>
                             <FormGroup>
                                 <FormLabel>
@@ -224,7 +224,7 @@ export default function EditSource() {
                             </FormGroup>
                         </Box>
                         <Box my={2}>
-                            <Button type="submit" variant="contained" my={4}>
+                            <Button type="submit" variant="contained" my={4} className="editSourceButton">
                                 Submit
                             </Button>
                         </Box>
