@@ -3,14 +3,14 @@ context('Demo - Full Test', () => {
   it('sign in', () => {
     // https://on.cypress.io/submit
     cy.visit('http://localhost:3000/')
-    cy.get('.signInClass')
-      .find('[id="email-signin-input"]').type('canary@gmail.com')
-    cy.get('.signInClass')
-      .find('[id="password-signin-input"]').type('canary')
-    
-    cy.get('.signInButtonClass').click()
-
-    cy.url().should('eq','http://localhost:3000/canary')
+      cy.get('.signInClass')
+        .find('[id="email"]').type('canary@gmail.com')
+      cy.get('.signInClass')
+        .find('[id="password"]').type('canary')
+      
+      cy.get('.signInButtonClass').click()
+      
+      cy.url().should('eq','http://localhost:3000/canary')
 
       cy.get('.listForm')
         .find('[id="title"]').type('newListTitle')

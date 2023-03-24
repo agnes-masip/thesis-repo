@@ -103,7 +103,7 @@ export default function SignUp() {
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }} className="signUpClass">
                         <TextField
                             id="username"
                             label="Username"
@@ -151,6 +151,7 @@ export default function SignUp() {
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+                            className="signUpButtonClass"
                         >
                             Sign up
                         </Button>
