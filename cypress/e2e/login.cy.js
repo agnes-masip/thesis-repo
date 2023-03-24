@@ -1,7 +1,8 @@
 context('Sign up', () => {
 
   it('sign up', () => {
-    cy.visit('http://localhost:3000/signup')
+    cy.visit('http://localhost:3000')
+    cy.get('.goToSignUp').click()
     cy.get('.signUpClass')
     .find('[id="username"]').type('cypressDemo4')
   cy.get('.signUpClass')

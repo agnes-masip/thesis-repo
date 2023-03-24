@@ -129,7 +129,7 @@ export default function LogIn() {
                 >
                     Sign In
                 </Button>
-                <Link href="/signup" variant="body2">
+                <Link href="/signup" variant="body2" className="goToSignUp">
                 Don't have an account? Sign up
                 </Link>
             </Box>
