@@ -8,3 +8,7 @@ export default defineConfig({
     },
   },
 });
+
+module.exports = {
+  projectId: "h8y62q"
+}
