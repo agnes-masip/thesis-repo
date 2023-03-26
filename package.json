@@ -27,7 +27,7 @@
     "start2": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
-    "test": "npx cypress run --reporter mochawesome --reporter-options reportDir=cypress/report/mochaawesome-report,overwrite=false,html=false,json=true,timestamp=mmddyyyy_HHMMss",
+    "test": "npx cypress run --reporter mochawesome --reporter-options reportDir=cypress/report/mochawesome-report,overwrite=false,html=false,json=true,timestamp=mmddyyyy_HHMMss",
     "ci": "start-server-and-test start http-get://localhost:3000 test"
   },
   "eslintConfig": {
